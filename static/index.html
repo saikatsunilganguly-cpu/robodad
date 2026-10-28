@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comfortaa:wght@500;700&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -49,6 +49,13 @@
   --metal:#8A6A9C; --alert:#FF5E7E; --ok:#7FE3A6; --jacket:#24120C; --jacket2:#3A1E16; --hair:#1A0B14; --lens:#120812;
   --glow:color-mix(in srgb, #FFB547 40%, transparent);
   --display:"Righteous", "Nunito", sans-serif; color-scheme:dark;
+}
+:root[data-look="y2k"]{
+  --sky:#DDF2FF; --surface:#FFFFFF; --ink:#0E2A47; --muted:#46647F; --line:#A9D3F0;
+  --denim:#1A7FD6; --denim-ink:#FFFFFF; --mustard:#6CCB3F; --mustard-ink:#0B2B05;
+  --metal:#C8D6E2; --alert:#C2413A; --ok:#2E9E5B; --jacket:#1B2733; --jacket2:#2C3B4A; --hair:#13202B; --lens:#0E2A47;
+  --glow:color-mix(in srgb, #38B6FF 45%, transparent);
+  --display:"Comfortaa", "Nunito", sans-serif; color-scheme:light;
 }
 :root[data-look="diner"]{
   --sky:#BFE8DC; --surface:#FFF8EE; --ink:#1E1E24; --muted:#47555A; --line:#8DBDB0;
@@ -94,8 +101,59 @@ button,textarea{font:inherit;color:inherit}
 .icon-btn:hover{background:var(--sky)}
 .icon-btn svg{width:20px; height:20px}
 .icon-btn[aria-pressed="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
-#musicBtn[aria-pressed="true"] svg{animation:bob 1s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-2px) rotate(-6deg)}}
+/* ---------- themed music players ---------- */
+.player-btn{flex:none; width:50px; height:42px; padding:0; border:0; background:transparent; border-radius:12px; cursor:pointer; display:grid; place-items:center}
+.player-btn:hover{background:color-mix(in srgb, var(--ink) 8%, transparent)}
+.pl-art.big svg{width:76px; height:64px}
+.pl-art{display:inline-grid; place-items:center; line-height:0}
+.pl-art svg{display:block; overflow:visible}
+.pl-art .spin,.pl-art .reel,.pl-art .bub{transform-box:fill-box; transform-origin:center}
+.pl-art .waves{opacity:0}
+.pl-art .bub{opacity:0}
+.pl-art.on .spin{animation:plspin 1.6s linear infinite}
+.pl-art.on .reel{animation:plspin 1.4s linear infinite reverse}
+.pl-art.on .waves path{animation:plwave 1.3s ease-out infinite}
+.pl-art.on .waves path:nth-child(2n){animation-delay:.25s}
+.pl-art.on .waves{opacity:1}
+.pl-art.on .ring{animation:plring 1.3s ease-in-out infinite}
+.pl-art.on .tube{animation:pltube 2.4s linear infinite}
+.pl-art.on .bub{animation:plbub 1.6s ease-in infinite}
+.pl-art.on .bub.b2{animation-delay:.5s} .pl-art.on .bub.b3{animation-delay:1s}
+.pl-art.on .marquee{animation:plmarq 3.6s linear infinite}
+.pl-art.on .screen{animation:plscreen 1.8s ease-in-out infinite}
+@keyframes plspin{to{transform:rotate(360deg)}}
+@keyframes plwave{0%{opacity:0} 25%{opacity:.95} 100%{opacity:0}}
+@keyframes plring{50%{fill:#9BE3FF}}
+@keyframes pltube{0%,100%{stroke:#FFD45C} 33%{stroke:#7BE0D3} 66%{stroke:#FF8FB1}}
+@keyframes plbub{0%{opacity:0; transform:translateY(0)} 20%{opacity:1} 100%{opacity:0; transform:translateY(-16px)}}
+@keyframes plmarq{from{transform:translateX(15px)} to{transform:translateX(-46px)}}
+@keyframes plscreen{50%{fill:#14406B}}
+
+/* ---------- Y2K Aero ---------- */
+:root[data-look="y2k"] body{background:linear-gradient(180deg, #EEF9FF 0%, #D6EEFF 55%, #BFE3FF 100%) fixed}
+:root[data-look="y2k"] .top{border-bottom:1px solid #9CCDEE;
+  background:linear-gradient(180deg, #FDFEFF 0%, #E3F4FF 48%, #C3E6FF 52%, #E9F7FF 100%)}
+:root[data-look="y2k"] .top h1,:root[data-look="y2k"] .card h2,:root[data-look="y2k"] .side-head h2{font-weight:700; letter-spacing:-.01em}
+:root[data-look="y2k"] .hello h2{font-weight:700; letter-spacing:-.02em;
+  background:linear-gradient(180deg, #2C9BF0 10%, #0E5FB0 60%, #0A4A8C 100%); -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(255,255,255,.9))}
+:root[data-look="y2k"] .hello::before{content:""; position:absolute; z-index:-1; top:2px; left:-26px; width:170px; height:150px;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.95) 0 9%, rgba(140,210,255,.55) 32%, rgba(80,170,255,.18) 62%, transparent 63%) 0 10px / 96px 96px no-repeat,
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.95) 0 9%, rgba(160,240,190,.55) 32%, rgba(90,200,140,.18) 62%, transparent 63%) 96px 0 / 54px 54px no-repeat,
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,.95) 0 9%, rgba(140,210,255,.5) 32%, rgba(80,170,255,.15) 62%, transparent 63%) 104px 78px / 40px 40px no-repeat}
+:root[data-look="y2k"] .user .bubble{background:linear-gradient(180deg, #5BB9FF, #1A7FD6); box-shadow:inset 0 1px 0 rgba(255,255,255,.55)}
+:root[data-look="y2k"] .robo .bubble,:root[data-look="y2k"] .widget,:root[data-look="y2k"] .extra{background:linear-gradient(180deg, #FFFFFF, #F1F9FF); box-shadow:0 2px 8px rgba(26,127,214,.12), inset 0 1px 0 #fff}
+:root[data-look="y2k"] .send,:root[data-look="y2k"] .primary{background:linear-gradient(180deg, #B6F28E 0%, #79D24A 50%, #5DBB2E 51%, #7DD84E 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.75), 0 1px 3px rgba(0,0,0,.18)}
+:root[data-look="y2k"] .chip{background:linear-gradient(180deg, #FFFFFF, #E4F3FF); border-color:#7FBDEB}
+.pv.y2k{background:linear-gradient(180deg, #F2FBFF, #9ED6FF)}
+.pv.y2k::before{content:""; position:absolute; width:30px; height:30px; left:8px; top:8px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff 0 12%, rgba(140,210,255,.7) 40%, rgba(80,170,255,.2) 70%)}
+/* Y2K thinking: buffering ring */
+.cassette .buffer,.cassette .t-y2k{display:none}
+:root[data-look="y2k"] .cassette .tape-svg,:root[data-look="y2k"] .cassette .t-tape{display:none}
+:root[data-look="y2k"] .cassette .buffer{display:block; width:24px; height:24px; animation:spin45 .9s linear infinite}
+:root[data-look="y2k"] .cassette .t-y2k{display:inline}
 
 /* ---------- waking banner ---------- */
 .wake{
@@ -280,9 +338,6 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .chipbtn:hover{background:var(--sky)}
 .chipbtn[aria-checked="true"],.chipbtn[aria-pressed="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
 .radio-head{display:flex; gap:12px; align-items:center}
-.radio-head svg.tape{width:46px; height:29px; color:var(--denim); flex:none}
-.radio-head .reel{animation:none}
-.radio.playing .radio-head .reel{animation:spin 1.6s linear infinite}
 .radio-head div{flex:1; min-width:0}
 .radio-head small{display:block}
 .playbtn{width:44px; height:44px; border-radius:50%; border:0; background:var(--mustard); color:var(--mustard-ink); cursor:pointer; display:grid; place-items:center; flex:none}
@@ -454,8 +509,8 @@ textarea::placeholder{color:var(--muted)}
   <button class="icon-btn" id="sideBtn" type="button" title="Dashboard: radio, timer and more">
     <svg aria-hidden="true"><use href="#i-dash"/></svg><span class="sr">Dashboard: radio, timer and more</span>
   </button>
-  <button class="icon-btn" id="musicBtn" type="button" title="Play music" aria-pressed="false">
-    <svg aria-hidden="true"><use href="#i-note"/></svg><span class="sr" id="musicLabel">Play music</span>
+  <button class="player-btn" id="musicBtn" type="button" title="Play music" aria-pressed="false">
+    <span class="pl-art" id="musicArt" aria-hidden="true"></span><span class="sr" id="musicLabel">Play music</span>
   </button>
   <button class="icon-btn hide-narrow" id="beltBtn" type="button" title="Life Skills Belt">
     <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Life Skills Belt</span>
@@ -543,7 +598,7 @@ textarea::placeholder{color:var(--muted)}
 
   <section class="widget radio" id="radioW" aria-label="RoboDad Radio">
     <div class="radio-head">
-      <svg class="tape" aria-hidden="true"><use href="#i-cassette"/></svg>
+      <span class="pl-art big" id="radioArt" aria-hidden="true"></span>
       <div><span class="w-title">RoboDad Radio</span><small id="radioNow">Off. Pick a station.</small></div>
       <button class="playbtn" id="radioToggle" type="button" aria-label="Play music"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
     </div>
@@ -623,6 +678,10 @@ textarea::placeholder{color:var(--muted)}
       <button class="look" type="button" role="radio" data-look="vhs" aria-checked="false">
         <span class="pv vhs"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
         <strong>VHS Sunset</strong><small>Rewind to 1987</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="y2k" aria-checked="false">
+        <span class="pv y2k"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <strong>Y2K Aero</strong><small>Glossy bubbles, circa 2004</small>
       </button>
       <button class="look" type="button" role="radio" data-look="diner" aria-checked="false">
         <span class="pv diner"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
@@ -815,7 +874,7 @@ textarea::placeholder{color:var(--muted)}
     const el = document.createElement("div");
     el.className = "msg robo";
     el.innerHTML = `<svg class="bot bot-mini" width="34" height="34" aria-hidden="true"><use href="#robodad"/></svg>
-      <div class="stack"><div class="bubble"><span class="cassette"><svg class="tape-svg" aria-hidden="true"><use href="#i-cassette"/></svg><svg class="vinyl" aria-hidden="true"><use href="#i-record"/></svg><span class="t-tape">Rewinding the tape…</span><span class="t-diner">Spinning a 45…</span></span></div></div>`;
+      <div class="stack"><div class="bubble"><span class="cassette"><svg class="tape-svg" aria-hidden="true"><use href="#i-cassette"/></svg><svg class="vinyl" aria-hidden="true"><use href="#i-record"/></svg><svg class="buffer" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#A9D3F0" stroke-width="3"/><path d="M12 3 A9 9 0 0 1 21 12" fill="none" stroke="#1A7FD6" stroke-width="3" stroke-linecap="round"/></svg><span class="t-tape">Rewinding the tape…</span><span class="t-diner">Spinning a 45…</span><span class="t-y2k">Buffering…</span></span></div></div>`;
     log.appendChild(el); scrollDown();
     return { bubble: el.querySelector(".bubble"), stack: el.querySelector(".stack") };
   }
@@ -1036,11 +1095,61 @@ textarea::placeholder{color:var(--muted)}
     window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
   }
 
+  // ---------- themed music players (one per look) ----------
+const PLAYERS = {
+  classic: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <g class="waves" fill="none" stroke="#2E9BD6" stroke-width="2" stroke-linecap="round">
+      <path d="M9 14 Q6 20 9 26"/><path d="M5 11 Q0 20 5 29"/><path d="M39 14 Q42 20 39 26"/><path d="M43 11 Q48 20 43 29"/></g>
+    <rect x="14" y="5" width="20" height="31" rx="9" fill="#2E3A46" stroke="#1B2A3A" stroke-width="1.5"/>
+    <g fill="#55626E">${[0,1,2,3,4].map(r=>[0,1,2].map(c=>`<circle cx="${19+c*5}" cy="${16+r*4}" r="1"/>`).join('')).join('')}</g>
+    <ellipse class="ring" cx="24" cy="8.5" rx="7.5" ry="2" fill="#2E9BD6"/></svg>`,
+  arcade: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <defs><linearGradient id="cd${u}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7FF6FF"/><stop offset=".28" stop-color="#FF8BD8"/><stop offset=".52" stop-color="#FFF59A"/><stop offset=".76" stop-color="#8AFFC1"/><stop offset="1" stop-color="#7FF6FF"/></linearGradient></defs>
+    <g class="spin"><circle cx="24" cy="20" r="17" fill="url(#cd${u})" stroke="#E9E6FF" stroke-width="1"/>
+      <circle cx="24" cy="20" r="12.5" fill="none" stroke="#fff" stroke-opacity=".35"/>
+      <path d="M12 12 A14 14 0 0 1 22 6.3" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>
+      <circle cx="24" cy="20" r="6" fill="#DCE3E7" stroke="#9AA6AE"/><circle cx="24" cy="20" r="2.4" fill="#0D0A26"/></g></svg>`,
+  vhs: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <rect x="9" y="3" width="6" height="4" rx="1" fill="#FFB547"/><rect x="17" y="3" width="6" height="4" rx="1" fill="#FFE6A8"/><rect x="25" y="3" width="6" height="4" rx="1" fill="#FFE6A8"/>
+    <rect x="5" y="6" width="38" height="29" rx="5" fill="#FF7A59" stroke="#2A0A05" stroke-width="1.6"/>
+    <rect x="10" y="12" width="28" height="14" rx="3.5" fill="#2B1634" stroke="#2A0A05" stroke-width="1.2"/>
+    <g class="reel"><circle cx="17.5" cy="19" r="4.2" fill="none" stroke="#FFB547" stroke-width="1.8"/><path d="M17.5 15.5v7M14 19h7" stroke="#FFB547" stroke-width="1.4"/></g>
+    <g class="reel"><circle cx="30.5" cy="19" r="4.2" fill="none" stroke="#FFB547" stroke-width="1.8"/><path d="M30.5 15.5v7M27 19h7" stroke="#FFB547" stroke-width="1.4"/></g>
+    <path d="M21.7 19h4.6" stroke="#8A6A9C" stroke-width="2"/>
+    <rect x="10" y="29" width="28" height="2.5" rx="1.2" fill="#FFE6A8" opacity=".85"/></svg>`,
+  diner: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <path d="M10 38 V17 A14 14 0 0 1 38 17 V38 Z" fill="#D7263D" stroke="#1E1E24" stroke-width="1.6" stroke-linejoin="round"/>
+    <path class="tube" d="M14 37 V17.5 A10 10 0 0 1 34 17.5 V37" fill="none" stroke="#FFD45C" stroke-width="2.6"/>
+    <rect x="17.5" y="15" width="13" height="9" rx="2.5" fill="#FFF8EE" stroke="#1E1E24" stroke-width="1"/>
+    <circle cx="24" cy="19.5" r="3.2" fill="#1E1E24"/><circle cx="24" cy="19.5" r="1.1" fill="#D7263D"/>
+    <g stroke="#DCE3E7" stroke-width="1.4" stroke-linecap="round"><path d="M18 28h12M18 31h12M18 34h12"/></g>
+    <circle class="bub b1" cx="14" cy="34" r="1.3" fill="#fff"/><circle class="bub b2" cx="34" cy="33" r="1.3" fill="#fff"/><circle class="bub b3" cx="14" cy="30" r="1" fill="#fff"/></svg>`,
+  y2k: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <defs><linearGradient id="mp${u}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4FBFF"/><stop offset=".5" stop-color="#BFD9EA"/><stop offset="1" stop-color="#8FB6D1"/></linearGradient>
+      <clipPath id="scr${u}"><rect x="16" y="5.5" width="16" height="11" rx="2"/></clipPath></defs>
+    <rect x="13" y="2" width="22" height="36" rx="6" fill="url(#mp${u})" stroke="#4D7699" stroke-width="1.4"/>
+    <rect class="screen" x="16" y="5.5" width="16" height="11" rx="2" fill="#0E2A47"/>
+    <g clip-path="url(#scr${u})"><text class="marquee" x="17" y="12.8" font-family="Verdana, sans-serif" font-size="5" fill="#7FE7FF">♪ RoboDad Radio ♪</text></g>
+    <rect x="17.5" y="20.5" width="13" height="13" rx="4.5" fill="#F2F7FB" stroke="#4D7699" stroke-width="1.2"/>
+    <rect x="21.3" y="24.3" width="5.4" height="5.4" rx="1.8" fill="none" stroke="#9DB7CC" stroke-width="1"/>
+    <path d="M15 4.5 Q24 3 33 4.5" stroke="#fff" stroke-width="1.2" opacity=".8" fill="none"/></svg>`,
+};
+
+  function renderPlayers(){
+    const look = document.documentElement.dataset.look || "classic";
+    const make = PLAYERS[look] || PLAYERS.classic;
+    $("musicArt").innerHTML = make("h"); $("radioArt").innerHTML = make("w");
+    const on = !!(window.RoboRadio && RoboRadio.playing);
+    $("musicArt").classList.toggle("on", on); $("radioArt").classList.toggle("on", on);
+  }
+
   // ---------- looks ----------
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6" };
   const WAKE_COPY = {
     diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
+    y2k: "Dialing up at 56k… RoboDad will be ready in about 30 seconds.",
     other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
   };
   const menuDlg = $("menuDlg");
@@ -1049,6 +1158,7 @@ textarea::placeholder{color:var(--muted)}
     if (look === "classic") delete document.documentElement.dataset.look; else document.documentElement.dataset.look = look;
     document.querySelector('meta[name="theme-color"]').content = THEME_COLORS[look];
     if (!/Signal lost/.test(wakeText.textContent)) wakeText.textContent = WAKE_COPY[look] || WAKE_COPY.other;
+    renderPlayers();
     menuDlg.querySelectorAll(".look").forEach(b => b.setAttribute("aria-checked", String(b.dataset.look === look)));
     setPref(LOOK_KEY, look);
   }
@@ -1266,6 +1376,7 @@ textarea::placeholder{color:var(--muted)}
     $("stations").querySelectorAll("[data-st]").forEach(b => b.setAttribute("aria-checked", String(b.dataset.st === radioPrefs.st)));
     $("radioNow").textContent = on ? `Now playing: ${R.stations[R.station]}` : `Off. ${R ? R.stations[radioPrefs.st] : ""} is ready.`;
     $("musicBtn").setAttribute("aria-pressed", String(on));
+    $("musicArt").classList.toggle("on", on); $("radioArt").classList.toggle("on", on);
     $("musicBtn").title = on ? `Pause music (${R.stations[R.station]})` : "Play music";
     $("musicLabel").textContent = $("musicBtn").title;
   }
