@@ -203,6 +203,8 @@ async def chat(req: ChatRequest, request: Request):
                 async for chunk in stream_reply(provider, build_system_prompt(analysis), history, state["client"]):
                     sent_any = True
                     yield _sse("token", chunk)
+                if not sent_any:
+                    raise RuntimeError("model returned an empty reply")
             except Exception as exc:  # network, quota, bad key …
                 log.warning("LLM failed, falling back to classic: %s", exc)
                 if not sent_any:

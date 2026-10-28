@@ -107,7 +107,7 @@ and use `ANTHROPIC_API_KEY` instead of `GROQ_API_KEY` below. RoboDad uses
 5. Under **Environment Variables** add `GROQ_API_KEY` with your key.
 6. Click **Deploy Web Service**. The first build takes about 3–5 minutes.
 7. When the log says "Your service is live", open the link at the top of the page.
-   The header should read "Online · Groq · llama-3.3-70b-versatile".
+   The header should read "Online · Groq · openai/gpt-oss-120b".
    "Classic mode" means the key is missing or misspelled
    (fix it under **Environment**, then **Manual Deploy** → **Deploy latest commit**).
 
@@ -145,7 +145,7 @@ environment, or `.env` locally).
 
 | Variable | Default | What it does |
 |---|---|---|
-| `GROQ_API_KEY` | none | Use Groq. Model set by `GROQ_MODEL` (default `llama-3.3-70b-versatile`) |
+| `GROQ_API_KEY` | none | Use Groq. Model set by `GROQ_MODEL` (default `openai/gpt-oss-120b`) |
 | `ANTHROPIC_API_KEY` | none | Use Claude. Model set by `ANTHROPIC_MODEL` (default `claude-haiku-5-5`) |
 | `OPENAI_API_KEY` | none | Any OpenAI-compatible API, with `OPENAI_BASE_URL` and `OPENAI_MODEL` |
 | `LLM_PROVIDER` | `auto` | Force `anthropic`, `groq`, `openai`, or `none` (classic only) |
