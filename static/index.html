@@ -34,19 +34,19 @@
   --denim:#4C80B8; --metal:#55687A; --alert:#E07A66; --ok:#5FBF93; color-scheme: dark;
 }
 /* ---------- the three looks ---------- */
-:root{--display:"Nunito", ui-rounded, system-ui, sans-serif; --jacket:#5A3A26; --lens:#1B2A3A; --glow:transparent}
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--jacket:#2A1C14; --lens:#05080C} }
+:root{--display:"Nunito", ui-rounded, system-ui, sans-serif; --jacket:#2B211C; --jacket2:#3D2F27; --hair:#1B2A3A; --lens:#1B2A3A; --glow:transparent}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--jacket:#1A1411; --jacket2:#2E241E; --hair:#0B1118; --lens:#05080C} }
 :root[data-look="arcade"]{
   --sky:#0D0A26; --surface:#18123F; --ink:#EEEAFF; --muted:#A99FDD; --line:#2F2770;
   --denim:#FF3EA5; --denim-ink:#1A0620; --mustard:#2DE2E6; --mustard-ink:#03181A;
-  --metal:#5B50B0; --alert:#FF6B6B; --ok:#3CFF9B; --jacket:#1F1838; --lens:#05030F;
+  --metal:#5B50B0; --alert:#FF6B6B; --ok:#3CFF9B; --jacket:#1F1838; --jacket2:#2C2356; --hair:#0D0A26; --lens:#05030F;
   --glow:color-mix(in srgb, #FF3EA5 55%, transparent);
   --display:"Bungee", "Nunito", sans-serif; color-scheme:dark;
 }
 :root[data-look="vhs"]{
   --sky:#1C0E22; --surface:#2B1634; --ink:#FFEBDD; --muted:#D3B0C3; --line:#4A2A56;
   --denim:#FF7A59; --denim-ink:#2A0A05; --mustard:#FFB547; --mustard-ink:#2A1600;
-  --metal:#8A6A9C; --alert:#FF5E7E; --ok:#7FE3A6; --jacket:#24120C; --lens:#120812;
+  --metal:#8A6A9C; --alert:#FF5E7E; --ok:#7FE3A6; --jacket:#24120C; --jacket2:#3A1E16; --hair:#1A0B14; --lens:#120812;
   --glow:color-mix(in srgb, #FFB547 40%, transparent);
   --display:"Righteous", "Nunito", sans-serif; color-scheme:dark;
 }
@@ -102,9 +102,8 @@ button,textarea{font:inherit;color:inherit}
 .bot{flex:none; display:block}
 .top > .bot{animation:poweron 1.1s steps(1, end) 1}
 @keyframes poweron{0%{opacity:0} 12%{opacity:1; filter:brightness(2)} 18%{opacity:.2} 30%{opacity:1} 38%{opacity:.5} 46%,100%{opacity:1; filter:none}}
-.bot .light{fill:var(--mustard)}
-.thinking .bot .light, .is-waking .bot .light{animation:blink .7s steps(2,start) infinite}
-@keyframes blink{to{fill:var(--metal)}}
+.thinking .bot .glint, .is-waking .bot .glint{animation:glint .8s ease-in-out infinite}
+@keyframes glint{50%{opacity:.05}}
 
 /* ---------- conversation ---------- */
 main{flex:1; overflow-y:auto; scroll-behavior:smooth}
@@ -227,6 +226,49 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .plate-new{animation:plate .6s ease-out 1}
 @keyframes plate{0%{transform:scale(.2); opacity:0} 70%{transform:scale(1.25)} 100%{transform:scale(1); opacity:1}}
 
+/* ---------- dashboard widgets ---------- */
+.side{display:none}
+.side-head{display:flex; align-items:center; justify-content:space-between}
+.side-head h2{margin:0; font-family:var(--display); font-size:1.15rem; font-weight:900}
+:root[data-look="arcade"] .side-head h2,:root[data-look="vhs"] .side-head h2{font-weight:400}
+.widget{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px}
+.widget > b,.widget .w-title{font-family:var(--display); font-weight:900; font-size:.98rem}
+:root[data-look="arcade"] .widget > b,:root[data-look="arcade"] .widget .w-title,:root[data-look="vhs"] .widget > b,:root[data-look="vhs"] .widget .w-title{font-weight:400}
+.widget p{margin:0} .widget small{color:var(--muted); font-size:.78rem; line-height:1.35}
+.widget .row{display:flex; gap:6px; flex-wrap:wrap}
+.chipbtn{border:1px solid var(--line); background:transparent; border-radius:999px; padding:5px 11px; font-weight:800; font-size:.85rem; cursor:pointer}
+.chipbtn:hover{background:var(--sky)}
+.chipbtn[aria-checked="true"],.chipbtn[aria-pressed="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
+.radio-head{display:flex; gap:12px; align-items:center}
+.radio-head svg.tape{width:46px; height:29px; color:var(--denim); flex:none}
+.radio-head .reel{animation:none}
+.radio.playing .radio-head .reel{animation:spin 1.6s linear infinite}
+.radio-head div{flex:1; min-width:0}
+.radio-head small{display:block}
+.playbtn{width:44px; height:44px; border-radius:50%; border:0; background:var(--mustard); color:var(--mustard-ink); cursor:pointer; display:grid; place-items:center; flex:none}
+.playbtn svg{width:20px; height:20px}
+input[type=range]{width:100%; accent-color:var(--mustard)}
+.timer{font-family:var(--display); font-size:2.4rem; font-weight:900; letter-spacing:.02em; line-height:1; font-variant-numeric:tabular-nums}
+:root[data-look="arcade"] .timer,:root[data-look="vhs"] .timer{font-weight:400}
+.big-num{font-family:var(--display); font-size:2.2rem; font-weight:900; line-height:1}
+.widget input:not([type=range]){font:inherit; font-size:.9rem; color:var(--ink); background:var(--sky); border:1.5px solid var(--line); border-radius:10px; padding:7px 10px; width:100%}
+.meter{height:8px; border-radius:4px; background:var(--line)} .meter span{display:block; height:100%; border-radius:4px; background:var(--mustard)}
+.help a{color:var(--denim); font-weight:800}
+.help{border-color:color-mix(in srgb, var(--alert) 45%, var(--line))}
+.only-mobile{display:inline-flex}
+@media (min-width:1180px){
+  .side{display:flex; flex-direction:column; gap:12px; position:fixed; right:0; top:var(--header-h, 69px); bottom:0; width:330px; overflow:auto;
+    padding:16px; border-left:1px solid var(--line); background:color-mix(in srgb, var(--surface) 45%, var(--sky)); z-index:5}
+  main,.composer,.wake{margin-right:330px}
+  #sideBtn,.only-mobile{display:none}
+}
+@media (max-width:1179px){
+  .side.open{display:flex; flex-direction:column; gap:12px; position:fixed; inset:0; z-index:25; overflow:auto;
+    padding:16px; padding-top:max(16px, env(safe-area-inset-top)); background:var(--sky)}
+}
+.newchat-label{display:inline}
+#newChat .nc-icon{display:none}
+@media (max-width:520px){ .newchat-label{display:none} #newChat{padding:9px 11px} #newChat .nc-icon{display:block} }
 .toast{position:fixed; left:50%; top:calc(14px + env(safe-area-inset-top)); transform:translateX(-50%); z-index:40;
   background:var(--ink); color:var(--sky); font-weight:800; padding:10px 18px; border-radius:999px; box-shadow:0 10px 30px rgba(0,0,0,.25); max-width:calc(100vw - 32px); text-align:center}
 .report-btn{border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted); font-size:.85rem; font-weight:700; display:inline-flex; gap:4px; align-items:center}
@@ -276,9 +318,9 @@ details.why[open] summary::before{content:"–"}
 
 /* ---------- composer ---------- */
 .composer{background:linear-gradient(to top, var(--sky) 70%, transparent); padding:8px 16px calc(12px + env(safe-area-inset-bottom))}
-form{max-width:720px; margin:0 auto; display:flex; gap:6px; align-items:flex-end;
+#form{max-width:720px; margin:0 auto; display:flex; gap:6px; align-items:flex-end;
   background:var(--surface); border:1.5px solid var(--line); border-radius:24px; padding:6px 6px 6px 16px}
-form:focus-within{border-color:var(--denim); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 55%, transparent)}
+#form:focus-within{border-color:var(--denim); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 55%, transparent)}
 textarea:focus-visible{outline:none}
 textarea{flex:1; border:0; outline:0; resize:none; background:transparent; padding:8px 0; max-height:160px; line-height:1.4}
 textarea::placeholder{color:var(--muted)}
@@ -312,27 +354,26 @@ textarea::placeholder{color:var(--muted)}
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="robodad" viewBox="0 0 64 64">
-    <!-- leather jacket collar -->
-    <path d="M6 64 L18 50 L27 57 L32 64 Z M58 64 L46 50 L37 57 L32 64 Z" fill="var(--jacket)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
-    <rect x="26" y="45" width="12" height="9" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
-    <!-- headphones resting round the neck -->
-    <path d="M17 51 Q32 62 47 51" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="17" cy="51" r="4" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2"/>
-    <circle cx="47" cy="51" r="4" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2"/>
-    <!-- antenna -->
-    <line x1="32" y1="3" x2="32" y2="11" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
-    <circle class="light" cx="32" cy="4" r="3.6"/>
+    <!-- leather jacket, open over a white shirt -->
+    <path d="M3 64 C5 55 12 50.5 21 49.5 L32 52 L43 49.5 C52 50.5 59 55 61 64 Z" fill="var(--jacket)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M23 49.5 L41 49.5 L32 63 Z" fill="#fff" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M23 49.5 L29 53 L26 57 Z M41 49.5 L35 53 L38 57 Z" fill="#fff" stroke="var(--ink)" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M21 49.5 L26.5 57.5 L29.5 64 L20 64 L15 54 Z M43 49.5 L37.5 57.5 L34.5 64 L44 64 L49 54 Z" fill="var(--jacket2)" stroke="var(--ink)" stroke-width="1.6" stroke-linejoin="round"/>
+    <rect x="27.5" y="44" width="9" height="6.5" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
     <!-- head -->
-    <rect x="10" y="10" width="44" height="36" rx="12" fill="var(--metal)" stroke="var(--ink)" stroke-width="2.6"/>
-    <rect x="5" y="22" width="6" height="11" rx="3" fill="var(--ink)"/>
-    <rect x="53" y="22" width="6" height="11" rx="3" fill="var(--ink)"/>
+    <rect x="12" y="16" width="40" height="30" rx="11" fill="var(--metal)" stroke="var(--ink)" stroke-width="2.4"/>
+    <rect x="8" y="26" width="5" height="9" rx="2.5" fill="var(--ink)"/>
+    <rect x="51" y="26" width="5" height="9" rx="2.5" fill="var(--ink)"/>
+    <!-- slicked-back hair -->
+    <path d="M14 25 C12.5 17 15 10.5 21 7.5 C24 2.5 31 0.8 37 3 C43 2.2 49.5 6 50.5 13.5 L50 27 C49 22.5 46 20 41 20 C37.5 20 35 20.8 32 23 C29 20.8 26.5 20 23 20 C18 20 15 22.5 14 27 Z" fill="var(--hair)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M20.5 12 C25 7.5 32 6 38.5 8 C43 9.2 46.5 11.5 48.5 15 M23.5 16 C29.5 12.5 38 12.5 46 16.5 M25 7 C29 4.8 33.5 4.5 37 5.5" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".4"/>
     <!-- aviators -->
-    <path d="M13 21.5 H51" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
-    <path d="M14 22 H29 Q30 22 29.7 24 Q28.5 32 22 32 Q15.5 32 14.3 24 Q14 22 14 22Z" fill="var(--lens)" stroke="var(--ink)" stroke-width="1.8"/>
-    <path d="M50 22 H35 Q34 22 34.3 24 Q35.5 32 42 32 Q48.5 32 49.7 24 Q50 22 50 22Z" fill="var(--lens)" stroke="var(--ink)" stroke-width="1.8"/>
-    <path d="M17 24.5 L21 24.5 M37.5 24.5 L41.5 24.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
-    <!-- mustache -->
-    <path d="M19 39c4-4 9-4 13 0 4-4 9-4 13 0-3 4.5-9 4.5-13 2-4 2.5-10 2.5-13-2z" fill="var(--ink)"/>
+    <path d="M16 26.5 H30 Q30.5 34 23 34 Q16 34 16 26.5Z" fill="var(--lens)"/>
+    <path d="M48 26.5 H34 Q33.5 34 41 34 Q48 34 48 26.5Z" fill="var(--lens)"/>
+    <path d="M30 27.5 H34" stroke="var(--lens)" stroke-width="2"/>
+    <path class="glint" d="M19 28.5 L23 28.5 M37 28.5 L41 28.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".75"/>
+    <!-- smile -->
+    <path d="M25.5 39.5 Q32 43 38.5 39.5" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
   </symbol>
   <symbol id="i-cassette" viewBox="0 0 48 30">
     <rect x="1.5" y="1.5" width="45" height="27" rx="4" fill="none" stroke="currentColor" stroke-width="2.4"/>
@@ -342,6 +383,10 @@ textarea::placeholder{color:var(--muted)}
     <path d="M12 28.5l3-5h18l3 5" fill="none" stroke="currentColor" stroke-width="2"/>
   </symbol>
   <symbol id="i-belt" viewBox="0 0 24 24"><rect x="1.5" y="8" width="21" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="10" width="8" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4.2" height="15" rx="1" fill="currentColor"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1" fill="currentColor"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
   <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
   <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
@@ -358,13 +403,16 @@ textarea::placeholder{color:var(--muted)}
     <h1>RoboDad</h1>
     <p class="status waking" id="status"><span class="dot"></span>Warming up…</p>
   </div>
+  <button class="icon-btn" id="sideBtn" type="button" title="Dashboard: radio, timer and more">
+    <svg aria-hidden="true"><use href="#i-dash"/></svg><span class="sr">Dashboard: radio, timer and more</span>
+  </button>
   <button class="icon-btn" id="beltBtn" type="button" title="Life Skills Belt">
     <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Life Skills Belt</span>
   </button>
   <button class="icon-btn" id="menuBtn" type="button" title="Look and settings">
     <svg aria-hidden="true"><use href="#i-menu"/></svg><span class="sr">Look and settings</span>
   </button>
-  <button class="ghost" id="newChat" type="button">New chat</button>
+  <button class="ghost" id="newChat" type="button" title="New chat"><span class="newchat-label">New chat</span><svg class="nc-icon" width="16" height="16" aria-hidden="true"><use href="#i-plus"/></svg></button>
 </header>
 
 <div class="wake" id="wake" role="status" hidden>
@@ -398,6 +446,74 @@ textarea::placeholder{color:var(--muted)}
   </form>
   <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a></p>
 </div>
+
+<aside class="side" id="side" aria-label="RoboDad dashboard">
+  <div class="side-head"><h2>Dashboard</h2><button class="ghost only-mobile" id="sideClose" type="button">Close</button></div>
+
+  <section class="widget radio" id="radioW" aria-label="RoboDad Radio">
+    <div class="radio-head">
+      <svg class="tape" aria-hidden="true"><use href="#i-cassette"/></svg>
+      <div><span class="w-title">RoboDad Radio</span><small id="radioNow">Off. Pick a station.</small></div>
+      <button class="playbtn" id="radioToggle" type="button" aria-label="Play music"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
+    </div>
+    <div class="row" role="radiogroup" aria-label="Station" id="stations">
+      <button class="chipbtn" type="button" role="radio" data-st="lounge" aria-checked="true">Lobby Lounge</button>
+      <button class="chipbtn" type="button" role="radio" data-st="canon" aria-checked="false">Canon in D</button>
+      <button class="chipbtn" type="button" role="radio" data-st="drive" aria-checked="false">Midnight Drive</button>
+    </div>
+    <label class="sr" for="radioVol">Volume</label>
+    <input type="range" id="radioVol" min="0" max="100" value="35">
+    <small>Played live by RoboDad's built-in synth, so nothing is downloaded. Canon in D by Johann Pachelbel (public domain).</small>
+  </section>
+
+  <section class="widget" aria-label="Focus timer">
+    <b>Focus timer</b>
+    <div class="timer" id="timerDisplay" aria-live="off">25:00</div>
+    <div class="row" role="radiogroup" aria-label="Timer length">
+      <button class="chipbtn" type="button" role="radio" data-min="25" aria-checked="true">25 min focus</button>
+      <button class="chipbtn" type="button" role="radio" data-min="5" aria-checked="false">5 min break</button>
+    </div>
+    <div class="row"><button class="primary" id="timerStart" type="button">Start</button><button class="ghost" id="timerReset" type="button">Reset</button></div>
+  </section>
+
+  <section class="widget" aria-label="Countdown">
+    <b>Countdown</b>
+    <div id="cdShow" hidden><div class="big-num" id="cdDays"></div><p id="cdText"></p><div class="row"><button class="chipbtn" id="cdEdit" type="button">Change</button><button class="chipbtn" id="cdClear" type="button">Clear</button></div></div>
+    <form id="cdForm" style="display:flex; flex-direction:column; gap:8px">
+      <small>Counting down to an exam, a trip or a birthday?</small>
+      <label class="sr" for="cdName">What are you counting down to?</label>
+      <input id="cdName" maxlength="30" placeholder="e.g. Math exam" required>
+      <label class="sr" for="cdDate">Date</label>
+      <input id="cdDate" type="date" required>
+      <div class="row"><button class="chipbtn" type="submit">Start countdown</button></div>
+    </form>
+  </section>
+
+  <section class="widget" aria-label="Dad joke of the day">
+    <b>Dad joke of the day</b>
+    <p id="dailyJoke">Loading a fresh groaner…</p>
+    <div class="row"><button class="chipbtn" id="jokeMore" type="button">Another one</button></div>
+  </section>
+
+  <section class="widget" aria-label="Tip of the day">
+    <b>Tip of the day</b>
+    <p id="tipTopic" style="font-weight:800"></p>
+    <p id="dailyTip">Loading…</p>
+  </section>
+
+  <section class="widget" aria-label="Life Skills Belt progress">
+    <b>Life Skills Belt</b>
+    <p id="beltMiniText"></p>
+    <div class="meter" aria-hidden="true"><span id="beltMiniBar" style="width:0"></span></div>
+    <div class="row"><button class="chipbtn" id="beltMiniOpen" type="button">Open belt</button></div>
+  </section>
+
+  <section class="widget help" aria-label="Help">
+    <b>Need to talk to someone now?</b>
+    <p><a href="tel:18006686868">Kids Help Phone: 1-800-668-6868</a>, or text CONNECT to <a href="sms:686868?body=CONNECT">686868</a>. Free, any time.</p>
+    <p>In an emergency, call <a href="tel:911">911</a>.</p>
+  </section>
+</aside>
 
 <div class="overlay" id="menuDlg" role="dialog" aria-modal="true" aria-labelledby="menuTitle" hidden>
   <div class="card">
@@ -479,6 +595,7 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
+<script src="/static/radio.js"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -536,6 +653,9 @@ textarea::placeholder{color:var(--muted)}
     const u = new SpeechSynthesisUtterance(plain(text));
     const v = pickVoice(); if (v) u.voice = v;
     u.rate = 1; u.pitch = 0.9;
+    const unduck = () => window.RoboRadio && RoboRadio.duck(false);
+    u.onend = unduck; u.onerror = unduck;
+    if (window.RoboRadio) RoboRadio.duck(true);
     speechSynthesis.speak(u);
   }
   if (canSpeak) {
@@ -724,6 +844,7 @@ textarea::placeholder{color:var(--muted)}
     }
     clearTimeout(slow);
     wake.hidden = true; document.body.classList.remove("is-waking");
+    loadDaily(false);
   }
 
   // ---------- chat ----------
@@ -904,7 +1025,12 @@ textarea::placeholder{color:var(--muted)}
       <text x="160" y="80" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="20" fill="#4A3200">${n}/12</text>
     </svg>`;
   }
+  function updateBeltMini(){
+    $("beltMiniText").textContent = `${belt.size}/12 plates · ${rank(belt.size)}`;
+    $("beltMiniBar").style.width = `${Math.round(belt.size / 12 * 100)}%`;
+  }
   function renderBelt(justEarned){
+    updateBeltMini();
     $("beltArt").innerHTML = beltSVG(justEarned);
     $("beltRank").textContent = rank(belt.size);
     $("skillList").innerHTML = SKILLS.map(([id, label]) =>
@@ -912,7 +1038,7 @@ textarea::placeholder{color:var(--muted)}
   }
   function earn(id){
     if (belt.has(id)) return false;
-    belt.add(id); saveBelt();
+    belt.add(id); saveBelt(); updateBeltMini();
     const label = SKILLS.find(s => s[0] === id)?.[1] || "";
     toast(`New plate! ${belt.size}/12 · ${rank(belt.size)}`);
     if (!$("beltDlg").hidden) renderBelt(id);
@@ -922,6 +1048,7 @@ textarea::placeholder{color:var(--muted)}
     const b = e.target.closest(".skill"); if (!b) return;
     const id = b.dataset.skill;
     if (belt.has(id)) { belt.delete(id); saveBelt(); renderBelt(); } else { earn(id); renderBelt(id); }
+    updateBeltMini();
   });
   $("beltBtn").addEventListener("click", () => { renderBelt(); $("beltDlg").hidden = false; $("beltDone").focus(); });
   const closeBelt = () => { $("beltDlg").hidden = true; $("beltBtn").focus(); };
@@ -1001,6 +1128,104 @@ textarea::placeholder{color:var(--muted)}
     }
     tools.appendChild(card);
   }
+
+  // ---------- dashboard ----------
+  const side = $("side");
+  const setHeaderH = () => document.documentElement.style.setProperty("--header-h", document.querySelector(".top").offsetHeight + "px");
+  setHeaderH(); window.addEventListener("resize", setHeaderH);
+  $("sideBtn").addEventListener("click", () => { side.classList.add("open"); $("sideClose").focus(); });
+  const closeSide = () => { side.classList.remove("open"); $("sideBtn").focus(); };
+  $("sideClose").addEventListener("click", closeSide);
+  side.addEventListener("keydown", (e) => { if (e.key === "Escape" && side.classList.contains("open")) closeSide(); });
+  $("beltMiniOpen").addEventListener("click", () => { side.classList.remove("open"); $("beltBtn").click(); });
+  updateBeltMini();
+
+  // RoboDad Radio
+  const RADIO_KEY = "robodad.radio";
+  let radioPrefs = { st: "lounge", vol: 35 };
+  try { radioPrefs = { ...radioPrefs, ...JSON.parse(localStorage.getItem(RADIO_KEY) || "{}") }; } catch {}
+  const saveRadio = () => setPref(RADIO_KEY, JSON.stringify(radioPrefs));
+  const radioW = $("radioW"), radioToggle = $("radioToggle"), radioVol = $("radioVol");
+  radioVol.value = radioPrefs.vol;
+  function radioUI(){
+    const R = window.RoboRadio, on = !!(R && R.playing);
+    radioW.classList.toggle("playing", on);
+    radioToggle.innerHTML = `<svg aria-hidden="true"><use href="#i-${on ? "pause" : "play"}"/></svg>`;
+    radioToggle.setAttribute("aria-label", on ? "Pause music" : "Play music");
+    $("stations").querySelectorAll("[data-st]").forEach(b => b.setAttribute("aria-checked", String(b.dataset.st === radioPrefs.st)));
+    $("radioNow").textContent = on ? `Now playing: ${R.stations[R.station]}` : `Off. ${R ? R.stations[radioPrefs.st] : ""} is ready.`;
+  }
+  if (window.RoboRadio) {
+    RoboRadio.onchange = radioUI;
+    RoboRadio.setVolume(radioPrefs.vol / 100);
+    radioToggle.addEventListener("click", () => { RoboRadio.playing ? RoboRadio.stop() : RoboRadio.play(radioPrefs.st); });
+    $("stations").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-st]"); if (!b) return;
+      radioPrefs.st = b.dataset.st; saveRadio(); RoboRadio.play(radioPrefs.st); radioUI();
+    });
+    radioVol.addEventListener("input", () => { radioPrefs.vol = Number(radioVol.value); saveRadio(); RoboRadio.setVolume(radioPrefs.vol / 100); });
+    radioUI();
+  } else { radioW.hidden = true; }
+
+  // Focus timer
+  let tMinutes = 25, tRemaining = 25 * 60, tEnd = 0, tTick = null;
+  const fmt = (sec) => `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+  const tShow = () => { $("timerDisplay").textContent = fmt(Math.max(0, Math.ceil(tRemaining))); };
+  function tStop(){ clearInterval(tTick); tTick = null; $("timerStart").textContent = "Start"; }
+  function tSet(min){ tStop(); tMinutes = min; tRemaining = min * 60; tShow();
+    document.querySelectorAll("[data-min]").forEach(b => b.setAttribute("aria-checked", String(Number(b.dataset.min) === min))); }
+  document.querySelectorAll("[data-min]").forEach(b => b.addEventListener("click", () => tSet(Number(b.dataset.min))));
+  $("timerStart").addEventListener("click", () => {
+    if (tTick) { tRemaining = (tEnd - Date.now()) / 1000; tStop(); $("timerStart").textContent = "Resume"; return; }
+    tEnd = Date.now() + tRemaining * 1000; $("timerStart").textContent = "Pause";
+    tTick = setInterval(() => {
+      tRemaining = (tEnd - Date.now()) / 1000; tShow();
+      if (tRemaining <= 0) {
+        tStop(); window.RoboRadio && RoboRadio.chime();
+        toast(tMinutes >= 25 ? "Focus session done! Take a 5-minute break." : "Break's over. Ready for another round?");
+        tSet(tMinutes >= 25 ? 5 : 25);
+      }
+    }, 250);
+  });
+  $("timerReset").addEventListener("click", () => tSet(tMinutes));
+  tShow();
+
+  // Countdown
+  const CD_KEY = "robodad.countdown";
+  function cdRender(){
+    let cd = null; try { cd = JSON.parse(localStorage.getItem(CD_KEY) || "null"); } catch {}
+    $("cdShow").hidden = !cd; $("cdForm").hidden = !!cd;
+    if (!cd) return;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const [y, m, d] = cd.date.split("-").map(Number); const target = new Date(y, m - 1, d);
+    const days = Math.round((target - today) / 86400000);
+    $("cdDays").textContent = days > 0 ? `${days} day${days === 1 ? "" : "s"}` : days === 0 ? "Today!" : `${-days} day${days === -1 ? "" : "s"} ago`;
+    $("cdText").textContent = days > 0 ? `until ${cd.name}` : days === 0 ? `${cd.name} is today. You've got this.` : `since ${cd.name}. How did it go?`;
+  }
+  $("cdForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    setPref(CD_KEY, JSON.stringify({ name: $("cdName").value.trim().slice(0, 30), date: $("cdDate").value })); cdRender();
+  });
+  $("cdEdit").addEventListener("click", () => {
+    try { const cd = JSON.parse(localStorage.getItem(CD_KEY)); $("cdName").value = cd.name; $("cdDate").value = cd.date; } catch {}
+    $("cdShow").hidden = true; $("cdForm").hidden = false; $("cdName").focus();
+  });
+  $("cdClear").addEventListener("click", () => { try { localStorage.removeItem(CD_KEY); } catch {} $("cdName").value = ""; $("cdDate").value = ""; cdRender(); });
+  cdRender();
+
+  // Dad joke + tip of the day
+  async function loadDaily(randomJoke){
+    try {
+      const r = await fetch("/api/daily" + (randomJoke ? "?random_pick=true" : ""), { cache:"no-store" });
+      const d = await r.json();
+      $("dailyJoke").textContent = d.joke || "RoboDad's joke book is empty. That's the real joke.";
+      if (!randomJoke) {
+        $("tipTopic").textContent = d.question ? `“${d.question}”` : (d.topic ? `Topic: ${d.topic}` : "");
+        $("dailyTip").textContent = d.tip;
+      }
+    } catch { $("dailyJoke").textContent = "Couldn't load today's joke. Check your internet connection."; }
+  }
+  $("jokeMore").addEventListener("click", () => loadDaily(true));
 
   // ---------- nickname ----------
   const NAME_KEY = "robodad.nickname", AGE_KEY = "robodad.ageCheck";
