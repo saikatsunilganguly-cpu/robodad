@@ -10,6 +10,8 @@ pinned: false
 
 # RoboDad: from intent classifier to a hosted LLM chatbot
 
+**Live demo: https://robodad.onrender.com** (free hosting: the first visit after a quiet spell takes up to a minute to wake up)
+
 RoboDad started as my CONL725 coursework chatbot: TF-IDF + Logistic Regression
 intent classification, VADER sentiment, regex NER and canned responses in a
 terminal. This version turns it into a web app that talks like a real LLM
