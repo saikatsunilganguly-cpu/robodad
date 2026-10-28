@@ -43,7 +43,7 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse  # n
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-from .llm import build_system_prompt, detect_provider, stream_reply  # noqa: E402
+from .llm import build_system_prompt, detect_provider, stream_with_failover  # noqa: E402
 from .nlp import RoboDadNLP  # noqa: E402
 from .safety import CRISIS_RESPONSE, clean_user_text, is_crisis  # noqa: E402
 
@@ -55,6 +55,11 @@ STATIC_DIR = os.path.join(BASE_DIR, "static")
 HISTORY_TURNS = 16  # messages of context sent to the LLM
 RATE_LIMIT = os.getenv("RATE_LIMIT", "30/600")  # messages / seconds, per visitor
 DAILY_LLM_LIMIT = int(os.getenv("DAILY_LLM_LIMIT", "1500"))  # protects your API bill
+
+# Optional feedback storage (free Supabase project). Without these, thumbs
+# up/down are still written to the server log.
+SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "").strip()
 
 state: dict = {}
 
@@ -113,6 +118,15 @@ class ChatMessage(BaseModel):
     content: str
 
 
+class FeedbackRequest(BaseModel):
+    rating: int = Field(ge=-1, le=1)
+    intent: str = Field(default="", max_length=64)
+    confidence: float = 0.0
+    mode: str = Field(default="", max_length=16)
+    model: str = Field(default="", max_length=120)
+    reply: str = Field(default="", max_length=4000)
+
+
 class ChatRequest(BaseModel):
     messages: list[ChatMessage] = Field(min_length=1, max_length=200)
 
@@ -142,7 +156,22 @@ def _sse(event: str, data) -> str:
 # ---------------------------------------------------------------- routes
 @app.get("/")
 async def index():
-    return FileResponse(os.path.join(STATIC_DIR, "index.html"))
+    return FileResponse(os.path.join(STATIC_DIR, "index.html"), headers={"Cache-Control": "no-cache"})
+
+
+# The phone-app files must be served from the site root to control the whole site.
+@app.get("/manifest.webmanifest")
+async def manifest():
+    return FileResponse(os.path.join(STATIC_DIR, "manifest.webmanifest"), media_type="application/manifest+json")
+
+
+@app.get("/sw.js")
+async def service_worker():
+    return FileResponse(
+        os.path.join(STATIC_DIR, "sw.js"),
+        media_type="application/javascript",
+        headers={"Cache-Control": "no-cache", "Service-Worker-Allowed": "/"},
+    )
 
 
 @app.get("/api/status")
@@ -200,7 +229,7 @@ async def chat(req: ChatRequest, request: Request):
             _daily["count"] += 1
             sent_any = False
             try:
-                async for chunk in stream_reply(provider, build_system_prompt(analysis), history, state["client"]):
+                async for chunk in stream_with_failover(provider, build_system_prompt(analysis), history, state["client"]):
                     sent_any = True
                     yield _sse("token", chunk)
                 if not sent_any:
@@ -213,10 +242,41 @@ async def chat(req: ChatRequest, request: Request):
                 else:
                     yield _sse("token", " …sorry kiddo, I lost my train of thought there.")
 
-        yield _sse("done", {"total_ms": round((time.perf_counter() - t0) * 1000, 1)})
+        done = {"total_ms": round((time.perf_counter() - t0) * 1000, 1)}
+        if mode == "llm":
+            done["model"] = provider.label  # may differ from meta if the model was switched
+        yield _sse("done", done)
 
     return StreamingResponse(
         events(),
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+@app.post("/api/feedback")
+async def feedback(fb: FeedbackRequest, request: Request):
+    """Thumbs up/down on a reply. The child's own message is never stored."""
+    if fb.rating == 0:
+        raise HTTPException(400, "Rating must be 1 or -1.")
+    if _rate_limited(_client_ip(request)):
+        return JSONResponse({"error": "Too many ratings. Wait a minute, then try again."}, status_code=429)
+
+    row = fb.model_dump()
+    log.info("FEEDBACK %s intent=%s mode=%s model=%s reply=%r",
+             "up" if fb.rating > 0 else "down", fb.intent, fb.mode, fb.model, fb.reply[:120])
+    if not (SUPABASE_URL and SUPABASE_KEY):
+        return {"stored": "log"}
+
+    headers = {"apikey": SUPABASE_KEY, "Content-Type": "application/json", "Prefer": "return=minimal"}
+    if not SUPABASE_KEY.startswith("sb_"):  # legacy JWT-style service_role key
+        headers["Authorization"] = f"Bearer {SUPABASE_KEY}"
+    try:
+        r = await state["client"].post(f"{SUPABASE_URL}/rest/v1/feedback", headers=headers, json=row)
+        if r.status_code >= 300:
+            log.warning("Supabase insert failed %s: %s", r.status_code, r.text[:300])
+            return {"stored": "log"}
+    except httpx.HTTPError as exc:
+        log.warning("Supabase unreachable: %s", exc)
+        return {"stored": "log"}
+    return {"stored": "database"}

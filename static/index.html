@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>RoboDad</title>
 <meta name="description" content="RoboDad: a friendly robot dad who helps with everyday life skills.">
+<meta name="theme-color" content="#2E5C8A">
+<link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -28,6 +33,7 @@
   --denim:#4C80B8; --metal:#55687A; --alert:#E07A66; --ok:#5FBF93; color-scheme: dark;
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{
   margin:0; background:var(--sky); color:var(--ink);
@@ -36,34 +42,49 @@ body{
 }
 button,textarea{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--mustard); outline-offset:2px; border-radius:8px}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 
 /* ---------- header ---------- */
 .top{
-  display:flex; align-items:center; gap:12px;
-  padding:12px 16px; border-bottom:1px solid var(--line); background:var(--surface);
+  display:flex; align-items:center; gap:10px;
+  padding:12px 16px; padding-top:max(12px, env(safe-area-inset-top));
+  border-bottom:1px solid var(--line); background:var(--surface);
 }
 .top .who{flex:1; min-width:0}
 .top h1{margin:0; font-size:1.25rem; font-weight:900; letter-spacing:-.01em}
 .status{margin:0; font-size:.85rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .status .dot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ok); margin-right:6px; vertical-align:1px}
 .status.classic .dot{background:var(--mustard)}
+.status.waking .dot{background:var(--muted)}
 .ghost{
   border:1px solid var(--line); background:transparent; border-radius:999px;
-  padding:6px 14px; font-weight:700; font-size:.9rem; cursor:pointer;
+  padding:6px 14px; font-weight:700; font-size:.9rem; cursor:pointer; white-space:nowrap;
 }
 .ghost:hover{background:var(--sky)}
+.icon-btn{
+  flex:none; width:38px; height:38px; display:grid; place-items:center; padding:0;
+  border:1px solid var(--line); background:transparent; border-radius:50%; cursor:pointer;
+}
+.icon-btn:hover{background:var(--sky)}
+.icon-btn svg{width:20px; height:20px}
+.icon-btn[aria-pressed="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
+
+/* ---------- waking banner ---------- */
+.wake{
+  display:flex; gap:10px; align-items:center; justify-content:center;
+  padding:10px 16px; background:var(--mustard); color:var(--mustard-ink); font-weight:700; font-size:.92rem; text-align:center;
+}
 
 /* ---------- avatar ---------- */
 .bot{flex:none; display:block}
 .bot .light{fill:var(--mustard)}
-.thinking .bot .light{animation:blink .7s steps(2,start) infinite}
+.thinking .bot .light, .is-waking .bot .light{animation:blink .7s steps(2,start) infinite}
 @keyframes blink{to{fill:var(--metal)}}
 
 /* ---------- conversation ---------- */
 main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .log{max-width:720px; margin:0 auto; padding:24px 16px 8px; display:flex; flex-direction:column; gap:18px}
 
-.hello[hidden]{display:none}
 .hello{padding:32px 0 8px; display:flex; flex-direction:column; align-items:flex-start; gap:14px}
 .hello h2{margin:0; font-size:clamp(2rem, 6vw, 2.9rem); line-height:1.05; font-weight:900; letter-spacing:-.02em; max-width:14ch}
 .hello p{margin:0; color:var(--muted); max-width:46ch}
@@ -91,10 +112,25 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .typing i{width:7px; height:7px; border-radius:50%; background:var(--muted); animation:hop 1s infinite}
 .typing i:nth-child(2){animation-delay:.15s} .typing i:nth-child(3){animation-delay:.3s}
 @keyframes hop{50%{transform:translateY(-4px); opacity:.5}}
-.notice{font-size:.85rem; color:var(--muted); padding-left:4px}
+.notice{font-size:.85rem; color:var(--muted); padding-left:4px; margin:0}
 
-/* ---------- NLP insight panel ---------- */
-details.why{font-size:.85rem; color:var(--muted); padding-left:4px}
+/* ---------- under each reply: rating + insight ---------- */
+.tools{display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; padding-left:4px; font-size:.85rem; color:var(--muted)}
+.rate{display:inline-flex; gap:2px}
+.rate button{
+  border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted); line-height:1;
+}
+.rate button svg{width:17px; height:17px; display:block}
+.rate button:hover:not(:disabled){background:var(--surface); color:var(--ink)}
+.rate button[aria-pressed="true"]{color:var(--denim)}
+.rate button:disabled{cursor:default}
+.rate button:disabled:not([aria-pressed="true"]){opacity:.35}
+.thanks{font-weight:700}
+.speak-one{border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted)}
+.speak-one svg{width:17px; height:17px; display:block}
+.speak-one:hover{background:var(--surface); color:var(--ink)}
+
+details.why{flex-basis:100%; font-size:.85rem; color:var(--muted)}
 details.why summary{cursor:pointer; font-weight:700; list-style:none; display:inline-flex; gap:6px; align-items:center}
 details.why summary::-webkit-details-marker{display:none}
 details.why summary::before{content:"+"; font-weight:900; width:1em; text-align:center}
@@ -112,13 +148,20 @@ details.why[open] summary::before{content:"–"}
 
 /* ---------- composer ---------- */
 .composer{background:linear-gradient(to top, var(--sky) 70%, transparent); padding:8px 16px calc(12px + env(safe-area-inset-bottom))}
-form{max-width:720px; margin:0 auto; display:flex; gap:8px; align-items:flex-end;
+form{max-width:720px; margin:0 auto; display:flex; gap:6px; align-items:flex-end;
   background:var(--surface); border:1.5px solid var(--line); border-radius:24px; padding:6px 6px 6px 16px}
-form:focus-within{border-color:var(--denim)}
+form:focus-within{border-color:var(--denim); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 55%, transparent)}
 textarea:focus-visible{outline:none}
-form:focus-within{box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 55%, transparent)}
 textarea{flex:1; border:0; outline:0; resize:none; background:transparent; padding:8px 0; max-height:160px; line-height:1.4}
 textarea::placeholder{color:var(--muted)}
+.mic{
+  flex:none; width:42px; height:42px; border-radius:50%; border:0; background:transparent; cursor:pointer;
+  display:grid; place-items:center; color:var(--muted);
+}
+.mic svg{width:22px; height:22px}
+.mic:hover{background:var(--sky); color:var(--ink)}
+.mic.listening{background:var(--alert); color:#fff; animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px color-mix(in srgb, var(--alert) 25%, transparent)}}
 .send{
   flex:none; border:0; border-radius:999px; background:var(--mustard); color:var(--mustard-ink);
   font-weight:900; padding:10px 18px; cursor:pointer;
@@ -128,8 +171,10 @@ textarea::placeholder{color:var(--muted)}
 
 @media (max-width:520px){
   body{font-size:16px}
+  .top{gap:8px}
   .robo .bot-mini{display:none}
   .bubble,.robo .stack{max-width:92%}
+  .hide-narrow{display:none}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important; scroll-behavior:auto!important}
@@ -150,16 +195,28 @@ textarea::placeholder{color:var(--muted)}
     <circle cx="42" cy="29.5" r="2" fill="var(--ink)"/>
     <path d="M18 41c4-4 9-4 14 0 5-4 10-4 14 0-3 5-9 5-14 2-5 3-11 3-14-2z" fill="var(--ink)"/>
   </symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 21H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3m0 10V11m0 10h10.3a2 2 0 0 0 2-1.7l1.3-7A2 2 0 0 0 18.6 10H14V5.5A2.5 2.5 0 0 0 11.5 3L7 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><g transform="rotate(180 12 12)"><path d="M7 21H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3m0 10V11m0 10h10.3a2 2 0 0 0 2-1.7l1.3-7A2 2 0 0 0 18.6 10H14V5.5A2.5 2.5 0 0 0 11.5 3L7 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></g></symbol>
 </svg>
 
 <header class="top">
   <svg class="bot" width="44" height="44" aria-hidden="true"><use href="#robodad"/></svg>
   <div class="who">
     <h1>RoboDad</h1>
-    <p class="status" id="status"><span class="dot"></span>Starting up…</p>
+    <p class="status waking" id="status"><span class="dot"></span>Connecting…</p>
   </div>
+  <button class="ghost hide-narrow" id="install" type="button" hidden>Install app</button>
+  <button class="icon-btn" id="readAloud" type="button" aria-pressed="false" title="Read replies aloud" hidden>
+    <svg aria-hidden="true"><use href="#i-speaker"/></svg><span class="sr">Read replies aloud</span>
+  </button>
   <button class="ghost" id="newChat" type="button">New chat</button>
 </header>
+
+<div class="wake" id="wake" role="status" hidden>
+  <span id="wakeText">RoboDad is waking up. On the free plan this can take up to a minute.</span>
+</div>
 
 <main id="scroller">
   <div class="log" id="log" aria-live="polite">
@@ -179,8 +236,11 @@ textarea::placeholder{color:var(--muted)}
 
 <div class="composer">
   <form id="form" autocomplete="off">
-    <label for="input" class="sr" style="position:absolute;left:-9999px">Message RoboDad</label>
+    <label for="input" class="sr">Message RoboDad</label>
     <textarea id="input" rows="1" maxlength="1000" placeholder="Talk to RoboDad…"></textarea>
+    <button class="mic" id="mic" type="button" title="Talk instead of typing" hidden>
+      <svg aria-hidden="true"><use href="#i-mic"/></svg><span class="sr" id="micLabel">Talk instead of typing</span>
+    </button>
     <button class="send" id="send" type="submit" disabled>Send</button>
   </form>
   <p class="fine">RoboDad is an AI, not a real parent, and can get things wrong. Never share your address or passwords. In an emergency, call 911.</p>
@@ -190,24 +250,26 @@ textarea::placeholder{color:var(--muted)}
 (() => {
   const $ = (id) => document.getElementById(id);
   const log = $("log"), form = $("form"), input = $("input"), send = $("send"),
-        scroller = $("scroller"), statusEl = $("status"), hello = $("hello");
-  const KEY = "robodad.chat.v1";
-  let history = [];   // [{role, content, meta?}]
-  let busy = false;
+        scroller = $("scroller"), statusEl = $("status"), hello = $("hello"),
+        wake = $("wake"), wakeText = $("wakeText"), micBtn = $("mic"), readBtn = $("readAloud"), installBtn = $("install");
+  const KEY = "robodad.chat.v1", READ_KEY = "robodad.readAloud";
+  let history = [];   // [{role, content, meta?, totalMs?, rated?}]
+  let busy = false, awake = false;
 
   // ---------- storage (best effort) ----------
   const save = () => { try { sessionStorage.setItem(KEY, JSON.stringify(history.slice(-60))); } catch {} };
   const load = () => { try { return JSON.parse(sessionStorage.getItem(KEY) || "[]"); } catch { return []; } };
+  const getPref = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+  const setPref = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
 
   // ---------- tiny, safe markdown ----------
-  const esc = (s) => s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   function md(text){
     const blocks = esc(text.trim()).split(/\n{2,}/);
     const inline = s => s.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*(?!\s)(.+?)\*/g,"$1<em>$2</em>");
     const OL = /^\s*\d+[.)]\s/, UL = /^\s*[-•*]\s/;
     const kind = l => OL.test(l) ? "ol" : UL.test(l) ? "ul" : "p";
     return blocks.map(b => {
-      // group consecutive lines of the same kind: text, numbered list, bullet list
       const runs = [];
       for (const l of b.split("\n")) {
         const k = kind(l), last = runs[runs.length - 1];
@@ -218,6 +280,68 @@ textarea::placeholder{color:var(--muted)}
         : `<${k}>` + lines.map(l => "<li>" + inline(l.replace(k === "ol" ? OL : UL, "")) + "</li>").join("") + `</${k}>`
       ).join("");
     }).join("");
+  }
+  const plain = (text) => text.replace(/\*\*?/g, "").replace(/^\s*[-•*]\s/gm, "").replace(/\n+/g, ". ");
+
+  // ---------- read aloud ----------
+  const canSpeak = "speechSynthesis" in window;
+  let readAloud = canSpeak && getPref(READ_KEY) === "on";
+  function pickVoice(){
+    const voices = speechSynthesis.getVoices();
+    const lang = (navigator.language || "en-US").toLowerCase();
+    return voices.find(v => v.lang.toLowerCase() === lang) || voices.find(v => v.lang.toLowerCase().startsWith("en")) || null;
+  }
+  function speak(text){
+    if (!canSpeak) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(plain(text));
+    const v = pickVoice(); if (v) u.voice = v;
+    u.rate = 1; u.pitch = 0.9;
+    speechSynthesis.speak(u);
+  }
+  if (canSpeak) {
+    readBtn.hidden = false;
+    readBtn.setAttribute("aria-pressed", String(readAloud));
+    readBtn.addEventListener("click", () => {
+      readAloud = !readAloud;
+      readBtn.setAttribute("aria-pressed", String(readAloud));
+      readBtn.title = readAloud ? "Stop reading replies aloud" : "Read replies aloud";
+      setPref(READ_KEY, readAloud ? "on" : "off");
+      if (!readAloud) speechSynthesis.cancel();
+    });
+  }
+
+  // ---------- voice input ----------
+  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null, listening = false, heard = "";
+  if (Rec) {
+    micBtn.hidden = false;
+    micBtn.addEventListener("click", () => {
+      if (listening) { rec.stop(); return; }
+      if (canSpeak) speechSynthesis.cancel();
+      rec = new Rec();
+      rec.lang = navigator.language || "en-US";
+      rec.interimResults = true;
+      rec.maxAlternatives = 1;
+      heard = "";
+      const before = input.value ? input.value.trimEnd() + " " : "";
+      rec.onresult = (e) => {
+        heard = Array.from(e.results).map(r => r[0].transcript).join("");
+        input.value = before + heard; autosize(); send.disabled = busy || !input.value.trim();
+      };
+      rec.onerror = (e) => {
+        if (e.error === "not-allowed" || e.error === "service-not-allowed")
+          input.placeholder = "Allow microphone access in your browser to talk to RoboDad";
+      };
+      rec.onend = () => {
+        listening = false; micBtn.classList.remove("listening");
+        micBtn.title = "Talk instead of typing"; $("micLabel").textContent = "Talk instead of typing";
+        if (heard.trim() && !busy) submit(input.value);
+      };
+      rec.start();
+      listening = true; micBtn.classList.add("listening");
+      micBtn.title = "Stop listening"; $("micLabel").textContent = "Stop listening";
+    });
   }
 
   // ---------- rendering ----------
@@ -245,8 +369,43 @@ textarea::placeholder{color:var(--muted)}
   const intentLabel = (s) => s === "fallback" ? "not sure (fallback)" : s.replace(/^life_skill_/,"").replace(/_/g," ");
   const modeLabel = (m) => ({llm:"AI model, grounded by the NLP pipeline", classic:"Classic intent classifier", safety:"Safety guardrail (fixed message, no AI)"}[m] || m);
 
-  function renderWhy(stack, meta, totalMs){
+  function renderTools(stack, item){
+    const meta = item.meta;
     if (!meta) return;
+    const tools = document.createElement("div");
+    tools.className = "tools";
+
+    if (meta.mode !== "safety") {
+      const rate = document.createElement("span");
+      rate.className = "rate";
+      rate.innerHTML = `<button type="button" data-r="1" title="Good answer" aria-pressed="false"><svg aria-hidden="true"><use href="#i-up"/></svg><span class="sr">Good answer</span></button>
+        <button type="button" data-r="-1" title="Bad answer" aria-pressed="false"><svg aria-hidden="true"><use href="#i-down"/></svg><span class="sr">Bad answer</span></button>`;
+      const thanks = document.createElement("span");
+      thanks.className = "thanks"; thanks.hidden = true; thanks.textContent = "Thanks!";
+      const mark = (r) => {
+        rate.querySelectorAll("button").forEach(b => { b.disabled = true; b.setAttribute("aria-pressed", String(b.dataset.r === String(r))); });
+        thanks.hidden = false;
+      };
+      if (item.rated) mark(item.rated);
+      rate.addEventListener("click", (e) => {
+        const b = e.target.closest("button"); if (!b || b.disabled) return;
+        const r = Number(b.dataset.r);
+        mark(r); item.rated = r; save();
+        fetch("/api/feedback", { method:"POST", headers:{"content-type":"application/json"},
+          body: JSON.stringify({ rating:r, intent:meta.intent||"", confidence:meta.confidence||0, mode:meta.mode||"", model:meta.model||"", reply:item.content.slice(0,4000) }) })
+          .catch(() => {});
+      });
+      tools.append(rate, thanks);
+    }
+
+    if (canSpeak) {
+      const sp = document.createElement("button");
+      sp.type = "button"; sp.className = "speak-one"; sp.title = "Read this reply aloud";
+      sp.innerHTML = `<svg aria-hidden="true"><use href="#i-speaker"/></svg><span class="sr">Read this reply aloud</span>`;
+      sp.addEventListener("click", () => speak(item.content));
+      tools.appendChild(sp);
+    }
+
     const s = meta.sentiment || {};
     const mood = s.compound <= -0.3 ? "Negative" : s.compound >= 0.3 ? "Positive" : "Neutral";
     const ents = (meta.entities||[]).map(e => `<span class="tag">${esc(e.text)} · ${esc(e.label.toLowerCase().replace("_"," "))}</span>`).join("") || "None found";
@@ -260,9 +419,10 @@ textarea::placeholder{color:var(--muted)}
         <dt>Mood</dt><dd>${mood} (${(s.compound ?? 0).toFixed(2)})</dd>
         <dt>Entities</dt><dd>${ents}</dd>
         ${ex ? `<dt>Similar examples</dt><dd><ul class="ex">${ex}</ul></dd>` : ""}
-        <dt>Timing</dt><dd>NLP ${meta.nlp_ms} ms${totalMs ? ` · full reply ${(totalMs/1000).toFixed(2)} s` : ""}</dd>
+        <dt>Timing</dt><dd>NLP ${meta.nlp_ms} ms${item.totalMs ? ` · full reply ${(item.totalMs/1000).toFixed(2)} s` : ""}</dd>
       </dl>`;
-    stack.appendChild(d);
+    tools.appendChild(d);
+    stack.appendChild(tools);
   }
 
   function addNotice(stack, text){
@@ -270,11 +430,42 @@ textarea::placeholder{color:var(--muted)}
     p.className = "notice"; p.textContent = text; stack.appendChild(p);
   }
 
-  // ---------- networking ----------
+  // ---------- waking up (free hosting sleeps when idle) ----------
+  function setStatus(s){
+    statusEl.classList.remove("waking");
+    statusEl.classList.toggle("classic", s.mode !== "llm");
+    statusEl.innerHTML = `<span class="dot"></span>` + (s.mode === "llm"
+      ? `Online · ${esc(s.model)}`
+      : `Classic mode · ${s.intents} intents, ${s.examples} examples`);
+  }
+  async function connect(){
+    const started = Date.now();
+    const slow = setTimeout(() => { if (!awake) { wake.hidden = false; document.body.classList.add("is-waking"); } }, 2500);
+    while (!awake) {
+      try {
+        const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 70000);
+        const r = await fetch("/api/status", { cache:"no-store", signal: ctrl.signal });
+        clearTimeout(t);
+        if (r.ok) { awake = true; setStatus(await r.json()); break; }
+      } catch {}
+      if (Date.now() - started > 120000) {
+        wakeText.textContent = "RoboDad can't be reached right now. Check your internet connection, then refresh the page.";
+        statusEl.innerHTML = `<span class="dot"></span>Offline`;
+        clearTimeout(slow); wake.hidden = false; document.body.classList.remove("is-waking");
+        return;
+      }
+      await new Promise(res => setTimeout(res, 3000));
+    }
+    clearTimeout(slow);
+    wake.hidden = true; document.body.classList.remove("is-waking");
+  }
+
+  // ---------- chat ----------
   async function ask(){
     busy = true; send.disabled = true; document.body.classList.add("thinking");
+    if (canSpeak) speechSynthesis.cancel();
     const { bubble, stack } = addRobo();
-    let text = "", meta = null, totalMs = null, first = true;
+    let text = "", meta = null, totalMs = null;
     const payload = { messages: history.map(({role, content}) => ({role, content})) };
 
     try {
@@ -297,23 +488,26 @@ textarea::placeholder{color:var(--muted)}
           if (!ev || data === undefined) continue;
           const obj = JSON.parse(data);
           if (ev === "meta") { meta = obj; if (obj.mode === "safety") bubble.classList.add("safety"); }
-          else if (ev === "mode") { meta = {...meta, mode: obj.mode}; addNotice(stack, obj.reason); }
-          else if (ev === "token") {
-            text += obj;
-            if (first) { first = false; }
-            bubble.innerHTML = md(text); scrollDown();
+          else if (ev === "mode") { meta = {...meta, mode: obj.mode, model: ""}; addNotice(stack, obj.reason); }
+          else if (ev === "token") { text += obj; bubble.innerHTML = md(text); scrollDown(); }
+          else if (ev === "done") {
+            totalMs = obj.total_ms;
+            if (obj.model && meta?.mode === "llm" && obj.model !== meta.model) {
+              meta.model = obj.model;
+              setStatus({ mode:"llm", model: obj.model });
+            }
           }
-          else if (ev === "done") totalMs = obj.total_ms;
         }
       }
       if (!text) throw new Error("RoboDad went quiet. Send your message again.");
-      history.push({ role:"assistant", content:text, meta, totalMs });
-      save();
-      renderWhy(stack, meta, totalMs);
+      const item = { role:"assistant", content:text, meta, totalMs };
+      history.push(item); save();
+      renderTools(stack, item);
+      if (readAloud) speak(text);
     } catch (err) {
-      bubble.innerHTML = md(err.message || String(err));
+      bubble.innerHTML = md(err.message && !/fetch|network/i.test(err.message) ? err.message
+        : "RoboDad couldn't be reached. Check your internet connection and send your message again.");
       bubble.classList.add("safety");
-      // drop the unanswered user turn so a resend doesn't duplicate it
       const last = history.pop(); input.value = last?.content || ""; autosize();
     } finally {
       busy = false; document.body.classList.remove("thinking");
@@ -340,23 +534,35 @@ textarea::placeholder{color:var(--muted)}
   document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => submit(c.textContent)));
   $("newChat").addEventListener("click", () => {
     history = []; save();
+    if (canSpeak) speechSynthesis.cancel();
     log.querySelectorAll(".msg").forEach(n => n.remove());
     hello.hidden = false; input.focus();
   });
 
-  // ---------- boot ----------
-  fetch("/api/status").then(r => r.json()).then(s => {
-    statusEl.classList.toggle("classic", s.mode !== "llm");
-    statusEl.innerHTML = `<span class="dot"></span>` + (s.mode === "llm"
-      ? `Online · ${esc(s.model)}`
-      : `Classic mode · ${s.intents} intents, ${s.examples} examples`);
-  }).catch(() => { statusEl.innerHTML = `<span class="dot"></span>Offline`; });
+  // ---------- install as an app ----------
+  let installEvt = null;
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; installBtn.hidden = false; });
+  installBtn.addEventListener("click", async () => {
+    if (!installEvt) return;
+    installEvt.prompt(); await installEvt.userChoice.catch(() => {});
+    installEvt = null; installBtn.hidden = true;
+  });
+  window.addEventListener("appinstalled", () => { installBtn.hidden = true; });
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+  }
 
+  // ---------- boot ----------
   for (const m of load()) {
     history.push(m);
     if (m.role === "user") addUser(m.content);
-    else { const { bubble, stack } = addRobo(); bubble.innerHTML = md(m.content); if (m.meta?.mode === "safety") bubble.classList.add("safety"); renderWhy(stack, m.meta, m.totalMs); }
+    else {
+      const { bubble, stack } = addRobo(); bubble.innerHTML = md(m.content);
+      if (m.meta?.mode === "safety") bubble.classList.add("safety");
+      renderTools(stack, m);
+    }
   }
+  connect();
   input.focus();
 })();
 </script>
