@@ -231,6 +231,39 @@ async def assetlinks():
     }])
 
 
+_TIP_INTENTS = {
+    "life_skill_jobs", "life_skill_money", "life_skill_study", "life_skill_cooking", "life_skill_food",
+    "life_skill_sleep", "life_skill_focus", "life_skill_time", "life_skill_laundry", "life_skill_home",
+    "life_skill_transport", "life_skill_online", "life_skill_friendship", "life_skill_peer_pressure",
+    "life_skill_future", "life_skill_organization", "life_skill_growth", "life_skill_planning", "life_skill_cleaning",
+}
+
+
+@app.get("/api/daily")
+async def daily(random_pick: bool = False):
+    """Dad joke and life tip of the day, from RoboDad's own dataset."""
+    import hashlib
+    import random as _random
+
+    nlp: RoboDadNLP = state["nlp"]
+    jokes = sorted(set(nlp.responses.get("dad_joke", [])))
+    tips = sorted({(r["intent"], r["user_utterance"], r["bot_response"]) for r in nlp.rows
+                   if r["intent"] in _TIP_INTENTS and len(r["bot_response"]) > 45})
+    if random_pick:
+        rng = _random.Random()
+    else:
+        rng = _random.Random(int(hashlib.sha256(date.today().isoformat().encode()).hexdigest(), 16))
+    joke = rng.choice(jokes) if jokes else ""
+    topic, question, tip = rng.choice(tips) if tips else ("", "", "")
+    question = question.strip().rstrip("?")
+    for pat, fix in ((r"\bi\b", "I"), (r"\bim\b", "I'm"), (r"\bive\b", "I've"), (r"\bdont\b", "don't"),
+                     (r"\bcant\b", "can't"), (r"\bdidnt\b", "didn't"), (r"\bwont\b", "won't")):
+        question = re.sub(pat, fix, question)
+    question = (question[:1].upper() + question[1:] + "?") if question else ""
+    return {"joke": joke, "tip": tip, "question": question,
+            "topic": topic.replace("life_skill_", "").replace("_", " ")}
+
+
 @app.get("/health")
 async def health():
     return {"ok": True}
