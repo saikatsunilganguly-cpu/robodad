@@ -282,6 +282,12 @@ then asks the provider for its current models and picks a chat model.
 - The persona prompt in `app/llm.py` is written for teens: respectful, no
   lecturing, nothing sexual, no diet plans or weight targets, no drug or vaping
   how-tos, and it steers medical, legal and dangerous topics to trusted adults.
+- **Dad Mode** (in `app/llm.py`): for odd, tricky or boundary-pushing messages RoboDad never sends a
+  bare "Sorry, I can't help with that". He asks what they mean when a message is confusing, plays along
+  with harmless trolling, and for anything harmful gives a short boundary, one honest reason and a
+  helpful redirect. The server holds back the first ~150 characters of each reply; if the model still
+  produces a stock refusal, it is rewritten in Dad Mode before anyone sees it.
+  `python scripts/test_dad_mode.py` runs 19 trick questions from real testers against the live site.
 - A neutral age check asks for the birth year on first visit and stores only
   pass/fail on the device. Under-13s see a message instead of the chat.
 - Conversations aren't stored on the server. Each browser tab keeps its own

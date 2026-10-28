@@ -44,7 +44,10 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse  # n
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-from .llm import build_system_prompt, clean_secret, detect_provider, stream_with_failover  # noqa: E402
+from .llm import (  # noqa: E402
+    FALLBACK_LINE, REWRITE_NOTE, build_system_prompt, clean_secret, detect_provider, is_bare_refusal,
+    stream_with_failover,
+)
 from .nlp import RoboDadNLP  # noqa: E402
 from .safety import check_crisis, clean_nickname, clean_user_text  # noqa: E402
 
@@ -313,7 +316,7 @@ async def chat(req: ChatRequest, request: Request):
             _daily["count"] += 1
             sent_any = False
             try:
-                async for chunk in stream_with_failover(provider, build_system_prompt(analysis, nickname), history, state["client"]):
+                async for chunk in dad_mode_stream(provider, build_system_prompt(analysis, nickname), history):
                     sent_any = True
                     yield _sse("token", chunk)
                 if not sent_any:
@@ -336,6 +339,42 @@ async def chat(req: ChatRequest, request: Request):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+HOLD_BACK_CHARS = 150  # long enough to spot a one-line stock refusal before anyone sees it
+
+
+async def dad_mode_stream(provider, system: str, history: list[dict]):
+    """Stream the reply, but never let a bare "Sorry, I can't help with that" through.
+
+    The first ~150 characters are held back. If the complete reply turns out to
+    be a stock refusal, RoboDad is asked to rewrite it in Dad Mode; if that
+    fails too, an in-character line is sent instead.
+    """
+    buf, flushed = "", False
+    async for chunk in stream_with_failover(provider, system, history, state["client"]):
+        if flushed:
+            yield chunk
+            continue
+        buf += chunk
+        if len(buf) > HOLD_BACK_CHARS:
+            flushed = True
+            yield buf
+    if flushed:
+        return
+    if not is_bare_refusal(buf):
+        if buf:
+            yield buf
+        return
+    log.info("Bare refusal caught; asking for a Dad Mode rewrite")
+    _daily["count"] += 1
+    retry = ""
+    try:
+        async for chunk in stream_with_failover(provider, system + REWRITE_NOTE, history, state["client"]):
+            retry += chunk
+    except Exception as exc:
+        log.warning("Dad Mode rewrite failed: %s", exc)
+    yield retry if retry.strip() and not is_bare_refusal(retry) else FALLBACK_LINE
 
 
 @app.post("/api/feedback")
