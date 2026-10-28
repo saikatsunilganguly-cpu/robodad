@@ -108,6 +108,7 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .bubble p{margin:0 0 .6em} .bubble p:last-child{margin:0}
 .bubble ol,.bubble ul{margin:.3em 0 .6em; padding-left:1.3em}
 .bubble.safety{border:2px solid var(--alert)}
+.bubble a{color:inherit; font-weight:800; text-underline-offset:2px}
 .typing{display:inline-flex; gap:4px; padding:4px 0}
 .typing i{width:7px; height:7px; border-radius:50%; background:var(--muted); animation:hop 1s infinite}
 .typing i:nth-child(2){animation-delay:.15s} .typing i:nth-child(3){animation-delay:.3s}
@@ -126,6 +127,30 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .rate button:disabled{cursor:default}
 .rate button:disabled:not([aria-pressed="true"]){opacity:.35}
 .thanks{font-weight:700}
+.report-btn{border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted); font-size:.85rem; font-weight:700; display:inline-flex; gap:4px; align-items:center}
+.report-btn svg{width:15px; height:15px}
+.report-btn:hover{background:var(--surface); color:var(--ink)}
+.report-box{flex-basis:100%; display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:8px 10px; border:1px solid var(--line); border-radius:12px; background:var(--surface); color:var(--ink)}
+.report-box span{font-weight:700; margin-right:4px}
+.report-box button{border:1px solid var(--line); background:transparent; border-radius:999px; padding:4px 10px; cursor:pointer; font-size:.85rem; font-weight:700}
+.report-box button:hover{background:var(--sky)}
+
+/* ---------- dialogs (age check, nickname) ---------- */
+.overlay{position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:16px;
+  background:color-mix(in srgb, var(--ink) 55%, transparent)}
+.card{width:min(440px, 100%); max-height:calc(100vh - 32px); overflow:auto; background:var(--surface); color:var(--ink);
+  border-radius:22px; padding:24px; display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.card h2{margin:0; font-size:1.5rem; font-weight:900; letter-spacing:-.01em; line-height:1.15}
+.card p{margin:0; color:var(--muted)}
+.card ul{margin:0; padding-left:1.2em; color:var(--ink)} .card li{margin-bottom:4px}
+.card label{font-weight:700; font-size:.95rem}
+.card select,.card input{font:inherit; color:var(--ink); background:var(--sky); border:1.5px solid var(--line); border-radius:12px; padding:10px 12px; width:100%}
+.card select:focus,.card input:focus{outline:3px solid var(--mustard); outline-offset:1px}
+.card .row{display:flex; gap:8px; flex-wrap:wrap}
+.primary{border:0; border-radius:999px; background:var(--mustard); color:var(--mustard-ink); font-weight:900; padding:11px 20px; cursor:pointer}
+.primary:disabled{opacity:.45; cursor:default}
+.card a{color:var(--denim); font-weight:700}
+.fine a{color:inherit; font-weight:700}
 .speak-one{border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted)}
 .speak-one svg{width:17px; height:17px; display:block}
 .speak-one:hover{background:var(--surface); color:var(--ink)}
@@ -197,6 +222,8 @@ textarea::placeholder{color:var(--muted)}
   </symbol>
   <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4m0 0h11l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
   <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 21H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3m0 10V11m0 10h10.3a2 2 0 0 0 2-1.7l1.3-7A2 2 0 0 0 18.6 10H14V5.5A2.5 2.5 0 0 0 11.5 3L7 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
   <symbol id="i-down" viewBox="0 0 24 24"><g transform="rotate(180 12 12)"><path d="M7 21H4a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1h3m0 10V11m0 10h10.3a2 2 0 0 0 2-1.7l1.3-7A2 2 0 0 0 18.6 10H14V5.5A2.5 2.5 0 0 0 11.5 3L7 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></g></symbol>
 </svg>
@@ -211,6 +238,9 @@ textarea::placeholder{color:var(--muted)}
   <button class="icon-btn" id="readAloud" type="button" aria-pressed="false" title="Read replies aloud" hidden>
     <svg aria-hidden="true"><use href="#i-speaker"/></svg><span class="sr">Read replies aloud</span>
   </button>
+  <button class="icon-btn" id="nameBtn" type="button" title="What should RoboDad call you?">
+    <svg aria-hidden="true"><use href="#i-user"/></svg><span class="sr">What should RoboDad call you?</span>
+  </button>
   <button class="ghost" id="newChat" type="button">New chat</button>
 </header>
 
@@ -222,12 +252,12 @@ textarea::placeholder{color:var(--muted)}
   <div class="log" id="log" aria-live="polite">
     <section class="hello" id="hello">
       <svg class="bot" width="88" height="88" aria-hidden="true"><use href="#robodad"/></svg>
-      <h2>Hey kiddo. What's on your mind?</h2>
-      <p>I can help with snacks, chores, homework, sleep, money, friends, big feelings, or a terrible joke.</p>
+      <h2 id="helloTitle">Hey. What's on your mind?</h2>
+      <p>Real advice for real life: school stress, money, cooking, friends, first jobs, or a dad joke you'll pretend not to like.</p>
       <div class="chips">
-        <button class="chip" type="button">I'm hungry, what should I eat?</button>
-        <button class="chip" type="button">How do I do my laundry?</button>
-        <button class="chip" type="button">I'm nervous about a test tomorrow</button>
+        <button class="chip" type="button">How do I make a budget?</button>
+        <button class="chip" type="button">I'm stressed about exams</button>
+        <button class="chip" type="button">Help me prep for a job interview</button>
         <button class="chip" type="button">Tell me a dad joke</button>
       </div>
     </section>
@@ -243,7 +273,43 @@ textarea::placeholder{color:var(--muted)}
     </button>
     <button class="send" id="send" type="submit" disabled>Send</button>
   </form>
-  <p class="fine">RoboDad is an AI, not a real parent, and can get things wrong. Never share your address or passwords. In an emergency, call 911.</p>
+  <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a></p>
+</div>
+
+<div class="overlay" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" hidden>
+  <div class="card" id="gateCard">
+    <svg class="bot" width="64" height="64" aria-hidden="true"><use href="#robodad"/></svg>
+    <h2 id="gateTitle">Before we start</h2>
+    <ul>
+      <li>RoboDad is an <strong>AI chatbot for ages 13 and up</strong>. It can be wrong, so double-check anything important.</li>
+      <li>To write replies, your messages are sent to an AI service. RoboDad doesn't keep your chats.</li>
+      <li>Don't share your full name, address, school, passwords or photos.</li>
+      <li>If you're ever in danger, call 911.</li>
+    </ul>
+    <label for="birthYear">What year were you born?</label>
+    <select id="birthYear"><option value="">Choose a year</option></select>
+    <div class="row"><button class="primary" id="gateGo" type="button" disabled>Continue</button></div>
+    <p><a href="/privacy">How RoboDad uses your information</a></p>
+  </div>
+  <div class="card" id="gateNo" hidden>
+    <svg class="bot" width="64" height="64" aria-hidden="true"><use href="#robodad"/></svg>
+    <h2>RoboDad is for teens 13 and up</h2>
+    <p>It isn't available for you yet. Ask a parent, guardian or teacher about apps made for your age.</p>
+  </div>
+</div>
+
+<div class="overlay" id="nameDlg" role="dialog" aria-modal="true" aria-labelledby="nameTitle" hidden>
+  <form class="card" id="nameForm">
+    <h2 id="nameTitle">What should RoboDad call you?</h2>
+    <p>A first name or nickname is plenty. It stays on this device and is sent with your messages so RoboDad can use it.</p>
+    <label for="nameInput">Nickname</label>
+    <input id="nameInput" maxlength="20" autocomplete="off" placeholder="e.g. Sam">
+    <div class="row">
+      <button class="primary" type="submit">Save</button>
+      <button class="ghost" id="nameClear" type="button">Don't use a name</button>
+      <button class="ghost" id="nameCancel" type="button">Cancel</button>
+    </div>
+  </form>
 </div>
 
 <script>
@@ -266,7 +332,12 @@ textarea::placeholder{color:var(--muted)}
   const esc = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   function md(text){
     const blocks = esc(text.trim()).split(/\n{2,}/);
-    const inline = s => s.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*(?!\s)(.+?)\*/g,"$1<em>$2</em>");
+    const HELP_SITES = /\b(NeedHelpNow\.ca|Cybertip\.ca|TakeItDown\.ncmec\.org|nedic\.ca|KidsHelpPhone\.ca)\b/gi;
+    const HELP_PHONES = /\b(1-800-668-6868|1-866-633-4220|988|911)\b/g;
+    const links = s => s
+      .replace(HELP_SITES, d => `<a href="https://${d.toLowerCase()}" target="_blank" rel="noopener">${d}</a>`)
+      .replace(HELP_PHONES, n => `<a href="tel:${n.replace(/-/g, "")}">${n}</a>`);
+    const inline = s => links(s.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*(?!\s)(.+?)\*/g,"$1<em>$2</em>"));
     const OL = /^\s*\d+[.)]\s/, UL = /^\s*[-•*]\s/;
     const kind = l => OL.test(l) ? "ol" : UL.test(l) ? "ul" : "p";
     return blocks.map(b => {
@@ -395,7 +466,29 @@ textarea::placeholder{color:var(--muted)}
           body: JSON.stringify({ rating:r, intent:meta.intent||"", confidence:meta.confidence||0, mode:meta.mode||"", model:meta.model||"", reply:item.content.slice(0,4000) }) })
           .catch(() => {});
       });
-      tools.append(rate, thanks);
+      const rep = document.createElement("button");
+      rep.type = "button"; rep.className = "report-btn"; rep.title = "Report this reply";
+      rep.innerHTML = `<svg aria-hidden="true"><use href="#i-flag"/></svg>Report`;
+      const box = document.createElement("div");
+      box.className = "report-box"; box.hidden = true;
+      box.innerHTML = `<span>What's wrong with this reply?</span>
+        <button type="button" data-reason="harmful">Harmful or unsafe</button>
+        <button type="button" data-reason="wrong">Wrong information</button>
+        <button type="button" data-reason="other">Something else</button>
+        <button type="button" data-reason="">Cancel</button>`;
+      const reported = () => { rep.disabled = true; rep.innerHTML = "Reported. Thanks for helping keep RoboDad safe."; box.hidden = true; };
+      if (item.reported) reported();
+      rep.addEventListener("click", () => { if (!item.reported) box.hidden = !box.hidden; });
+      box.addEventListener("click", (e) => {
+        const b = e.target.closest("button"); if (!b) return;
+        const reason = b.dataset.reason;
+        if (!reason) { box.hidden = true; return; }
+        item.reported = reason; save(); reported();
+        fetch("/api/feedback", { method:"POST", headers:{"content-type":"application/json"},
+          body: JSON.stringify({ kind:"report", reason, rating:-1, intent:meta.intent||"", confidence:meta.confidence||0, mode:meta.mode||"", model:meta.model||"", reply:item.content.slice(0,4000) }) })
+          .catch(() => {});
+      });
+      tools.append(rate, thanks, rep, box);
     }
 
     if (canSpeak) {
@@ -466,7 +559,7 @@ textarea::placeholder{color:var(--muted)}
     if (canSpeak) speechSynthesis.cancel();
     const { bubble, stack } = addRobo();
     let text = "", meta = null, totalMs = null;
-    const payload = { messages: history.map(({role, content}) => ({role, content})) };
+    const payload = { messages: history.map(({role, content}) => ({role, content})), nickname };
 
     try {
       const res = await fetch("/api/chat", { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(payload) });
@@ -517,7 +610,7 @@ textarea::placeholder{color:var(--muted)}
 
   function submit(text){
     text = text.trim();
-    if (!text || busy) return;
+    if (!text || busy || !$("gate").hidden) return;
     history.push({ role:"user", content:text });
     addUser(text);
     input.value = ""; autosize();
@@ -551,6 +644,42 @@ textarea::placeholder{color:var(--muted)}
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
   }
+
+  // ---------- nickname ----------
+  const NAME_KEY = "robodad.nickname", AGE_KEY = "robodad.ageCheck";
+  let nickname = getPref(NAME_KEY) || "";
+  const nameDlg = $("nameDlg"), nameInput = $("nameInput"), nameBtn = $("nameBtn");
+  function applyName(){
+    $("helloTitle").textContent = nickname ? `Hey ${nickname}. What's on your mind?` : "Hey. What's on your mind?";
+    nameBtn.setAttribute("aria-pressed", String(!!nickname));
+  }
+  function openName(){ nameInput.value = nickname; nameDlg.hidden = false; nameInput.focus(); }
+  function closeName(){ nameDlg.hidden = true; nameBtn.focus(); }
+  nameBtn.addEventListener("click", openName);
+  $("nameCancel").addEventListener("click", closeName);
+  $("nameClear").addEventListener("click", () => { nickname = ""; setPref(NAME_KEY, ""); applyName(); closeName(); });
+  $("nameForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    nickname = nameInput.value.replace(/[^\p{L}\s'\-]/gu, "").replace(/\s+/g, " ").trim().slice(0, 20);
+    setPref(NAME_KEY, nickname); applyName(); closeName();
+  });
+  nameDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeName(); });
+  applyName();
+
+  // ---------- age check (neutral: asks birth year, stores only the result) ----------
+  const gate = $("gate"), birthYear = $("birthYear"), gateGo = $("gateGo");
+  const thisYear = new Date().getFullYear();
+  for (let y = thisYear; y >= thisYear - 100; y--) birthYear.add(new Option(String(y), String(y)));
+  birthYear.addEventListener("change", () => { gateGo.disabled = !birthYear.value; });
+  function showUnder(){ $("gateCard").hidden = true; $("gateNo").hidden = false; gate.hidden = false; }
+  gateGo.addEventListener("click", () => {
+    const age = thisYear - Number(birthYear.value);
+    if (age >= 13) { setPref(AGE_KEY, "ok"); gate.hidden = true; input.focus(); }
+    else { setPref(AGE_KEY, "under"); showUnder(); }
+  });
+  const ageState = getPref(AGE_KEY);
+  if (ageState === "under") showUnder();
+  else if (ageState !== "ok") { gate.hidden = false; setTimeout(() => birthYear.focus(), 50); }
 
   // ---------- boot ----------
   for (const m of load()) {

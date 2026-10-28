@@ -46,7 +46,7 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 from .llm import build_system_prompt, clean_secret, detect_provider, stream_with_failover  # noqa: E402
 from .nlp import RoboDadNLP  # noqa: E402
-from .safety import CRISIS_RESPONSE, clean_user_text, is_crisis  # noqa: E402
+from .safety import check_crisis, clean_nickname, clean_user_text  # noqa: E402
 
 log = logging.getLogger("robodad")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -146,10 +146,13 @@ class FeedbackRequest(BaseModel):
     mode: str = Field(default="", max_length=16)
     model: str = Field(default="", max_length=120)
     reply: str = Field(default="", max_length=4000)
+    kind: str = Field(default="rating", pattern="^(rating|report)$")
+    reason: str = Field(default="", max_length=40)
 
 
 class ChatRequest(BaseModel):
     messages: list[ChatMessage] = Field(min_length=1, max_length=200)
+    nickname: str = Field(default="", max_length=40)
 
 
 def _prepare_history(msgs: list[ChatMessage]) -> list[dict]:
@@ -206,6 +209,28 @@ async def status():
     }
 
 
+@app.get("/privacy")
+async def privacy():
+    return FileResponse(os.path.join(STATIC_DIR, "privacy.html"), headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/.well-known/assetlinks.json")
+async def assetlinks():
+    """Proves to Android that the Play Store app and this website belong together.
+
+    Set ANDROID_PACKAGE (e.g. com.robodad.app) and ANDROID_SHA256 (the signing
+    key fingerprint from PWABuilder / Play Console; several can be comma-separated).
+    """
+    package = os.getenv("ANDROID_PACKAGE", "").strip()
+    prints = [p.strip() for p in os.getenv("ANDROID_SHA256", "").split(",") if p.strip()]
+    if not (package and prints):
+        raise HTTPException(404, "Not configured")
+    return JSONResponse([{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {"namespace": "android_app", "package_name": package, "sha256_cert_fingerprints": prints},
+    }])
+
+
 @app.get("/health")
 async def health():
     return {"ok": True}
@@ -222,6 +247,7 @@ async def chat(req: ChatRequest, request: Request):
         )
 
     user_text = history[-1]["content"]
+    nickname = clean_nickname(req.nickname)
     nlp: RoboDadNLP = state["nlp"]
     provider = state["provider"]
 
@@ -230,7 +256,8 @@ async def chat(req: ChatRequest, request: Request):
         analysis = await asyncio.to_thread(nlp.analyse, user_text)
         nlp_ms = (time.perf_counter() - t0) * 1000
 
-        if is_crisis(user_text):
+        crisis = check_crisis(user_text)
+        if crisis:
             mode = "safety"
         elif provider and _llm_budget_left():
             mode = "llm"
@@ -238,19 +265,22 @@ async def chat(req: ChatRequest, request: Request):
             mode = "classic"
 
         meta = analysis.to_dict() | {"mode": mode, "nlp_ms": round(nlp_ms, 1)}
+        if crisis:
+            meta["safety"] = crisis[0]
         if mode == "llm":
             meta["model"] = provider.label
         yield _sse("meta", meta)
 
         if mode == "safety":
-            yield _sse("token", CRISIS_RESPONSE)
+            log.info("SAFETY message shown: %s", crisis[0])
+            yield _sse("token", crisis[1])
         elif mode == "classic":
             yield _sse("token", nlp.classic_reply(analysis))
         else:
             _daily["count"] += 1
             sent_any = False
             try:
-                async for chunk in stream_with_failover(provider, build_system_prompt(analysis), history, state["client"]):
+                async for chunk in stream_with_failover(provider, build_system_prompt(analysis, nickname), history, state["client"]):
                     sent_any = True
                     yield _sse("token", chunk)
                 if not sent_any:
@@ -261,7 +291,7 @@ async def chat(req: ChatRequest, request: Request):
                     yield _sse("mode", {"mode": "classic", "reason": "The AI model didn't respond, so RoboDad answered from his playbook."})
                     yield _sse("token", nlp.classic_reply(analysis))
                 else:
-                    yield _sse("token", " …sorry kiddo, I lost my train of thought there.")
+                    yield _sse("token", " …sorry, I lost my train of thought there. Try asking again?")
 
         done = {"total_ms": round((time.perf_counter() - t0) * 1000, 1)}
         if mode == "llm":
@@ -277,15 +307,20 @@ async def chat(req: ChatRequest, request: Request):
 
 @app.post("/api/feedback")
 async def feedback(fb: FeedbackRequest, request: Request):
-    """Thumbs up/down on a reply. The child's own message is never stored."""
+    """Thumbs up/down or a report on a reply. What the user typed is never stored."""
+    if fb.kind == "report":
+        fb.rating = -1
     if fb.rating == 0:
         raise HTTPException(400, "Rating must be 1 or -1.")
     if _rate_limited(_client_ip(request)):
         return JSONResponse({"error": "Too many ratings. Wait a minute, then try again."}, status_code=429)
 
     row = fb.model_dump()
-    log.info("FEEDBACK %s intent=%s mode=%s model=%s reply=%r",
-             "up" if fb.rating > 0 else "down", fb.intent, fb.mode, fb.model, fb.reply[:120])
+    log.info("FEEDBACK %s%s intent=%s mode=%s model=%s reply=%r",
+             "REPORT " if fb.kind == "report" else "", "up" if fb.rating > 0 else "down",
+             fb.intent, fb.mode, fb.model, fb.reply[:120])
+    if fb.kind == "report":
+        log.warning("REPORTED REPLY (%s): %r", fb.reason or "no reason", fb.reply[:500])
     if not (SUPABASE_URL and SUPABASE_KEY):
         return {"stored": "log"}
 
@@ -294,6 +329,10 @@ async def feedback(fb: FeedbackRequest, request: Request):
         headers["Authorization"] = f"Bearer {SUPABASE_KEY}"
     try:
         r = await state["client"].post(f"{SUPABASE_URL}/rest/v1/feedback", headers=headers, json=row)
+        if r.status_code == 400 and ("kind" in r.text or "reason" in r.text):
+            # table created before reports existed: save without the new columns
+            row = {k: v for k, v in row.items() if k not in ("kind", "reason")}
+            r = await state["client"].post(f"{SUPABASE_URL}/rest/v1/feedback", headers=headers, json=row)
         if r.status_code >= 300:
             log.warning("Supabase insert failed %s: %s", r.status_code, r.text[:300])
             return {"stored": "log"}
