@@ -14,13 +14,17 @@ classifier, so the site still works with no key and no cost.
 from __future__ import annotations
 
 import json
+import logging
 import os
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, field
 from typing import AsyncIterator
 
 import httpx
 
 from .nlp import Analysis
+
+log = logging.getLogger("robodad")
 
 PERSONA = """You are RoboDad, a warm, patient, slightly goofy robot dad. You help kids and teens \
 with everyday life skills (cooking, snacks, chores, laundry, homework, sleep, money, friendships, \
@@ -78,10 +82,16 @@ class Provider:
     model: str
     api_key: str
     base_url: str
+    backups: list[str] = field(default_factory=list)
+    retired: set[str] = field(default_factory=set)
 
     @property
     def label(self) -> str:
         return f"{self.name} · {self.model}"
+
+
+def _csv(value: str) -> list[str]:
+    return [v.strip() for v in value.split(",") if v.strip()]
 
 
 def detect_provider() -> Provider | None:
@@ -96,6 +106,7 @@ def detect_provider() -> Provider | None:
             model=os.getenv("ANTHROPIC_MODEL", "claude-haiku-5-5"),
             api_key=os.environ["ANTHROPIC_API_KEY"].strip(),
             base_url=os.getenv("ANTHROPIC_BASE_URL", "https://api.anthropic.com"),
+            backups=_csv(os.getenv("ANTHROPIC_BACKUP_MODELS", "")),
         )
     if choice in ("auto", "groq") and os.getenv("GROQ_API_KEY"):
         return Provider(
@@ -104,6 +115,7 @@ def detect_provider() -> Provider | None:
             model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
             api_key=os.environ["GROQ_API_KEY"].strip(),
             base_url="https://api.groq.com/openai/v1",
+            backups=_csv(os.getenv("GROQ_BACKUP_MODELS", "openai/gpt-oss-20b")),
         )
     if choice in ("auto", "openai") and os.getenv("OPENAI_API_KEY"):
         return Provider(
@@ -112,8 +124,22 @@ def detect_provider() -> Provider | None:
             model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
             api_key=os.environ["OPENAI_API_KEY"].strip(),
             base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
+            backups=_csv(os.getenv("OPENAI_BACKUP_MODELS", "")),
         )
     return None
+
+
+class ModelUnavailable(RuntimeError):
+    """The provider says this model doesn't exist or has been retired."""
+
+
+_MODEL_GONE = re.compile(r"model_not_found|decommission|deprecat|does not exist|not_found_error|no such model|unknown model", re.I)
+
+
+def _api_error(provider: Provider, status: int, body: str) -> RuntimeError:
+    if status in (400, 404) and _MODEL_GONE.search(body):
+        return ModelUnavailable(f"{provider.name} model {provider.model} unavailable: {body}")
+    return RuntimeError(f"{provider.name} API {status}: {body}")
 
 
 MAX_TOKENS = int(os.getenv("LLM_MAX_TOKENS", "400"))
@@ -151,7 +177,7 @@ async def stream_reply(
         async with req as resp:
             if resp.status_code != 200:
                 body = (await resp.aread()).decode(errors="replace")[:300]
-                raise RuntimeError(f"Anthropic API {resp.status_code}: {body}")
+                raise _api_error(provider, resp.status_code, body)
             async for data in _sse_lines(resp):
                 try:
                     evt = json.loads(data)
@@ -187,7 +213,8 @@ async def stream_reply(
     async with req as resp:
         if resp.status_code != 200:
             body = (await resp.aread()).decode(errors="replace")[:300]
-            raise RuntimeError(f"{provider.name} API {resp.status_code}: {body}")
+            raise _api_error(provider, resp.status_code, body)
+        hide = _ThinkFilter()
         async for data in _sse_lines(resp):
             if data == "[DONE]":
                 break
@@ -196,6 +223,97 @@ async def stream_reply(
             except json.JSONDecodeError:
                 continue
             for choice in evt.get("choices", []):
-                text = (choice.get("delta") or {}).get("content")
+                text = hide.feed((choice.get("delta") or {}).get("content") or "")
                 if text:
                     yield text
+
+
+class _ThinkFilter:
+    """Drops <think>…</think> blocks that some open models put in their reply."""
+
+    def __init__(self):
+        self.inside = False
+        self.buf = ""
+
+    def feed(self, text: str) -> str:
+        self.buf += text
+        out = ""
+        while self.buf:
+            tag = "</think>" if self.inside else "<think>"
+            i = self.buf.find(tag)
+            if i >= 0:
+                if not self.inside:
+                    out += self.buf[:i]
+                self.buf = self.buf[i + len(tag):]
+                self.inside = not self.inside
+                continue
+            # keep a possible partial tag at the end for the next chunk
+            keep = next((k for k in range(len(tag) - 1, 0, -1) if self.buf.endswith(tag[:k])), 0)
+            if not self.inside:
+                out += self.buf[: len(self.buf) - keep]
+            self.buf = self.buf[len(self.buf) - keep:] if keep else ""
+            break
+        return out
+
+
+# ---------------------------------------------------------------- failover
+_SKIP_MODELS = re.compile(
+    r"whisper|tts|guard|embed|moderation|orpheus|playai|compound|distil|vision|image|audio|transcri|search|realtime|instruct-?v0|safeguard",
+    re.I,
+)
+_PREFER = [r"gpt-oss-120b", r"gpt-oss", r"llama", r"qwen", r"kimi", r"haiku", r"sonnet", r"mini", r"gpt-4"]
+
+
+async def _discover_models(provider: Provider, client: httpx.AsyncClient) -> list[str]:
+    try:
+        if provider.kind == "anthropic":
+            r = await client.get(
+                f"{provider.base_url}/v1/models",
+                headers={"x-api-key": provider.api_key, "anthropic-version": "2023-06-01"},
+            )
+        else:
+            r = await client.get(f"{provider.base_url}/models", headers={"Authorization": f"Bearer {provider.api_key}"})
+        r.raise_for_status()
+        ids = [m.get("id", "") for m in r.json().get("data", []) if m.get("active", True)]
+    except Exception as exc:
+        log.warning("Couldn't list %s models: %s", provider.name, exc)
+        return []
+    ids = [i for i in ids if i and not _SKIP_MODELS.search(i)]
+
+    def rank(model_id: str) -> int:
+        return next((n for n, pat in enumerate(_PREFER) if re.search(pat, model_id, re.I)), len(_PREFER))
+
+    return sorted(ids, key=rank)
+
+
+async def _next_model(provider: Provider, client: httpx.AsyncClient) -> str | None:
+    for m in provider.backups:
+        if m not in provider.retired:
+            return m
+    for m in await _discover_models(provider, client):
+        if m not in provider.retired:
+            return m
+    return None
+
+
+async def stream_with_failover(
+    provider: Provider, system: str, messages: list[dict], client: httpx.AsyncClient
+) -> AsyncIterator[str]:
+    """Like stream_reply, but if the model has been retired, switch to another one and retry.
+
+    The switch is remembered for the life of the server, and the status line
+    in the page shows the model actually in use.
+    """
+    for _ in range(4):
+        try:
+            async for chunk in stream_reply(provider, system, messages, client):
+                yield chunk
+            return
+        except ModelUnavailable as exc:
+            provider.retired.add(provider.model)
+            nxt = await _next_model(provider, client)
+            if not nxt:
+                raise
+            log.warning("%s Switching to %s.", exc, nxt)
+            provider.model = nxt
+    raise RuntimeError("No working model found")

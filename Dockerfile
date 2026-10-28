@@ -10,6 +10,8 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY --chown=robodad:robodad . .
+# Train the intent classifier once at build time so start-up only loads it
+RUN python -c "from app.nlp import RoboDadNLP; RoboDadNLP()" && chown -R robodad:robodad models
 USER robodad
 
 # Hugging Face uses 7860; Render/Railway pass their own $PORT

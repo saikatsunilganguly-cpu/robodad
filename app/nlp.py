@@ -3,7 +3,9 @@ RoboDad NLP pipeline (from the CONL725 submission, upgraded for the web).
 
 What it does for every message:
   1. normalise the text (same rules as the original chat.py)
-  2. classify the intent with TF-IDF + Logistic Regression
+  2. classify the intent with TF-IDF (words + character n-grams) and
+     Logistic Regression, trained on the original data plus extra
+     hand-written examples (data/augmented_utterances.csv)
   3. retrieve the most similar examples from the RoboDad dataset (used to
      ground the LLM in RoboDad's voice: a small retrieval-augmented setup)
   4. score sentiment with VADER
@@ -17,6 +19,8 @@ hosting machine has a different scikit-learn version.
 from __future__ import annotations
 
 import csv
+import hashlib
+import logging
 import os
 import random
 import re
@@ -26,12 +30,23 @@ from dataclasses import dataclass, field
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.pipeline import FeatureUnion, Pipeline, make_pipeline
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+import joblib
+import sklearn
+
+log = logging.getLogger("robodad")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATASET_PATH = os.path.join(BASE_DIR, "data", "robodad_intents.csv")
+AUGMENTED_PATH = os.path.join(BASE_DIR, "data", "augmented_utterances.csv")
+MODEL_CACHE = os.path.join(BASE_DIR, "models", "intent_model.joblib")
 
-FALLBACK_THRESHOLD = 0.20
+# Below this confidence the classifier says "not sure" (fallback). Tuned with
+# scripts/evaluate.py: at 0.40 the model answers ~79% of messages and is right
+# ~77% of the time when it does (the CONL725 model answered 29% at 79%).
+FALLBACK_THRESHOLD = 0.40
 
 FALLBACK_RESPONSES = [
     "I'm not totally sure what you mean, kiddo, but I'm here for you.",
@@ -64,6 +79,33 @@ def extract_entities(text: str) -> list[dict]:
         if not re.search(rf"(?<!\d){n}(?!\d)", taken):
             entities.append({"text": n, "label": "NUMBER"})
     return entities
+
+
+def build_classifier() -> Pipeline:
+    """Word n-grams catch phrases ("tie a tie"); character n-grams catch typos,
+    slang and word endings ("hungryyy", "studyin"). Stop words are kept because
+    short messages like "how do i" or "im" carry most of their meaning in them."""
+    return make_pipeline(
+        FeatureUnion([
+            ("words", TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True)),
+            ("chars", TfidfVectorizer(analyzer="char_wb", ngram_range=(2, 5), sublinear_tf=True)),
+        ]),
+        LogisticRegression(max_iter=3000, C=10),
+    )
+
+
+def load_augmented(exclude: set[str], path: str = AUGMENTED_PATH) -> tuple[list[str], list[str]]:
+    """Extra training-only examples, minus any that duplicate an original one."""
+    if not os.path.exists(path):
+        return [], []
+    texts, labels = [], []
+    with open(path, encoding="utf-8", newline="") as f:
+        for r in csv.DictReader(f):
+            t = normalize(r["user_utterance"])
+            if t and t not in exclude:
+                texts.append(t)
+                labels.append(r["intent"])
+    return texts, labels
 
 
 @dataclass
@@ -100,11 +142,7 @@ class RoboDadNLP:
         for r in self.rows:
             self.responses.setdefault(r["intent"], []).append(r["bot_response"])
 
-        # Same configuration as train_intent_model.py
-        self.vectorizer = TfidfVectorizer(lowercase=True, stop_words="english", ngram_range=(1, 2))
-        self.X = self.vectorizer.fit_transform(self.utterances)
-        self.model = LogisticRegression(max_iter=2000)
-        self.model.fit(self.X, self.labels)
+        self.model = self._load_or_train()
 
         # A second, stop-word-free vectorizer for retrieval: short phrases like
         # "how do i" carry meaning when we look for similar examples.
@@ -113,12 +151,42 @@ class RoboDadNLP:
 
         self.sia = SentimentIntensityAnalyzer()
 
+    def _fingerprint(self) -> str:
+        h = hashlib.sha256(sklearn.__version__.encode())
+        for path in (DATASET_PATH, AUGMENTED_PATH, __file__):
+            if os.path.exists(path):
+                with open(path, "rb") as f:
+                    h.update(f.read())
+        return h.hexdigest()
+
+    def _load_or_train(self) -> Pipeline:
+        """Load the model trained at build time; retrain if data or code changed.
+
+        The cache is only ever written by this app inside its own container, so
+        loading it is safe and always matches the installed scikit-learn.
+        """
+        fp = self._fingerprint()
+        try:
+            cached = joblib.load(MODEL_CACHE)
+            if cached.get("fingerprint") == fp:
+                return cached["model"]
+        except Exception:
+            pass
+        aug_texts, aug_labels = load_augmented(set(self.utterances))
+        model = build_classifier().fit(self.utterances + aug_texts, self.labels + aug_labels)
+        try:
+            os.makedirs(os.path.dirname(MODEL_CACHE), exist_ok=True)
+            joblib.dump({"fingerprint": fp, "model": model}, MODEL_CACHE)
+        except OSError as exc:
+            log.info("Couldn't cache the model (%s); it will retrain next start.", exc)
+        return model
+
     @property
     def intents(self) -> list[str]:
         return sorted(self.responses)
 
     def classify(self, text: str) -> tuple[str, float]:
-        probs = self.model.predict_proba(self.vectorizer.transform([normalize(text)]))[0]
+        probs = self.model.predict_proba([normalize(text)])[0]
         i = int(probs.argmax())
         return str(self.model.classes_[i]), float(probs[i])
 

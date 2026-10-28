@@ -1,0 +1,481 @@
+intent,user_utterance
+greeting,hey robodad
+greeting,heyyy
+greeting,sup
+greeting,whats up
+greeting,hello there
+greeting,hi dad
+greeting,yo yo
+greeting,good afternoon
+greeting,good evening
+greeting,howdy
+greeting,hey whats new
+greeting,morning
+greeting,im back
+greeting,hiya
+greeting,hey there buddy
+goodbye,gotta go
+goodbye,see ya
+goodbye,talk later
+goodbye,bye bye
+goodbye,goodnight robodad
+goodbye,im heading out
+goodbye,catch you later
+goodbye,later dad
+goodbye,ok thats all for now
+goodbye,peace out
+goodbye,i have to leave now
+goodbye,see you tomorrow
+goodbye,thanks bye
+goodbye,cya
+goodbye,im logging off
+dad_joke,make me laugh
+dad_joke,got any jokes
+dad_joke,say something funny
+dad_joke,i need a laugh
+dad_joke,tell me something corny
+dad_joke,whats your worst joke
+dad_joke,joke please
+dad_joke,give me a pun
+dad_joke,do you know any puns
+dad_joke,cheer me up with a joke
+dad_joke,another joke
+dad_joke,tell me a funny one
+dad_joke,hit me with a dad joke
+dad_joke,say a cheesy joke
+dad_joke,can you be funny
+encouragement,i feel like giving up
+encouragement,im not good enough
+encouragement,i keep failing
+encouragement,can you motivate me
+encouragement,i need some encouragement
+encouragement,tell me i can do it
+encouragement,i messed up again
+encouragement,i dont think i can do this
+encouragement,everyone is better than me
+encouragement,i need a pep talk
+encouragement,say something nice
+encouragement,i feel like a failure
+encouragement,i want to quit
+encouragement,am i doing ok
+encouragement,believe in me
+life_skill_snacks,whats a good snack
+life_skill_snacks,snack ideas
+life_skill_snacks,i want something to munch on
+life_skill_snacks,my tummy is rumbling
+life_skill_snacks,healthy snack after school
+life_skill_snacks,can i have chips
+life_skill_snacks,what can i eat between meals
+life_skill_snacks,im starving
+life_skill_snacks,quick snack please
+life_skill_snacks,i want something sweet
+life_skill_snacks,something crunchy to eat
+life_skill_snacks,what snack gives energy
+life_skill_snacks,is candy a good snack
+life_skill_snacks,snack before soccer practice
+life_skill_snacks,munchies
+life_skill_breakfast,what should i have for breakfast
+life_skill_breakfast,breakfast ideas
+life_skill_breakfast,i skipped breakfast
+life_skill_breakfast,quick morning meal
+life_skill_breakfast,i dont have time for breakfast
+life_skill_breakfast,can i make pancakes
+life_skill_breakfast,is cereal a good breakfast
+life_skill_breakfast,how do i make toast
+life_skill_breakfast,easy breakfast before school
+life_skill_breakfast,i want eggs for breakfast
+life_skill_breakfast,breakfast in five minutes
+life_skill_breakfast,im not hungry in the morning
+life_skill_breakfast,what do i eat when i wake up
+life_skill_breakfast,make a smoothie for breakfast
+life_skill_breakfast,oatmeal or cereal
+life_skill_food,how do i eat healthy
+life_skill_food,is fast food bad
+life_skill_food,what makes a balanced meal
+life_skill_food,should i eat more vegetables
+life_skill_food,how much water should i drink
+life_skill_food,i only like junk food
+life_skill_food,whats a healthy lunch
+life_skill_food,is sugar bad for me
+life_skill_food,i dont like vegetables
+life_skill_food,what food gives energy
+life_skill_food,eating healthier tips
+life_skill_food,how many meals a day
+life_skill_food,good food for my brain
+life_skill_food,what should i pack for lunch
+life_skill_food,protein foods
+life_skill_cooking,how do i cook pasta
+life_skill_cooking,teach me to cook
+life_skill_cooking,how do i boil an egg
+life_skill_cooking,easy recipe for dinner
+life_skill_cooking,how do i make rice
+life_skill_cooking,i burned my food
+life_skill_cooking,how do i use the stove safely
+life_skill_cooking,how long do i cook chicken
+life_skill_cooking,can i use the oven
+life_skill_cooking,how do i make a sandwich
+life_skill_cooking,help me make dinner
+life_skill_cooking,how do i scramble eggs
+life_skill_cooking,first time cooking
+life_skill_cooking,how do i cut vegetables safely
+life_skill_cooking,how to make grilled cheese
+life_skill_hygiene,how often should i shower
+life_skill_hygiene,do i need deodorant
+life_skill_hygiene,how do i brush my teeth properly
+life_skill_hygiene,i smell bad
+life_skill_hygiene,how often do i wash my hair
+life_skill_hygiene,should i floss
+life_skill_hygiene,i have acne
+life_skill_hygiene,how do i wash my face
+life_skill_hygiene,my breath stinks
+life_skill_hygiene,i forgot to shower
+life_skill_hygiene,how to keep clean
+life_skill_hygiene,clip my nails
+life_skill_hygiene,wash hands how long
+life_skill_hygiene,i feel sweaty
+life_skill_hygiene,daily hygiene routine
+life_skill_sleep,i cant sleep
+life_skill_sleep,how much sleep do i need
+life_skill_sleep,im always tired
+life_skill_sleep,i stay up too late
+life_skill_sleep,bedtime routine
+life_skill_sleep,i had a nightmare
+life_skill_sleep,i wake up in the night
+life_skill_sleep,how do i fall asleep faster
+life_skill_sleep,is it ok to use my phone in bed
+life_skill_sleep,i keep oversleeping
+life_skill_sleep,im sleepy in class
+life_skill_sleep,should i take a nap
+life_skill_sleep,i cant wake up in the morning
+life_skill_sleep,insomnia
+life_skill_sleep,my mind wont stop at night
+life_skill_homework,i have too much homework
+life_skill_homework,i dont want to do my homework
+life_skill_homework,help with homework
+life_skill_homework,i forgot my homework
+life_skill_homework,homework is boring
+life_skill_homework,how do i start my homework
+life_skill_homework,i dont understand my homework
+life_skill_homework,math homework is hard
+life_skill_homework,when should i do homework
+life_skill_homework,i keep putting off homework
+life_skill_homework,homework due tomorrow
+life_skill_homework,can you do my homework
+life_skill_homework,homework takes forever
+life_skill_homework,stuck on an assignment
+life_skill_homework,essay due soon
+life_skill_study,how do i study for a test
+life_skill_study,best way to study
+life_skill_study,i have an exam tomorrow
+life_skill_study,how do i remember things
+life_skill_study,study tips
+life_skill_study,i forget what i study
+life_skill_study,how long should i study
+life_skill_study,flashcards or notes
+life_skill_study,cramming for a test
+life_skill_study,how to take good notes
+life_skill_study,i failed my quiz
+life_skill_study,study schedule
+life_skill_study,how do i prepare for finals
+life_skill_study,studying with friends
+life_skill_study,memorize vocabulary
+life_skill_school,i dont like school
+life_skill_school,school is hard
+life_skill_school,first day at a new school
+life_skill_school,my teacher doesnt like me
+life_skill_school,i got a bad grade
+life_skill_school,i dont want to go to school
+life_skill_school,how do i talk to my teacher
+life_skill_school,i was late for class
+life_skill_school,school is stressful
+life_skill_school,choosing classes
+life_skill_school,i got detention
+life_skill_school,raise my hand in class
+life_skill_school,report card coming
+life_skill_school,i lost my school stuff
+life_skill_school,group project problems
+life_skill_focus,i cant concentrate
+life_skill_focus,i get distracted easily
+life_skill_focus,how do i stay focused
+life_skill_focus,my phone distracts me
+life_skill_focus,i zone out
+life_skill_focus,cant pay attention in class
+life_skill_focus,my mind wanders
+life_skill_focus,help me focus
+life_skill_focus,too many distractions
+life_skill_focus,i keep checking my phone
+life_skill_focus,focus tips
+life_skill_focus,how to stop daydreaming
+life_skill_focus,i lose focus fast
+life_skill_focus,noise makes it hard to focus
+life_skill_focus,cant sit still
+life_skill_time,i never have enough time
+life_skill_time,how do i manage my time
+life_skill_time,im always late
+life_skill_time,i procrastinate
+life_skill_time,too much to do today
+life_skill_time,how do i stop wasting time
+life_skill_time,time management tips
+life_skill_time,i run out of time
+life_skill_time,how to be on time
+life_skill_time,i spend too long on games
+life_skill_time,make a daily schedule
+life_skill_time,deadlines stress me out
+life_skill_time,how to plan my day
+life_skill_time,i keep missing deadlines
+life_skill_time,i waste my weekends
+life_skill_planning,help me make a plan
+life_skill_planning,how do i set goals
+life_skill_planning,planning my week
+life_skill_planning,i want to plan a party
+life_skill_planning,how do i make a to do list
+life_skill_planning,plan a trip
+life_skill_planning,i dont know where to start
+life_skill_planning,big project coming up
+life_skill_planning,how do i break a task into steps
+life_skill_planning,set a goal for the year
+life_skill_planning,make a checklist
+life_skill_planning,planning for summer
+life_skill_planning,i want to save for something
+life_skill_planning,how do i plan ahead
+life_skill_planning,organize my plans
+life_skill_organization,my room is messy
+life_skill_organization,how do i organize my stuff
+life_skill_organization,i cant find anything
+life_skill_organization,my backpack is a mess
+life_skill_organization,organize my desk
+life_skill_organization,i keep losing things
+life_skill_organization,how do i keep my locker tidy
+life_skill_organization,organize my closet
+life_skill_organization,folders for school papers
+life_skill_organization,declutter my room
+life_skill_organization,where should i put my things
+life_skill_organization,organize my notes
+life_skill_organization,too much clutter
+life_skill_organization,i lost my keys
+life_skill_organization,sort my stuff
+life_skill_cleaning,how do i clean my room
+life_skill_cleaning,cleaning tips
+life_skill_cleaning,how do i clean the bathroom
+life_skill_cleaning,i spilled something
+life_skill_cleaning,how do i vacuum
+life_skill_cleaning,my room smells
+life_skill_cleaning,how to dust
+life_skill_cleaning,clean the kitchen
+life_skill_cleaning,wipe the table
+life_skill_cleaning,how do i mop the floor
+life_skill_cleaning,cleaning is boring
+life_skill_cleaning,how to get a stain out of carpet
+life_skill_cleaning,clean my mirror
+life_skill_cleaning,quick clean before guests
+life_skill_cleaning,what cleaner should i use
+life_skill_chores,i dont want to do chores
+life_skill_chores,why do i have to do chores
+life_skill_chores,how do i load the dishwasher
+life_skill_chores,take out the trash
+life_skill_chores,make my bed
+life_skill_chores,chores are unfair
+life_skill_chores,how do i wash dishes
+life_skill_chores,my parents gave me chores
+life_skill_chores,feed the pet
+life_skill_chores,set the table
+life_skill_chores,how to do chores faster
+life_skill_chores,chore chart
+life_skill_chores,mow the lawn
+life_skill_chores,water the plants
+life_skill_chores,help around the house
+life_skill_laundry,how do i do laundry
+life_skill_laundry,how do i use the washing machine
+life_skill_laundry,can i wash colors with whites
+life_skill_laundry,my shirt shrunk
+life_skill_laundry,how much detergent
+life_skill_laundry,how do i fold clothes
+life_skill_laundry,how do i use the dryer
+life_skill_laundry,my clothes turned pink
+life_skill_laundry,how to get a stain out of a shirt
+life_skill_laundry,wash my sports uniform
+life_skill_laundry,hang clothes to dry
+life_skill_laundry,how often to wash jeans
+life_skill_laundry,iron a shirt
+life_skill_laundry,separate laundry
+life_skill_laundry,my clothes smell musty
+life_skill_lightbulb,how do i change a light bulb
+life_skill_lightbulb,the light went out
+life_skill_lightbulb,bulb is burnt out
+life_skill_lightbulb,which light bulb do i buy
+life_skill_lightbulb,lamp stopped working
+life_skill_lightbulb,replace a bulb safely
+life_skill_lightbulb,is it safe to change a bulb
+life_skill_lightbulb,light flickering
+life_skill_lightbulb,led or regular bulb
+life_skill_lightbulb,ceiling light broken
+life_skill_lightbulb,bulb is stuck
+life_skill_lightbulb,how hot is a light bulb
+life_skill_lightbulb,my room is dark the bulb died
+life_skill_lightbulb,what watt bulb
+life_skill_lightbulb,turn off the switch before changing bulb
+life_skill_tie,how do i tie a necktie
+life_skill_tie,teach me to tie a tie
+life_skill_tie,windsor knot
+life_skill_tie,my tie looks wrong
+life_skill_tie,tie a tie for a wedding
+life_skill_tie,how long should my tie be
+life_skill_tie,tie for school uniform
+life_skill_tie,how to tie a bow tie
+life_skill_tie,simple tie knot
+life_skill_tie,my knot is crooked
+life_skill_tie,tie for a job interview
+life_skill_tie,tie a tie step by step
+life_skill_tie,loosen a tie
+life_skill_tie,which tie goes with my shirt
+life_skill_tie,tie knot keeps slipping
+life_skill_transport,how do i take the bus
+life_skill_transport,first time on the subway
+life_skill_transport,how do i ride the train
+life_skill_transport,i missed my bus
+life_skill_transport,how do i pay for the bus
+life_skill_transport,taking transit alone
+life_skill_transport,how do i read a bus schedule
+life_skill_transport,i got on the wrong bus
+life_skill_transport,how do i get to school
+life_skill_transport,bike safety
+life_skill_transport,walking home alone
+life_skill_transport,how to use a transit map
+life_skill_transport,can i take an uber alone
+life_skill_transport,where do i get off the bus
+life_skill_transport,transit card
+life_skill_money,how do i save money
+life_skill_money,i want to make money
+life_skill_money,what is a budget
+life_skill_money,i spent all my allowance
+life_skill_money,should i open a bank account
+life_skill_money,how do i spend wisely
+life_skill_money,i want to buy a game
+life_skill_money,how does interest work
+life_skill_money,saving for a bike
+life_skill_money,is it ok to borrow money
+life_skill_money,how to earn money as a kid
+life_skill_money,piggy bank
+life_skill_money,what is a credit card
+life_skill_money,money tips
+life_skill_money,i lost my money
+life_skill_online,is it safe to talk to strangers online
+life_skill_online,someone online asked for my address
+life_skill_online,how do i make a strong password
+life_skill_online,should i post my photo
+life_skill_online,cyberbullying
+life_skill_online,someone is mean to me online
+life_skill_online,how much screen time
+life_skill_online,i got a weird message online
+life_skill_online,can i join social media
+life_skill_online,online privacy
+life_skill_online,scam link
+life_skill_online,online gaming safety
+life_skill_online,someone hacked my account
+life_skill_online,what should i not share online
+life_skill_online,a stranger added me
+life_skill_safety,what do i do in a fire
+life_skill_safety,i got a cut
+life_skill_safety,stranger danger
+life_skill_safety,im home alone
+life_skill_safety,when do i call 911
+life_skill_safety,first aid basics
+life_skill_safety,is it safe to cross the street
+life_skill_safety,i got lost
+life_skill_safety,what if someone knocks on the door
+life_skill_safety,smoke alarm is beeping
+life_skill_safety,i burned my finger
+life_skill_safety,safety tips
+life_skill_safety,bike helmet
+life_skill_safety,power went out
+life_skill_safety,what to do in an emergency
+life_skill_emotions,im sad
+life_skill_emotions,i feel anxious
+life_skill_emotions,im stressed out
+life_skill_emotions,im so mad
+life_skill_emotions,i feel lonely
+life_skill_emotions,i feel overwhelmed
+life_skill_emotions,i cried today
+life_skill_emotions,im worried
+life_skill_emotions,i feel upset
+life_skill_emotions,i dont feel like myself
+life_skill_emotions,i feel jealous
+life_skill_emotions,im scared
+life_skill_emotions,i feel nervous
+life_skill_emotions,bad day
+life_skill_emotions,how do i calm down
+life_skill_conflict,i had a fight with my friend
+life_skill_conflict,my sister is annoying
+life_skill_conflict,how do i say sorry
+life_skill_conflict,someone is mad at me
+life_skill_conflict,i argued with my mom
+life_skill_conflict,my brother took my stuff
+life_skill_conflict,how do i solve an argument
+life_skill_conflict,someone blamed me
+life_skill_conflict,i yelled at someone
+life_skill_conflict,how do i forgive someone
+life_skill_conflict,we disagree
+life_skill_conflict,my parents are fighting
+life_skill_conflict,i hurt my friends feelings
+life_skill_conflict,someone wont stop teasing me
+life_skill_conflict,how do i stand up for myself
+life_skill_friendship,how do i make friends
+life_skill_friendship,i have no friends
+life_skill_friendship,my best friend ignores me
+life_skill_friendship,how to be a good friend
+life_skill_friendship,my friend moved away
+life_skill_friendship,friends left me out
+life_skill_friendship,how do i keep a friend
+life_skill_friendship,is my friend a real friend
+life_skill_friendship,new friend at school
+life_skill_friendship,my friend lied to me
+life_skill_friendship,friend drama
+life_skill_friendship,how do i cheer up my friend
+life_skill_friendship,friends pressuring me
+life_skill_friendship,i miss my friends
+life_skill_friendship,want to hang out with friends
+life_skill_social,im shy
+life_skill_social,how do i start a conversation
+life_skill_social,i feel awkward around people
+life_skill_social,public speaking scares me
+life_skill_social,how do i introduce myself
+life_skill_social,i dont fit in
+life_skill_social,how to make small talk
+life_skill_social,going to a party alone
+life_skill_social,how do i be more confident with people
+life_skill_social,meeting new people
+life_skill_social,good manners
+life_skill_social,how do i talk to adults
+life_skill_social,eye contact
+life_skill_social,joining a club
+life_skill_social,giving a presentation
+life_skill_responsibility,how do i be more responsible
+life_skill_responsibility,i forgot to do what i promised
+life_skill_responsibility,taking care of a pet
+life_skill_responsibility,i broke something
+life_skill_responsibility,keeping my word
+life_skill_responsibility,i made a mistake
+life_skill_responsibility,how do i own up
+life_skill_responsibility,being trusted
+life_skill_responsibility,babysitting tips
+life_skill_responsibility,remember my tasks
+life_skill_responsibility,doing my part
+life_skill_responsibility,i let someone down
+life_skill_responsibility,should i tell the truth
+life_skill_responsibility,my first job
+life_skill_responsibility,taking care of my things
+life_skill_growth,how do i get better at things
+life_skill_growth,i want to learn something new
+life_skill_growth,how do i build good habits
+life_skill_growth,how do i become confident
+life_skill_growth,i want to improve
+life_skill_growth,new hobby ideas
+life_skill_growth,how do i grow up
+life_skill_growth,learning from mistakes
+life_skill_growth,how do i be patient
+life_skill_growth,i want to be better
+life_skill_growth,self improvement
+life_skill_growth,how do i keep trying
+life_skill_growth,i want to try new things
+life_skill_growth,how to be brave
+life_skill_growth,how do i get stronger
