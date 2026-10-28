@@ -3,8 +3,8 @@
 // background), so even when the free server is asleep the app appears at once
 // and shows "waking up" instead of a blank screen. Chat requests always go to
 // the network.
-const CACHE = "robodad-v3";
-const SHELL = ["/", "/manifest.webmanifest", "/static/favicon.svg", "/static/icon-192.png", "/static/icon-512.png"];
+const CACHE = "robodad-v4";
+const SHELL = ["/", "/privacy", "/manifest.webmanifest", "/static/favicon.svg", "/static/icon-192.png", "/static/icon-512.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -30,7 +30,7 @@ self.addEventListener("fetch", (e) => {
   // stale-while-revalidate
   e.respondWith(
     caches.open(CACHE).then(async (cache) => {
-      const key = req.mode === "navigate" ? "/" : req;
+      const key = req.mode === "navigate" ? (url.pathname === "/privacy" ? "/privacy" : "/") : req;
       const cached = await cache.match(key);
       const network = fetch(req)
         .then((res) => { if (res.ok || res.type === "opaque") cache.put(key, res.clone()); return res; })

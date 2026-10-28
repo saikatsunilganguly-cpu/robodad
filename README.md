@@ -14,8 +14,9 @@ pinned: false
 
 RoboDad started as my CONL725 coursework chatbot: TF-IDF + Logistic Regression
 intent classification, VADER sentiment, regex NER and canned responses in a
-terminal. This version turns it into a web app that talks like a real LLM
-while keeping that NLP pipeline in charge of grounding and safety.
+terminal. This version turns it into a web app for **teenagers (13+)** that
+talks like a real LLM while keeping that NLP pipeline in charge of grounding
+and safety.
 
 ## What changed
 
@@ -26,12 +27,13 @@ while keeping that NLP pipeline in charge of grounding and safety.
 | Intent classifier | 57.8% accuracy; confident on only 29% of messages | 68.7% accuracy; confident on 79% of messages at the same reliability (see below) |
 | Voice | None | Talk with the mic button; RoboDad can read replies aloud |
 | Phone | None | Installs as a home-screen app and opens instantly |
-| Feedback | None | Thumbs up/down on every reply, saved to a free database |
+| Feedback | None | Thumbs up/down and "Report" on every reply, saved to a free database |
+| Audience | Kids, terminal only | Teens 13+: teen persona, teen topics (first jobs, life after high school, healthy relationships, peer pressure, budgeting, driving), neutral birth-year age check, optional nickname, privacy page |
 | Memory | None, every message stands alone | Remembers the last 16 messages of the conversation |
 | Out-of-scope questions ("help me cook pasta") | Fallback: "I didn't quite catch that" | Real answer, in RoboDad's voice |
 | Use of the dataset | Training data + response bank | Also a retrieval index: the 4 most similar examples are fed to the LLM as style and content guidance (retrieval-augmented generation) |
 | NLP analysis | Printed to the console | Shown under each reply in "How RoboDad read this" |
-| Safety | Confidence threshold only | Crisis guardrail that bypasses the LLM, persona rules, input limits, per-visitor rate limit, daily LLM budget |
+| Safety | Confidence threshold only | Crisis guardrail that bypasses the LLM with situation-specific help (self-harm, sextortion, eating struggles, dating violence, abuse at home) and tap-to-call links; persona rules (no diet plans, no drug how-tos, nothing sexual); input limits; per-visitor rate limit; daily LLM budget; API keys redacted from logs |
 | Reliability | Needed the exact scikit-learn version that made the `.joblib` files | Model trained during the build, so it always matches; switches AI model automatically if one is retired; falls back to the classic classifier if the LLM is down or no key is set; shows "waking up" while the free server starts |
 | Data | Windows-1252 file read as Latin-1, so apostrophes turned into junk ("Im") | Cleaned to UTF-8, 61 duplicate rows removed (1,042 → 981) |
 
@@ -41,7 +43,8 @@ while keeping that NLP pipeline in charge of grounding and safety.
  user message
      │
      ▼
- safety check ──── crisis words? ──► fixed help message (Kids Help Phone, 988, 911); no LLM
+ safety check ──── danger signs? ──► fixed help message for that situation
+     │                                (Kids Help Phone, 988, NeedHelpNow, Cybertip, NEDIC, 911); no LLM
      │
      ▼
  NLP pipeline (app/nlp.py)
@@ -64,8 +67,26 @@ while keeping that NLP pipeline in charge of grounding and safety.
 
 ## Improving the intent classifier
 
-`python scripts/evaluate.py` compares set-ups with 5-fold cross-validation.
-Every set-up is tested only on the original 981 RoboDad examples.
+### Teen version (current)
+
+The original 981 examples plus 125 new teen examples (`data/teen_intents.csv`),
+with snacks and breakfast merged into food, and lightbulbs into home basics:
+**1,106 examples, 34 intents**.
+
+| Set-up | Accuracy | Confident† | Right when confident |
+|---|---|---|---|
+| 1. Original CONL725 model | 51.0% | 11.7% | 88.9% |
+| 4. Production model | **65.8%** | 75.1% | 75.7% |
+
+†Above the 0.40 fallback threshold. Majority-class baseline: 7.9%.
+Every new teen topic is recognised with 0.81–0.90 confidence on unseen test
+phrases ("how do i ask my crush out", "my friends keep pushing me to vape").
+
+### CONL725 data only (32 intents)
+
+These are the results before the teen topics were added, tested only on the
+original 981 RoboDad examples with 5-fold cross-validation
+(`python scripts/evaluate.py` now runs the teen version).
 
 | Set-up | Accuracy | Confident* | Right when confident |
 |---|---|---|---|
@@ -103,16 +124,19 @@ app/
   main.py      web server: chat streaming, rate limits, fallbacks
   nlp.py       the CONL725 pipeline: classifier, retrieval, sentiment, NER
   llm.py       RoboDad persona prompt + Claude / Groq / OpenAI-compatible streaming
-  safety.py    crisis detection and help-line message
+  safety.py    crisis detection: situation-specific help messages
 static/
-  index.html   the chat page (no build step): voice, feedback, waking-up banner
+  index.html   the chat page (no build step): voice, feedback, report, age check, nickname
+  privacy.html privacy policy (served at /privacy)
   sw.js, manifest.webmanifest, icon-*.png   phone-app (PWA) files
   favicon.svg
 data/
   robodad_intents.csv       cleaned dataset (UTF-8)
+  teen_intents.csv          125 teen-topic examples with RoboDad replies
   augmented_utterances.csv  480 extra training-only examples
 scripts/
-  evaluate.py  compares classifier set-ups with cross-validation
+  evaluate.py      compares classifier set-ups with cross-validation
+  test_safety.py   50 checks: messages that must / must not trigger help
 Dockerfile, requirements.txt, .env.example
 ```
 
@@ -168,7 +192,9 @@ Without this step, ratings still work and appear in Render's **Logs** as
      confidence real,
      mode text,
      model text,
-     reply text
+     reply text,
+     kind text not null default 'rating',   -- 'rating' or 'report'
+     reason text                            -- report reason
    );
    alter table public.feedback enable row level security;
    grant select, insert on public.feedback to service_role;
@@ -179,8 +205,9 @@ Without this step, ratings still work and appear in Render's **Logs** as
 4. In Render → **Environment**, add `SUPABASE_URL` and `SUPABASE_KEY` with those values.
 5. Ratings now appear in Supabase under **Table Editor → feedback**.
 
-Only the rating, the detected intent, the model and RoboDad's reply are saved,
-never what the child typed. Free Supabase projects pause after a week without
+Only the rating or report reason, the detected intent, the model and RoboDad's
+reply are saved, never what the user typed. Reported replies also appear in
+Render's logs as `REPORTED REPLY` warnings. Free Supabase projects pause after a week without
 activity; open the dashboard and click **Restore** to wake one up.
 
 ### Install on a phone
@@ -230,7 +257,8 @@ All settings are environment variables (Render environment or `.env` locally).
 | `DAILY_LLM_LIMIT` | `1500` | LLM calls per day before switching to classic mode; caps your bill |
 | `LLM_MAX_TOKENS` | `400` | Maximum reply length |
 | `LLM_TEMPERATURE` | `0.7` | Higher is more playful, lower is more consistent |
-| `SUPABASE_URL`, `SUPABASE_KEY` | none | Save thumbs up/down to Supabase (otherwise they go to the log) |
+| `SUPABASE_URL`, `SUPABASE_KEY` | none | Save thumbs up/down and reports to Supabase (otherwise they go to the log) |
+| `ANDROID_PACKAGE`, `ANDROID_SHA256` | none | For the Google Play app: serves `/.well-known/assetlinks.json` so the app opens without a browser bar |
 
 If several keys are set, Claude is used first, then Groq, then OpenAI-compatible.
 If the provider says a model has been retired, RoboDad tries the backup list,
@@ -238,12 +266,19 @@ then asks the provider for its current models and picks a chat model.
 
 ## Safety notes
 
-- Messages that suggest self-harm or abuse never reach the LLM. RoboDad replies
-  with a fixed message pointing to Kids Help Phone (1-800-668-6868, text
-  CONNECT to 686868), the 988 Suicide Crisis Helpline and 911. These are
-  Canada/US services; edit `CRISIS_RESPONSE` in `app/safety.py` for other countries.
-- The persona prompt in `app/llm.py` keeps RoboDad age-appropriate, honest
-  that he's an AI, and steers medical, legal and dangerous topics to trusted adults.
+- Messages that suggest danger never reach the LLM. RoboDad replies with a fixed
+  message for the situation, with tap-to-call numbers and links:
+  - self-harm or suicide: Kids Help Phone (1-800-668-6868, text CONNECT to 686868), 988, 911
+  - sextortion: don't pay, keep evidence, tell an adult; NeedHelpNow.ca, Cybertip.ca (US: TakeItDown.ncmec.org)
+  - eating struggles: NEDIC (1-866-633-4220), Kids Help Phone
+  - dating violence or abuse at home: 911, Kids Help Phone, a trusted adult
+  These are Canada/US services; edit `app/safety.py` for other countries.
+  `python scripts/test_safety.py` checks 50 messages that must or must not trigger help.
+- The persona prompt in `app/llm.py` is written for teens: respectful, no
+  lecturing, nothing sexual, no diet plans or weight targets, no drug or vaping
+  how-tos, and it steers medical, legal and dangerous topics to trusted adults.
+- A neutral age check asks for the birth year on first visit and stores only
+  pass/fail on the device. Under-13s see a message instead of the chat.
 - Conversations aren't stored on the server. Each browser tab keeps its own
   chat until it's closed. Feedback stores ratings and RoboDad's replies only.
 - Voice input uses the browser's own speech recognition (Chrome and Edge send

@@ -3,7 +3,7 @@ Compare intent-classifier set-ups with 5-fold cross-validation.
 
     python scripts/evaluate.py
 
-Every set-up is tested ONLY on the original RoboDad examples. The extra
+Every set-up is tested ONLY on the labelled RoboDad examples (original CONL725 data plus the teen topics). The extra
 examples in data/augmented_utterances.csv are added to the training folds
 only, and any that exactly match an original example are dropped first, so no
 test sentence can leak into training.
@@ -65,7 +65,7 @@ def main():
     aug_X, aug_y = load_augmented(set(nlp.utterances))
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-    print(f"{len(X)} original examples, {len(set(y))} intents, {len(aug_X)} augmented training examples\n")
+    print(f"{len(X)} labelled examples, {len(set(y))} intents, {len(aug_X)} augmented training examples\n")
     print(f"{'Set-up':38} {'Accuracy':>9} {'Answered*':>10} {'Acc. when answered':>19}")
     for name, factory, use_aug in SETUPS:
         accs, answered, acc_ans = [], [], []

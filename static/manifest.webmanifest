@@ -1,11 +1,12 @@
 {
   "name": "RoboDad",
   "short_name": "RoboDad",
-  "description": "A friendly robot dad who helps kids with everyday life skills.",
+  "description": "A friendly AI robot dad with practical advice for teens: school, money, cooking, first jobs and more.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
+  "categories": ["lifestyle", "education"],
   "background_color": "#E8EFF5",
   "theme_color": "#2E5C8A",
   "icons": [

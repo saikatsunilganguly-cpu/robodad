@@ -41,6 +41,17 @@ log = logging.getLogger("robodad")
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATASET_PATH = os.path.join(BASE_DIR, "data", "robodad_intents.csv")
 AUGMENTED_PATH = os.path.join(BASE_DIR, "data", "augmented_utterances.csv")
+# Teen topics added for the app-store version (first jobs, life after high
+# school, relationships, peer pressure, budgeting, driving, home basics).
+# Kept in a separate file so the original CONL725 dataset stays unchanged.
+TEEN_PATH = os.path.join(BASE_DIR, "data", "teen_intents.csv")
+
+# Topics folded together for a teen audience
+INTENT_MERGES = {
+    "life_skill_snacks": "life_skill_food",
+    "life_skill_breakfast": "life_skill_food",
+    "life_skill_lightbulb": "life_skill_home",
+}
 MODEL_CACHE = os.path.join(BASE_DIR, "models", "intent_model.joblib")
 
 # Below this confidence the classifier says "not sure" (fallback). Tuned with
@@ -104,7 +115,7 @@ def load_augmented(exclude: set[str], path: str = AUGMENTED_PATH) -> tuple[list[
             t = normalize(r["user_utterance"])
             if t and t not in exclude:
                 texts.append(t)
-                labels.append(r["intent"])
+                labels.append(INTENT_MERGES.get(r["intent"], r["intent"]))
     return texts, labels
 
 
@@ -131,9 +142,15 @@ class Analysis:
 
 
 class RoboDadNLP:
-    def __init__(self, dataset_path: str = DATASET_PATH):
-        with open(dataset_path, encoding="utf-8", newline="") as f:
-            self.rows = [r for r in csv.DictReader(f)]
+    def __init__(self, dataset_paths: tuple[str, ...] = (DATASET_PATH, TEEN_PATH)):
+        self.rows = []
+        for path in dataset_paths:
+            if not os.path.exists(path):
+                continue
+            with open(path, encoding="utf-8", newline="") as f:
+                for r in csv.DictReader(f):
+                    r["intent"] = INTENT_MERGES.get(r["intent"], r["intent"])
+                    self.rows.append(r)
 
         self.utterances = [normalize(r["user_utterance"]) for r in self.rows]
         self.labels = [r["intent"] for r in self.rows]
@@ -153,7 +170,7 @@ class RoboDadNLP:
 
     def _fingerprint(self) -> str:
         h = hashlib.sha256(sklearn.__version__.encode())
-        for path in (DATASET_PATH, AUGMENTED_PATH, __file__):
+        for path in (DATASET_PATH, TEEN_PATH, AUGMENTED_PATH, __file__):
             if os.path.exists(path):
                 with open(path, "rb") as f:
                     h.update(f.read())
