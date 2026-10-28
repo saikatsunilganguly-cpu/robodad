@@ -28,6 +28,8 @@ and safety.
 | Voice | None | Talk with the mic button; RoboDad can read replies aloud |
 | Phone | None | Installs as a home-screen app and opens instantly |
 | Feedback | None | Thumbs up/down and "Report" on every reply, saved to a free database |
+| Look and feel | Terminal text | Three looks the user picks: **Classic**, **Arcade Neon** and **VHS Sunset**. RoboDad has aviators, a leather jacket and headphones; a cassette spins while he thinks; "blowing on the cartridge" while the free server wakes up |
+| Real-life skills | None | **Life Skills Belt**: a championship belt that earns a plate for each skill done for real (self-reported, stored only on the device, no streaks). **Dad's Mixtape**: a classic-rock track suggestion when someone's having a rough time (titles only). **Ask your real one**: a question to take to a parent, tied to the topic |
 | Audience | Kids, terminal only | Teens 13+: teen persona, teen topics (first jobs, life after high school, healthy relationships, peer pressure, budgeting, driving), neutral birth-year age check, optional nickname, privacy page |
 | Memory | None, every message stands alone | Remembers the last 16 messages of the conversation |
 | Out-of-scope questions ("help me cook pasta") | Fallback: "I didn't quite catch that" | Real answer, in RoboDad's voice |

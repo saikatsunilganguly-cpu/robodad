@@ -13,7 +13,8 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+<script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
   --sky:#E8EFF5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5A6B7E; --line:#D3DEE8;
@@ -31,6 +32,23 @@
 :root[data-theme="dark"]{
   --sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49;
   --denim:#4C80B8; --metal:#55687A; --alert:#E07A66; --ok:#5FBF93; color-scheme: dark;
+}
+/* ---------- the three looks ---------- */
+:root{--display:"Nunito", ui-rounded, system-ui, sans-serif; --jacket:#5A3A26; --lens:#1B2A3A; --glow:transparent}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--jacket:#2A1C14; --lens:#05080C} }
+:root[data-look="arcade"]{
+  --sky:#0D0A26; --surface:#18123F; --ink:#EEEAFF; --muted:#A99FDD; --line:#2F2770;
+  --denim:#FF3EA5; --denim-ink:#1A0620; --mustard:#2DE2E6; --mustard-ink:#03181A;
+  --metal:#5B50B0; --alert:#FF6B6B; --ok:#3CFF9B; --jacket:#1F1838; --lens:#05030F;
+  --glow:color-mix(in srgb, #FF3EA5 55%, transparent);
+  --display:"Bungee", "Nunito", sans-serif; color-scheme:dark;
+}
+:root[data-look="vhs"]{
+  --sky:#1C0E22; --surface:#2B1634; --ink:#FFEBDD; --muted:#D3B0C3; --line:#4A2A56;
+  --denim:#FF7A59; --denim-ink:#2A0A05; --mustard:#FFB547; --mustard-ink:#2A1600;
+  --metal:#8A6A9C; --alert:#FF5E7E; --ok:#7FE3A6; --jacket:#24120C; --lens:#120812;
+  --glow:color-mix(in srgb, #FFB547 40%, transparent);
+  --display:"Righteous", "Nunito", sans-serif; color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -51,7 +69,8 @@ button,textarea{font:inherit;color:inherit}
   border-bottom:1px solid var(--line); background:var(--surface);
 }
 .top .who{flex:1; min-width:0}
-.top h1{margin:0; font-size:1.25rem; font-weight:900; letter-spacing:-.01em}
+.top h1{margin:0; font-family:var(--display); font-size:1.25rem; font-weight:900; letter-spacing:-.01em}
+:root[data-look="arcade"] .top h1,:root[data-look="vhs"] .top h1{font-weight:400; letter-spacing:.02em}
 .status{margin:0; font-size:.85rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .status .dot{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--ok); margin-right:6px; vertical-align:1px}
 .status.classic .dot{background:var(--mustard)}
@@ -71,12 +90,18 @@ button,textarea{font:inherit;color:inherit}
 
 /* ---------- waking banner ---------- */
 .wake{
+  position:relative; overflow:hidden;
   display:flex; gap:10px; align-items:center; justify-content:center;
   padding:10px 16px; background:var(--mustard); color:var(--mustard-ink); font-weight:700; font-size:.92rem; text-align:center;
 }
+.wake::after{content:""; position:absolute; left:0; right:0; height:6px; top:-8px; background:rgba(255,255,255,.45); filter:blur(1px);
+  animation:tracking 1.6s linear infinite}
+@keyframes tracking{to{transform:translateY(60px)}}
 
 /* ---------- avatar ---------- */
 .bot{flex:none; display:block}
+.top > .bot{animation:poweron 1.1s steps(1, end) 1}
+@keyframes poweron{0%{opacity:0} 12%{opacity:1; filter:brightness(2)} 18%{opacity:.2} 30%{opacity:1} 38%{opacity:.5} 46%,100%{opacity:1; filter:none}}
 .bot .light{fill:var(--mustard)}
 .thinking .bot .light, .is-waking .bot .light{animation:blink .7s steps(2,start) infinite}
 @keyframes blink{to{fill:var(--metal)}}
@@ -86,7 +111,29 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .log{max-width:720px; margin:0 auto; padding:24px 16px 8px; display:flex; flex-direction:column; gap:18px}
 
 .hello{padding:32px 0 8px; display:flex; flex-direction:column; align-items:flex-start; gap:14px}
-.hello h2{margin:0; font-size:clamp(2rem, 6vw, 2.9rem); line-height:1.05; font-weight:900; letter-spacing:-.02em; max-width:14ch}
+.hello{position:relative; isolation:isolate}
+.hello h2{margin:0; font-family:var(--display); font-size:clamp(2rem, 6vw, 2.9rem); line-height:1.05; font-weight:900; letter-spacing:-.02em; max-width:14ch}
+:root[data-look="arcade"] .hello h2{font-weight:400; letter-spacing:0; font-size:clamp(1.7rem, 5.4vw, 2.5rem); line-height:1.12;
+  text-shadow:0 0 18px var(--glow), 0 0 2px var(--denim)}
+:root[data-look="vhs"] .hello h2{font-weight:400; letter-spacing:.01em;
+  background:linear-gradient(180deg, #FFE6A8 10%, #FFB547 45%, #FF5E7E 95%); -webkit-background-clip:text; background-clip:text; color:transparent}
+.hello > .bot{filter:drop-shadow(0 0 14px var(--glow))}
+/* Arcade: neon grid floor */
+:root[data-look="arcade"] .hello::after{content:""; position:absolute; z-index:-1; left:-24px; right:-24px; bottom:-56px; height:170px;
+  background:
+    repeating-linear-gradient(90deg, color-mix(in srgb, #2DE2E6 45%, transparent) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(0deg, color-mix(in srgb, #FF3EA5 45%, transparent) 0 1px, transparent 1px 22px);
+  transform:perspective(240px) rotateX(58deg); transform-origin:bottom;
+  -webkit-mask-image:linear-gradient(to top, #000 10%, transparent 90%); mask-image:linear-gradient(to top, #000 10%, transparent 90%)}
+/* VHS: striped sunset behind RoboDad */
+:root[data-look="vhs"] .hello::before{content:""; position:absolute; z-index:-1; top:24px; left:-12px; width:112px; height:112px; border-radius:50%;
+  background:linear-gradient(180deg, #FFE6A8, #FFB547 40%, #FF5E7E 75%, #B63B8C);
+  -webkit-mask-image:repeating-linear-gradient(180deg, #000 0 60%, transparent 60% 62%, #000 62% 66%, transparent 66% 69%, #000 69% 74%, transparent 74% 78%, #000 78% 84%, transparent 84% 89%, #000 89%);
+  mask-image:repeating-linear-gradient(180deg, #000 0 60%, transparent 60% 62%, #000 62% 66%, transparent 66% 69%, #000 69% 74%, transparent 74% 78%, #000 78% 84%, transparent 84% 89%, #000 89%);
+  opacity:.9}
+/* VHS: faint scanlines over everything */
+:root[data-look="vhs"] body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:60;
+  background:repeating-linear-gradient(180deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px); mix-blend-mode:multiply}
 .hello p{margin:0; color:var(--muted); max-width:46ch}
 .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
 .chip{
@@ -109,6 +156,10 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .bubble ol,.bubble ul{margin:.3em 0 .6em; padding-left:1.3em}
 .bubble.safety{border:2px solid var(--alert)}
 .bubble a{color:inherit; font-weight:800; text-underline-offset:2px}
+.cassette{display:inline-flex; gap:10px; align-items:center; color:var(--muted); font-size:.9rem; font-weight:700}
+.cassette svg{width:42px; height:27px; flex:none}
+.cassette .reel{transform-box:fill-box; transform-origin:center; animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(-360deg)}}
 .typing{display:inline-flex; gap:4px; padding:4px 0}
 .typing i{width:7px; height:7px; border-radius:50%; background:var(--muted); animation:hop 1s infinite}
 .typing i:nth-child(2){animation-delay:.15s} .typing i:nth-child(3){animation-delay:.3s}
@@ -127,6 +178,57 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .rate button:disabled{cursor:default}
 .rate button:disabled:not([aria-pressed="true"]){opacity:.35}
 .thanks{font-weight:700}
+.rate.joke{gap:6px}
+.rate.joke button{border:1px solid var(--line); border-radius:999px; padding:4px 11px; font-weight:800; font-size:.85rem}
+.rate.joke button[aria-pressed="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
+
+/* extras under a reply: belt nudge, mixtape, ask your real one */
+.extra{flex-basis:100%; display:flex; gap:12px; align-items:flex-start; padding:12px 14px; border-radius:14px;
+  background:var(--surface); border:1px solid var(--line); color:var(--ink); font-size:.92rem}
+.extra svg{width:30px; height:30px; flex:none; color:var(--denim)}
+.extra b{display:block; font-family:var(--display); font-weight:900; font-size:.95rem; letter-spacing:.01em}
+:root[data-look="arcade"] .extra b,:root[data-look="vhs"] .extra b{font-weight:400}
+.extra p{margin:2px 0 0} .extra q{font-weight:800}
+.extra .mini{margin-top:8px; border:1px solid var(--line); background:transparent; border-radius:999px; padding:4px 11px; font-weight:800; font-size:.85rem; cursor:pointer}
+.extra .mini:hover:not(:disabled){background:var(--sky)}
+.extra .mini:disabled{cursor:default; opacity:.7}
+.plate-nudge{border:1px dashed var(--line); background:transparent; border-radius:999px; padding:4px 12px; font-weight:800; font-size:.85rem; cursor:pointer; color:var(--ink); display:inline-flex; gap:6px; align-items:center}
+.plate-nudge svg{width:16px; height:16px; color:var(--mustard)}
+.plate-nudge:hover{background:var(--surface)}
+
+/* settings menu */
+.looks{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px}
+.look{border:2px solid var(--line); border-radius:16px; background:transparent; padding:8px; cursor:pointer; text-align:left; display:flex; flex-direction:column; gap:6px}
+.look[aria-checked="true"]{border-color:var(--mustard); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 35%, transparent)}
+.look .pv{height:64px; border-radius:10px; position:relative; overflow:hidden; display:grid; place-items:center}
+.look .pv svg{width:40px; height:40px}
+.look strong{font-size:.9rem; line-height:1.2} .look small{color:var(--muted); font-size:.78rem; line-height:1.2}
+.pv.classic{background:#E8EFF5} .pv.arcade{background:linear-gradient(#0D0A26 55%, #2A1060)}
+.pv.vhs{background:linear-gradient(180deg, #2B1634 40%, #FF7A59 140%)}
+.pv.arcade::after{content:""; position:absolute; inset:auto 0 0; height:22px; background:repeating-linear-gradient(90deg, #2DE2E6 0 1px, transparent 1px 10px), repeating-linear-gradient(0deg, #FF3EA5 0 1px, transparent 1px 6px); opacity:.6}
+.pv.vhs::before{content:""; position:absolute; width:46px; height:46px; border-radius:50%; background:linear-gradient(#FFE6A8, #FF5E7E); bottom:-14px}
+.setting{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--line)}
+.setting span{font-weight:700}
+.switch{width:52px; height:30px; border-radius:999px; border:0; background:var(--line); position:relative; cursor:pointer; flex:none}
+.switch::after{content:""; position:absolute; top:4px; left:4px; width:22px; height:22px; border-radius:50%; background:var(--surface); transition:transform .15s}
+.switch[aria-pressed="true"]{background:var(--ok)}
+.switch[aria-pressed="true"]::after{transform:translateX(22px)}
+
+/* Life Skills Belt */
+.belt-svg{width:100%; height:auto; display:block}
+.belt-rank{text-align:center; margin:-4px 0 0; font-family:var(--display); font-weight:900; font-size:1.1rem; color:var(--ink)}
+:root[data-look="arcade"] .belt-rank,:root[data-look="vhs"] .belt-rank{font-weight:400}
+.skills{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
+.skill{width:100%; display:flex; gap:10px; align-items:center; text-align:left; border:1.5px solid var(--line); background:transparent; border-radius:12px; padding:9px 12px; cursor:pointer; font-weight:700}
+.skill .chk{width:22px; height:22px; border-radius:50%; border:2px solid var(--line); flex:none; display:grid; place-items:center}
+.skill[aria-pressed="true"]{border-color:var(--mustard)}
+.skill[aria-pressed="true"] .chk{background:var(--mustard); border-color:var(--mustard)}
+.skill[aria-pressed="true"] .chk::after{content:""; width:9px; height:5px; border:solid var(--mustard-ink); border-width:0 0 2.5px 2.5px; transform:rotate(-45deg) translate(1px,-1px)}
+.plate-new{animation:plate .6s ease-out 1}
+@keyframes plate{0%{transform:scale(.2); opacity:0} 70%{transform:scale(1.25)} 100%{transform:scale(1); opacity:1}}
+
+.toast{position:fixed; left:50%; top:calc(14px + env(safe-area-inset-top)); transform:translateX(-50%); z-index:40;
+  background:var(--ink); color:var(--sky); font-weight:800; padding:10px 18px; border-radius:999px; box-shadow:0 10px 30px rgba(0,0,0,.25); max-width:calc(100vw - 32px); text-align:center}
 .report-btn{border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted); font-size:.85rem; font-weight:700; display:inline-flex; gap:4px; align-items:center}
 .report-btn svg{width:15px; height:15px}
 .report-btn:hover{background:var(--surface); color:var(--ink)}
@@ -140,7 +242,8 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
   background:color-mix(in srgb, var(--ink) 55%, transparent)}
 .card{width:min(440px, 100%); max-height:calc(100vh - 32px); overflow:auto; background:var(--surface); color:var(--ink);
   border-radius:22px; padding:24px; display:flex; flex-direction:column; gap:14px; box-shadow:0 20px 50px rgba(0,0,0,.25)}
-.card h2{margin:0; font-size:1.5rem; font-weight:900; letter-spacing:-.01em; line-height:1.15}
+.card h2{margin:0; font-family:var(--display); font-size:1.5rem; font-weight:900; letter-spacing:-.01em; line-height:1.15}
+:root[data-look="arcade"] .card h2,:root[data-look="vhs"] .card h2{font-weight:400; letter-spacing:.01em}
 .card p{margin:0; color:var(--muted)}
 .card ul{margin:0; padding-left:1.2em; color:var(--ink)} .card li{margin-bottom:4px}
 .card label{font-weight:700; font-size:.95rem}
@@ -209,17 +312,38 @@ textarea::placeholder{color:var(--muted)}
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="robodad" viewBox="0 0 64 64">
-    <line x1="32" y1="4" x2="32" y2="13" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
-    <circle class="light" cx="32" cy="5" r="4.5"/>
-    <rect x="8" y="13" width="48" height="40" rx="14" fill="var(--metal)" stroke="var(--ink)" stroke-width="3"/>
-    <rect x="3" y="27" width="6" height="12" rx="3" fill="var(--ink)"/>
-    <rect x="55" y="27" width="6" height="12" rx="3" fill="var(--ink)"/>
-    <circle cx="23" cy="29" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-    <circle cx="41" cy="29" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
-    <circle cx="24" cy="29.5" r="2" fill="var(--ink)"/>
-    <circle cx="42" cy="29.5" r="2" fill="var(--ink)"/>
-    <path d="M18 41c4-4 9-4 14 0 5-4 10-4 14 0-3 5-9 5-14 2-5 3-11 3-14-2z" fill="var(--ink)"/>
+    <!-- leather jacket collar -->
+    <path d="M6 64 L18 50 L27 57 L32 64 Z M58 64 L46 50 L37 57 L32 64 Z" fill="var(--jacket)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <rect x="26" y="45" width="12" height="9" fill="var(--metal)" stroke="var(--ink)" stroke-width="2"/>
+    <!-- headphones resting round the neck -->
+    <path d="M17 51 Q32 62 47 51" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="17" cy="51" r="4" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2"/>
+    <circle cx="47" cy="51" r="4" fill="var(--mustard)" stroke="var(--ink)" stroke-width="2"/>
+    <!-- antenna -->
+    <line x1="32" y1="3" x2="32" y2="11" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>
+    <circle class="light" cx="32" cy="4" r="3.6"/>
+    <!-- head -->
+    <rect x="10" y="10" width="44" height="36" rx="12" fill="var(--metal)" stroke="var(--ink)" stroke-width="2.6"/>
+    <rect x="5" y="22" width="6" height="11" rx="3" fill="var(--ink)"/>
+    <rect x="53" y="22" width="6" height="11" rx="3" fill="var(--ink)"/>
+    <!-- aviators -->
+    <path d="M13 21.5 H51" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M14 22 H29 Q30 22 29.7 24 Q28.5 32 22 32 Q15.5 32 14.3 24 Q14 22 14 22Z" fill="var(--lens)" stroke="var(--ink)" stroke-width="1.8"/>
+    <path d="M50 22 H35 Q34 22 34.3 24 Q35.5 32 42 32 Q48.5 32 49.7 24 Q50 22 50 22Z" fill="var(--lens)" stroke="var(--ink)" stroke-width="1.8"/>
+    <path d="M17 24.5 L21 24.5 M37.5 24.5 L41.5 24.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>
+    <!-- mustache -->
+    <path d="M19 39c4-4 9-4 13 0 4-4 9-4 13 0-3 4.5-9 4.5-13 2-4 2.5-10 2.5-13-2z" fill="var(--ink)"/>
   </symbol>
+  <symbol id="i-cassette" viewBox="0 0 48 30">
+    <rect x="1.5" y="1.5" width="45" height="27" rx="4" fill="none" stroke="currentColor" stroke-width="2.4"/>
+    <rect x="9" y="7" width="30" height="12" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+    <g class="reel"><circle cx="15" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 9.5v7M11.5 13h7" stroke="currentColor" stroke-width="1.6"/></g>
+    <g class="reel"><circle cx="33" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M33 9.5v7M29.5 13h7" stroke="currentColor" stroke-width="1.6"/></g>
+    <path d="M12 28.5l3-5h18l3 5" fill="none" stroke="currentColor" stroke-width="2"/>
+  </symbol>
+  <symbol id="i-belt" viewBox="0 0 24 24"><rect x="1.5" y="8" width="21" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
   <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
@@ -232,20 +356,19 @@ textarea::placeholder{color:var(--muted)}
   <svg class="bot" width="44" height="44" aria-hidden="true"><use href="#robodad"/></svg>
   <div class="who">
     <h1>RoboDad</h1>
-    <p class="status waking" id="status"><span class="dot"></span>Connecting…</p>
+    <p class="status waking" id="status"><span class="dot"></span>Warming up…</p>
   </div>
-  <button class="ghost hide-narrow" id="install" type="button" hidden>Install app</button>
-  <button class="icon-btn" id="readAloud" type="button" aria-pressed="false" title="Read replies aloud" hidden>
-    <svg aria-hidden="true"><use href="#i-speaker"/></svg><span class="sr">Read replies aloud</span>
+  <button class="icon-btn" id="beltBtn" type="button" title="Life Skills Belt">
+    <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Life Skills Belt</span>
   </button>
-  <button class="icon-btn" id="nameBtn" type="button" title="What should RoboDad call you?">
-    <svg aria-hidden="true"><use href="#i-user"/></svg><span class="sr">What should RoboDad call you?</span>
+  <button class="icon-btn" id="menuBtn" type="button" title="Look and settings">
+    <svg aria-hidden="true"><use href="#i-menu"/></svg><span class="sr">Look and settings</span>
   </button>
   <button class="ghost" id="newChat" type="button">New chat</button>
 </header>
 
 <div class="wake" id="wake" role="status" hidden>
-  <span id="wakeText">RoboDad is waking up. On the free plan this can take up to a minute.</span>
+  <span id="wakeText">Blowing on the cartridge… RoboDad will be ready in about 30 seconds.</span>
 </div>
 
 <main id="scroller">
@@ -275,6 +398,50 @@ textarea::placeholder{color:var(--muted)}
   </form>
   <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a></p>
 </div>
+
+<div class="overlay" id="menuDlg" role="dialog" aria-modal="true" aria-labelledby="menuTitle" hidden>
+  <div class="card">
+    <h2 id="menuTitle">Make it yours</h2>
+    <p id="menuHint">Pick a look. You can change it any time from the ☰ menu.</p>
+    <div class="looks" role="radiogroup" aria-label="Look">
+      <button class="look" type="button" role="radio" data-look="classic" aria-checked="true">
+        <span class="pv classic"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <strong>Classic</strong><small>Calm and clean</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="arcade" aria-checked="false">
+        <span class="pv arcade"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <strong>Arcade Neon</strong><small>Midnight arcade glow</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="vhs" aria-checked="false">
+        <span class="pv vhs"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <strong>VHS Sunset</strong><small>Rewind to 1987</small>
+      </button>
+    </div>
+    <div>
+      <div class="setting" id="readRow" hidden><span>Read replies aloud</span>
+        <button class="switch" id="readAloud" type="button" aria-pressed="false"><span class="sr">Read replies aloud</span></button></div>
+      <div class="setting"><span>What RoboDad calls you</span>
+        <button class="ghost" id="nameBtn" type="button">Set a nickname</button></div>
+      <div class="setting" id="installRow" hidden><span>Put RoboDad on your home screen</span>
+        <button class="ghost" id="install" type="button">Install app</button></div>
+      <div class="setting"><span>How your information is used</span><a class="ghost" href="/privacy" style="text-decoration:none">Privacy</a></div>
+    </div>
+    <div class="row"><button class="primary" id="menuDone" type="button">Done</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="beltDlg" role="dialog" aria-modal="true" aria-labelledby="beltTitle" hidden>
+  <div class="card">
+    <h2 id="beltTitle">Life Skills Belt</h2>
+    <div id="beltArt"></div>
+    <p class="belt-rank" id="beltRank"></p>
+    <p>Earn a plate each time you do one of these for real. It's on the honour system, and it's saved only on this device.</p>
+    <ul class="skills" id="skillList"></ul>
+    <div class="row"><button class="primary" id="beltDone" type="button">Done</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
 
 <div class="overlay" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle" hidden>
   <div class="card" id="gateCard">
@@ -432,7 +599,7 @@ textarea::placeholder{color:var(--muted)}
     const el = document.createElement("div");
     el.className = "msg robo";
     el.innerHTML = `<svg class="bot bot-mini" width="34" height="34" aria-hidden="true"><use href="#robodad"/></svg>
-      <div class="stack"><div class="bubble"><span class="typing" aria-label="RoboDad is typing"><i></i><i></i><i></i></span></div></div>`;
+      <div class="stack"><div class="bubble"><span class="cassette"><svg aria-hidden="true"><use href="#i-cassette"/></svg>Rewinding the tape…</span></div></div>`;
     log.appendChild(el); scrollDown();
     return { bubble: el.querySelector(".bubble"), stack: el.querySelector(".stack") };
   }
@@ -449,11 +616,15 @@ textarea::placeholder{color:var(--muted)}
 
     if (meta.mode !== "safety") {
       const rate = document.createElement("span");
-      rate.className = "rate";
-      rate.innerHTML = `<button type="button" data-r="1" title="Good answer" aria-pressed="false"><svg aria-hidden="true"><use href="#i-up"/></svg><span class="sr">Good answer</span></button>
+      const isJoke = meta.intent === "dad_joke";
+      rate.className = isJoke ? "rate joke" : "rate";
+      rate.innerHTML = isJoke
+        ? `<button type="button" data-r="-1" aria-pressed="false">😩 Groan</button>
+           <button type="button" data-r="1" aria-pressed="false">😂 OK, that was good</button>`
+        : `<button type="button" data-r="1" title="Good answer" aria-pressed="false"><svg aria-hidden="true"><use href="#i-up"/></svg><span class="sr">Good answer</span></button>
         <button type="button" data-r="-1" title="Bad answer" aria-pressed="false"><svg aria-hidden="true"><use href="#i-down"/></svg><span class="sr">Bad answer</span></button>`;
       const thanks = document.createElement("span");
-      thanks.className = "thanks"; thanks.hidden = true; thanks.textContent = "Thanks!";
+      thanks.className = "thanks"; thanks.hidden = true; thanks.textContent = isJoke ? "Noted. RoboDad's joke book has been updated." : "Thanks!";
       const mark = (r) => {
         rate.querySelectorAll("button").forEach(b => { b.disabled = true; b.setAttribute("aria-pressed", String(b.dataset.r === String(r))); });
         thanks.hidden = false;
@@ -490,6 +661,7 @@ textarea::placeholder{color:var(--muted)}
           .catch(() => {});
       });
       tools.append(rate, thanks, rep, box);
+      renderExtras(tools, item);
     }
 
     if (canSpeak) {
@@ -543,7 +715,7 @@ textarea::placeholder{color:var(--muted)}
         if (r.ok) { awake = true; setStatus(await r.json()); break; }
       } catch {}
       if (Date.now() - started > 120000) {
-        wakeText.textContent = "RoboDad can't be reached right now. Check your internet connection, then refresh the page.";
+        wakeText.textContent = "Signal lost. RoboDad can't be reached right now. Check your internet connection, then refresh the page.";
         statusEl.innerHTML = `<span class="dot"></span>Offline`;
         clearTimeout(slow); wake.hidden = false; document.body.classList.remove("is-waking");
         return;
@@ -595,12 +767,13 @@ textarea::placeholder{color:var(--muted)}
       }
       if (!text) throw new Error("RoboDad went quiet. Send your message again.");
       const item = { role:"assistant", content:text, meta, totalMs };
+      item.extra = pickExtra(meta);
       history.push(item); save();
       renderTools(stack, item);
       if (readAloud) speak(text);
     } catch (err) {
       bubble.innerHTML = md(err.message && !/fetch|network/i.test(err.message) ? err.message
-        : "RoboDad couldn't be reached. Check your internet connection and send your message again.");
+        : "Signal's fuzzy. Check your internet connection and hit Send again.");
       bubble.classList.add("safety");
       const last = history.pop(); input.value = last?.content || ""; autosize();
     } finally {
@@ -635,15 +808,198 @@ textarea::placeholder{color:var(--muted)}
 
   // ---------- install as an app ----------
   let installEvt = null;
-  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; installBtn.hidden = false; });
+  window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; $("installRow").hidden = false; });
   installBtn.addEventListener("click", async () => {
     if (!installEvt) return;
     installEvt.prompt(); await installEvt.userChoice.catch(() => {});
-    installEvt = null; installBtn.hidden = true;
+    installEvt = null; $("installRow").hidden = true;
   });
-  window.addEventListener("appinstalled", () => { installBtn.hidden = true; });
+  window.addEventListener("appinstalled", () => { $("installRow").hidden = true; });
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+  }
+
+  // ---------- looks ----------
+  const LOOK_KEY = "robodad.look";
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22" };
+  const menuDlg = $("menuDlg");
+  function applyLook(look){
+    if (!THEME_COLORS[look]) look = "classic";
+    if (look === "classic") delete document.documentElement.dataset.look; else document.documentElement.dataset.look = look;
+    document.querySelector('meta[name="theme-color"]').content = THEME_COLORS[look];
+    menuDlg.querySelectorAll(".look").forEach(b => b.setAttribute("aria-checked", String(b.dataset.look === look)));
+    setPref(LOOK_KEY, look);
+  }
+  menuDlg.querySelectorAll(".look").forEach(b => b.addEventListener("click", () => applyLook(b.dataset.look)));
+  menuDlg.querySelector(".looks").addEventListener("keydown", (e) => {
+    if (!["ArrowRight","ArrowLeft","ArrowDown","ArrowUp"].includes(e.key)) return;
+    const tiles = [...menuDlg.querySelectorAll(".look")]; const i = tiles.indexOf(document.activeElement);
+    if (i < 0) return; e.preventDefault();
+    const next = tiles[(i + (e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : tiles.length - 1)) % tiles.length];
+    next.focus(); applyLook(next.dataset.look);
+  });
+  function openMenu(firstRun){
+    $("menuHint").textContent = firstRun ? "Pick a look. You can change it any time from the ☰ menu." : "Change how RoboDad looks and works.";
+    $("menuTitle").textContent = firstRun ? "Make it yours" : "Look and settings";
+    menuDlg.hidden = false; (menuDlg.querySelector('.look[aria-checked="true"]') || menuDlg.querySelector(".look")).focus();
+  }
+  function closeMenu(){ menuDlg.hidden = true; $("menuBtn").focus(); }
+  $("menuBtn").addEventListener("click", () => openMenu(false));
+  $("menuDone").addEventListener("click", () => { closeMenu(); input.focus(); });
+  menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+  applyLook(getPref(LOOK_KEY) || "classic");
+  if (canSpeak) $("readRow").hidden = false;
+
+  // ---------- toast ----------
+  let toastTimer;
+  function toast(msg){
+    const t = $("toast"); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+  }
+
+  // ---------- Life Skills Belt ----------
+  const BELT_KEY = "robodad.belt";
+  const SKILLS = [
+    ["cook", "Cooked a meal on my own"], ["laundry", "Did my own laundry"], ["budget", "Made a budget"],
+    ["job", "Practised for, or applied to, a job"], ["study", "Made a study plan and stuck to it"],
+    ["sleep", "Kept a good sleep routine for a week"], ["fix", "Fixed or cleaned something at home"],
+    ["transit", "Got somewhere new on my own, safely"], ["no", "Said no to peer pressure"],
+    ["friend", "Helped a friend or sorted out a conflict"], ["plan", "Set a goal for my future"],
+    ["talk", "Had a real talk with a parent or trusted adult"],
+  ];
+  const SKILL_BY_INTENT = {
+    life_skill_cooking:"cook", life_skill_food:"cook", life_skill_laundry:"laundry", life_skill_money:"budget",
+    life_skill_jobs:"job", life_skill_study:"study", life_skill_homework:"study", life_skill_sleep:"sleep",
+    life_skill_home:"fix", life_skill_cleaning:"fix", life_skill_chores:"fix", life_skill_transport:"transit",
+    life_skill_peer_pressure:"no", life_skill_friendship:"friend", life_skill_conflict:"friend",
+    life_skill_future:"plan", life_skill_planning:"plan",
+  };
+  const loadBelt = () => { try { return new Set(JSON.parse(localStorage.getItem(BELT_KEY) || "[]")); } catch { return new Set(); } };
+  let belt = loadBelt();
+  const saveBelt = () => setPref(BELT_KEY, JSON.stringify([...belt]));
+  function rank(n){
+    if (n >= 12) return "Undisputed Life Skills Champion";
+    if (n >= 8) return "Champion";
+    if (n >= 4) return "Contender";
+    return n ? "Rookie" : "Rookie: your first plate is waiting";
+  }
+  function beltSVG(justEarned){
+    const ids = SKILLS.map(s => s[0]); const n = belt.size;
+    const plate = (x, y, r, on, isNew) => `<circle cx="${x}" cy="${y}" r="${r}" class="${isNew ? "plate-new" : ""}" style="transform-box:fill-box; transform-origin:center"
+      fill="${on ? "url(#gold)" : "none"}" stroke="${on ? "#7A5300" : "var(--muted)"}" stroke-width="2" ${on ? "" : 'stroke-dasharray="3 3"'}/>`;
+    let side = "";
+    ids.forEach((id, i) => {
+      const left = i < 6, k = left ? i : i - 6;
+      const x = left ? 108 - k * 17 : 212 + k * 17;
+      side += plate(x, 60, 7, belt.has(id), id === justEarned);
+    });
+    return `<svg class="belt-svg" viewBox="0 0 320 120" role="img" aria-label="Life Skills Belt with ${n} of 12 plates">
+      <defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A3"/><stop offset=".5" stop-color="#F2B533"/><stop offset="1" stop-color="#B07A10"/></linearGradient></defs>
+      <rect x="4" y="40" width="312" height="40" rx="14" fill="var(--jacket)" stroke="var(--ink)" stroke-width="2.5"/>
+      <rect x="4" y="47" width="312" height="26" rx="10" fill="none" stroke="color-mix(in srgb, var(--ink) 25%, transparent)" stroke-dasharray="4 4"/>
+      ${side}
+      <path d="M160 8 L198 22 L198 98 L160 112 L122 98 L122 22 Z" fill="url(#gold)" stroke="#7A5300" stroke-width="2.5"/>
+      <path d="M160 18 L188 28 L188 92 L160 102 L132 92 L132 28 Z" fill="none" stroke="#7A5300" stroke-width="1.5" opacity=".6"/>
+      <text x="160" y="56" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="10" fill="#4A3200">LIFE SKILLS</text>
+      <text x="160" y="80" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="20" fill="#4A3200">${n}/12</text>
+    </svg>`;
+  }
+  function renderBelt(justEarned){
+    $("beltArt").innerHTML = beltSVG(justEarned);
+    $("beltRank").textContent = rank(belt.size);
+    $("skillList").innerHTML = SKILLS.map(([id, label]) =>
+      `<li><button class="skill" type="button" data-skill="${id}" aria-pressed="${belt.has(id)}"><span class="chk" aria-hidden="true"></span>${esc(label)}</button></li>`).join("");
+  }
+  function earn(id){
+    if (belt.has(id)) return false;
+    belt.add(id); saveBelt();
+    const label = SKILLS.find(s => s[0] === id)?.[1] || "";
+    toast(`New plate! ${belt.size}/12 · ${rank(belt.size)}`);
+    if (!$("beltDlg").hidden) renderBelt(id);
+    return true;
+  }
+  $("skillList").addEventListener("click", (e) => {
+    const b = e.target.closest(".skill"); if (!b) return;
+    const id = b.dataset.skill;
+    if (belt.has(id)) { belt.delete(id); saveBelt(); renderBelt(); } else { earn(id); renderBelt(id); }
+  });
+  $("beltBtn").addEventListener("click", () => { renderBelt(); $("beltDlg").hidden = false; $("beltDone").focus(); });
+  const closeBelt = () => { $("beltDlg").hidden = true; $("beltBtn").focus(); };
+  $("beltDone").addEventListener("click", closeBelt);
+  $("beltDlg").addEventListener("keydown", (e) => { if (e.key === "Escape") closeBelt(); });
+
+  // ---------- Dad's Mixtape + Ask your real one ----------
+  const MIXTAPE = {
+    stress: [["Don't Stop Believin'", "Journey"], ["Under Pressure", "Queen & David Bowie"], ["Here Comes the Sun", "The Beatles"], ["The Final Countdown", "Europe"]],
+    lonely: [["Lean on Me", "Bill Withers"], ["Stand by Me", "Ben E. King"], ["Let It Be", "The Beatles"], ["Hold On", "Wilson Phillips"]],
+    angry: [["Take It Easy", "Eagles"], ["Three Little Birds", "Bob Marley & The Wailers"]],
+    pumped: [["Eye of the Tiger", "Survivor"], ["Livin' on a Prayer", "Bon Jovi"], ["Walking on Sunshine", "Katrina and the Waves"]],
+  };
+  const MOOD_BY_INTENT = {
+    life_skill_study:"stress", life_skill_school:"stress", life_skill_homework:"stress", life_skill_focus:"stress",
+    life_skill_time:"stress", life_skill_emotions:"stress", life_skill_sleep:"stress",
+    life_skill_friendship:"lonely", life_skill_social:"lonely", life_skill_relationships:"lonely",
+    life_skill_conflict:"angry", encouragement:"pumped", life_skill_growth:"pumped", life_skill_jobs:"pumped", life_skill_future:"pumped",
+  };
+  const STARTERS = {
+    life_skill_jobs:"What was your first job, and what did it pay?",
+    life_skill_money:"What's the first big thing you ever saved up for?",
+    life_skill_cooking:"What's one dish you could teach me to make?",
+    life_skill_food:"What's one dish you could teach me to make?",
+    life_skill_future:"What did you want to be when you were my age?",
+    life_skill_transport:"What was your first car like?",
+    life_skill_study:"What's the worst test you ever took?",
+    life_skill_school:"What was school like for you at my age?",
+    life_skill_homework:"Which subject did you find hardest at school?",
+    life_skill_peer_pressure:"Was there ever a time you said no to your friends?",
+    life_skill_relationships:"How did you meet your best friend?",
+    life_skill_friendship:"Who was your best friend when you were my age?",
+    life_skill_social:"What helped you feel less awkward around new people?",
+    dad_joke:"What's the worst joke you know? I'll rate it.",
+    life_skill_emotions:"What helps you on a really hard day?",
+    life_skill_home:"What's the biggest household disaster you ever caused?",
+    life_skill_laundry:"What's the worst laundry mistake you ever made?",
+  };
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  function pickExtra(meta){
+    if (!meta || meta.mode === "safety") return null;
+    const prev = [...history].reverse().find(h => h.role === "assistant");
+    if (prev?.extra) return null;                                   // never two in a row
+    const score = meta.sentiment?.compound ?? 0, low = score <= -0.3;
+    const mood = MOOD_BY_INTENT[meta.intent] || MOOD_BY_INTENT[meta.top_intent] || (score <= -0.5 ? "lonely" : null);
+    if (mood && (low || mood === "pumped" && meta.intent === "encouragement")) {
+      const [song, artist] = pick(MIXTAPE[mood]); return { type:"mixtape", song, artist };
+    }
+    if (low) return null;                                           // no small talk when they're upset
+    const q = STARTERS[meta.intent];
+    if (q && !history.some(h => h.extra?.type === "realone" && h.meta?.intent === meta.intent)) return { type:"realone", text:q };
+    return null;
+  }
+  function renderExtras(tools, item){
+    const meta = item.meta;
+    const skill = SKILL_BY_INTENT[meta.intent];
+    if (skill && !belt.has(skill)) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "plate-nudge";
+      b.innerHTML = `<svg aria-hidden="true"><use href="#i-belt"/></svg>Did it for real? Add a plate to your belt`;
+      b.addEventListener("click", () => { earn(skill); b.remove(); });
+      tools.appendChild(b);
+    }
+    const x = item.extra; if (!x) return;
+    const card = document.createElement("div"); card.className = "extra";
+    if (x.type === "mixtape") {
+      card.innerHTML = `<svg aria-hidden="true"><use href="#i-cassette"/></svg><div><b>Dad's Mixtape</b>
+        <p>Track for today: <q>${esc(x.song)}</q> by ${esc(x.artist)}.</p><p>Ask a parent if they had it on cassette.</p></div>`;
+    } else {
+      card.innerHTML = `<svg aria-hidden="true"><use href="#i-chat"/></svg><div><b>Ask your real one</b>
+        <p>Try asking a parent or trusted adult: <q>${esc(x.text)}</q></p>
+        <button class="mini" type="button">We talked! Add a plate</button></div>`;
+      const btn = card.querySelector(".mini");
+      const done = () => { btn.disabled = true; btn.textContent = "Plate earned"; };
+      if (belt.has("talk")) done();
+      btn.addEventListener("click", () => { earn("talk"); done(); });
+    }
+    tools.appendChild(card);
   }
 
   // ---------- nickname ----------
@@ -675,7 +1031,7 @@ textarea::placeholder{color:var(--muted)}
   function showUnder(){ $("gateCard").hidden = true; $("gateNo").hidden = false; gate.hidden = false; }
   gateGo.addEventListener("click", () => {
     const age = thisYear - Number(birthYear.value);
-    if (age >= 13) { setPref(AGE_KEY, "ok"); gate.hidden = true; input.focus(); }
+    if (age >= 13) { setPref(AGE_KEY, "ok"); gate.hidden = true; openMenu(true); }
     else { setPref(AGE_KEY, "under"); showUnder(); }
   });
   const ageState = getPref(AGE_KEY);
