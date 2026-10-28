@@ -80,66 +80,43 @@ Dockerfile, requirements.txt, .env.example
 
 ---
 
-## Put it on the internet (free): Hugging Face Spaces
+## Put it on the internet (free): Render
 
-Hugging Face Spaces hosts the app for free on a public link like
-`https://<your-username>-robodad.hf.space`. You don't need Git; everything
-below is done in the browser.
+Render runs the Dockerfile on its free plan: no credit card, and a public link
+like `https://robodad.onrender.com`. Free services sleep after 15 minutes
+without visitors; the first visit after that takes up to a minute to wake up.
 
 ### 1. Get a free LLM key from Groq
 
 1. Go to **console.groq.com** and sign in with Google or GitHub.
 2. Open **API Keys** → **Create API Key**, name it `robodad`, and copy the key
-   (it starts with `gsk_`). Keep it somewhere safe; it's only shown once.
+   (it starts with `gsk_`). It's only shown once.
 
 Prefer Claude? Create a key in the Claude Console at **console.anthropic.com**
-(API Keys). It needs a small amount of prepaid credit; RoboDad uses
-`claude-haiku-5-5`, the fastest and cheapest Claude model. Use
-`ANTHROPIC_API_KEY` instead of `GROQ_API_KEY` in step 4.
+and use `ANTHROPIC_API_KEY` instead of `GROQ_API_KEY` below. RoboDad uses
+`claude-haiku-5-5`, the fastest and cheapest Claude model.
 
-### 2. Create the Space
+### 2. Deploy on Render
 
-1. Sign up at **huggingface.co**.
-2. Click your profile picture → **New Space**.
-3. Space name: `robodad`. License: `mit`.
-4. Select the Space SDK: **Docker** → template **Blank**.
-5. Hardware: **CPU basic · 2 vCPU · 16 GB · FREE**. Visibility: **Public**.
-6. Click **Create Space**.
+1. Go to **render.com** → **Get Started** → **GitHub** to sign up with your GitHub account.
+2. In the dashboard: **New** → **Web Service** → **GitHub**, and allow Render
+   to access the `robodad` repository.
+3. Pick the `robodad` repository → **Connect**.
+4. Name: `robodad`. Language: **Docker**. Branch: `main`. Region: **Ohio (US East)**.
+   Instance type: **Free**.
+5. Under **Environment Variables** add `GROQ_API_KEY` with your key.
+6. Click **Deploy Web Service**. The first build takes about 3–5 minutes.
+7. When the log says "Your service is live", open the link at the top of the page.
+   The header should read "Online · Groq · llama-3.3-70b-versatile".
+   "Classic mode" means the key is missing or misspelled
+   (fix it under **Environment**, then **Manual Deploy** → **Deploy latest commit**).
 
-### 3. Upload the code
+Every time you push a change to GitHub, Render redeploys automatically.
 
-1. In the new Space, open the **Files** tab → **Add file** → **Upload files**.
-2. Unzip `robodad-web.zip` on your computer, open the `robodad-web` folder,
-   select **everything inside it** (`app`, `static`, `data`, `scripts`,
-   `Dockerfile`, `requirements.txt`, `README.md`, `.env.example`, …) and drag it
-   onto the upload area. Folders upload with their contents.
-3. Commit message: `RoboDad web version` → **Commit changes to main**.
+### Why not Hugging Face Spaces?
 
-The `README.md` must sit at the top level of the Space: its header
-(`sdk: docker`, `app_port: 7860`) tells Hugging Face how to run the app.
-
-### 4. Add your key as a secret
-
-1. Open the Space's **Settings** tab → **Variables and secrets** → **New secret**.
-2. Name: `GROQ_API_KEY`. Value: the `gsk_…` key from step 1. Save.
-3. The Space restarts. Open the **App** tab: the header should read
-   "Online · Groq · llama-3.3-70b-versatile". If it reads "Classic mode",
-   the secret name is misspelled or the Space hasn't restarted yet
-   (Settings → **Factory rebuild**).
-
-Build logs are under the **Logs** button at the top of the Space if anything fails.
-
-Free Spaces go to sleep after 48 hours without visitors. The first visit after
-that takes about 30 seconds to wake it up.
-
-### Alternative host: Render
-
-1. Put the `robodad-web` folder in a GitHub repository.
-2. On **render.com**: **New** → **Web Service** → connect the repository.
-3. Runtime is detected as **Docker**. Instance type: **Free**.
-4. Under **Environment Variables**, add `GROQ_API_KEY` with your key.
-5. **Deploy**. Render gives you a `https://robodad-xxxx.onrender.com` link.
-   Free instances sleep after 15 minutes idle and take about a minute to wake.
+The `README.md` header still works for Hugging Face Docker Spaces, but since
+October 2026 those need a PRO subscription on the free CPU tier.
 
 ---
 
