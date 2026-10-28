@@ -335,6 +335,7 @@ textarea::placeholder{color:var(--muted)}
     const HELP_SITES = /\b(NeedHelpNow\.ca|Cybertip\.ca|TakeItDown\.ncmec\.org|nedic\.ca|KidsHelpPhone\.ca)\b/gi;
     const HELP_PHONES = /\b(1-800-668-6868|1-866-633-4220|988|911)\b/g;
     const links = s => s
+      .replace(/(\d)[\u2010\u2011](?=\d)/g, "$1-")   // AI models often use non-breaking hyphens in phone numbers
       .replace(HELP_SITES, d => `<a href="https://${d.toLowerCase()}" target="_blank" rel="noopener">${d}</a>`)
       .replace(HELP_PHONES, n => `<a href="tel:${n.replace(/-/g, "")}">${n}</a>`);
     const inline = s => links(s.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*(?!\s)(.+?)\*/g,"$1<em>$2</em>"));
