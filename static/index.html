@@ -94,6 +94,8 @@ button,textarea{font:inherit;color:inherit}
 .icon-btn:hover{background:var(--sky)}
 .icon-btn svg{width:20px; height:20px}
 .icon-btn[aria-pressed="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
+#musicBtn[aria-pressed="true"] svg{animation:bob 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-2px) rotate(-6deg)}}
 
 /* ---------- waking banner ---------- */
 .wake{
@@ -308,7 +310,7 @@ input[type=range]{width:100%; accent-color:var(--mustard)}
 #newChat .nc-icon{display:none}
 @media (max-width:520px){ .newchat-label{display:none} #newChat{padding:9px 11px} #newChat .nc-icon{display:block} }
 .toast{position:fixed; left:50%; top:calc(14px + env(safe-area-inset-top)); transform:translateX(-50%); z-index:40;
-  background:var(--ink); color:var(--sky); font-weight:800; padding:10px 18px; border-radius:999px; box-shadow:0 10px 30px rgba(0,0,0,.25); max-width:calc(100vw - 32px); text-align:center}
+  background:var(--ink); color:var(--sky); font-weight:800; padding:10px 18px; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.25); width:max-content; max-width:min(440px, calc(100vw - 32px)); text-align:center; line-height:1.35}
 .report-btn{border:0; background:transparent; cursor:pointer; padding:3px 6px; border-radius:8px; color:var(--muted); font-size:.85rem; font-weight:700; display:inline-flex; gap:4px; align-items:center}
 .report-btn svg{width:15px; height:15px}
 .report-btn:hover{background:var(--surface); color:var(--ink)}
@@ -429,6 +431,7 @@ textarea::placeholder{color:var(--muted)}
   </symbol>
   <symbol id="i-belt" viewBox="0 0 24 24"><rect x="1.5" y="8" width="21" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></symbol>
   <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="10" width="8" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
   <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4.2" height="15" rx="1" fill="currentColor"/><rect x="13.8" y="4.5" width="4.2" height="15" rx="1" fill="currentColor"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></symbol>
@@ -451,7 +454,10 @@ textarea::placeholder{color:var(--muted)}
   <button class="icon-btn" id="sideBtn" type="button" title="Dashboard: radio, timer and more">
     <svg aria-hidden="true"><use href="#i-dash"/></svg><span class="sr">Dashboard: radio, timer and more</span>
   </button>
-  <button class="icon-btn" id="beltBtn" type="button" title="Life Skills Belt">
+  <button class="icon-btn" id="musicBtn" type="button" title="Play music" aria-pressed="false">
+    <svg aria-hidden="true"><use href="#i-note"/></svg><span class="sr" id="musicLabel">Play music</span>
+  </button>
+  <button class="icon-btn hide-narrow" id="beltBtn" type="button" title="Life Skills Belt">
     <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Life Skills Belt</span>
   </button>
   <button class="icon-btn" id="menuBtn" type="button" title="Look and settings">
@@ -1070,7 +1076,7 @@ textarea::placeholder{color:var(--muted)}
   let toastTimer;
   function toast(msg){
     const t = $("toast"); t.textContent = msg; t.hidden = false;
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, msg.length > 60 ? 6000 : 3200);
   }
 
   // ---------- Life Skills Belt ----------
@@ -1259,18 +1265,27 @@ textarea::placeholder{color:var(--muted)}
     radioToggle.setAttribute("aria-label", on ? "Pause music" : "Play music");
     $("stations").querySelectorAll("[data-st]").forEach(b => b.setAttribute("aria-checked", String(b.dataset.st === radioPrefs.st)));
     $("radioNow").textContent = on ? `Now playing: ${R.stations[R.station]}` : `Off. ${R ? R.stations[radioPrefs.st] : ""} is ready.`;
+    $("musicBtn").setAttribute("aria-pressed", String(on));
+    $("musicBtn").title = on ? `Pause music (${R.stations[R.station]})` : "Play music";
+    $("musicLabel").textContent = $("musicBtn").title;
+  }
+  let musicTipShown = false;
+  function startMusic(){
+    RoboRadio.play(radioPrefs.st);
+    if (!musicTipShown) { musicTipShown = true; toast(`Playing ${RoboRadio.stations[radioPrefs.st]}. Can't hear it? Turn your volume up; on iPhone, also turn off silent mode.`); }
   }
   if (window.RoboRadio) {
     RoboRadio.onchange = radioUI;
     RoboRadio.setVolume(radioPrefs.vol / 100);
-    radioToggle.addEventListener("click", () => { RoboRadio.playing ? RoboRadio.stop() : RoboRadio.play(radioPrefs.st); });
+    radioToggle.addEventListener("click", () => { RoboRadio.playing ? RoboRadio.stop() : startMusic(); });
+    $("musicBtn").addEventListener("click", () => { RoboRadio.playing ? RoboRadio.stop() : startMusic(); });
     $("stations").addEventListener("click", (e) => {
       const b = e.target.closest("[data-st]"); if (!b) return;
       radioPrefs.st = b.dataset.st; saveRadio(); RoboRadio.play(radioPrefs.st); radioUI();
     });
     radioVol.addEventListener("input", () => { radioPrefs.vol = Number(radioVol.value); saveRadio(); RoboRadio.setVolume(radioPrefs.vol / 100); });
     radioUI();
-  } else { radioW.hidden = true; }
+  } else { radioW.hidden = true; $("musicBtn").hidden = true; }
 
   // Focus timer
   let tMinutes = 25, tRemaining = 25 * 60, tEnd = 0, tTick = null;

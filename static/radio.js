@@ -51,6 +51,23 @@
     delay.connect(delayFb).connect(delay); delay.connect(delayOut).connect(wet);
   }
 
+  // iPhones mute Web Audio when the ring/silent switch is on, unless the page
+  // tells Safari this is media playback. Newer Safari has navigator.audioSession;
+  // older versions switch modes once an <audio> element is playing.
+  let unlockEl = null;
+  function unlockMediaPlayback() {
+    try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) {}
+    if (unlockEl) { unlockEl.play().catch(() => {}); return; }
+    const sr = 8000, n = sr / 2, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+    const w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+    w(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); w(8, "WAVE"); w(12, "fmt "); v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true);
+    v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, "data"); v.setUint32(40, n * 2, true);
+    unlockEl = new Audio(URL.createObjectURL(new Blob([buf], { type: "audio/wav" })));
+    unlockEl.loop = true; unlockEl.volume = 0.01; unlockEl.setAttribute("playsinline", "");
+    unlockEl.play().catch(() => {});
+  }
+
   function out(node, sendDelay) {
     node.connect(dry); node.connect(wet);
     if (sendDelay) node.connect(delay);
@@ -253,6 +270,7 @@
     get playing() { return !!timer; },
     onchange: null,
     async play(name) {
+      unlockMediaPlayback();
       setup();
       if (ctx.state === "suspended") await ctx.resume();
       if (timer && name === current) return;
@@ -272,7 +290,7 @@
       master.gain.cancelScheduledValues(ctx.currentTime);
       master.gain.setValueAtTime(master.gain.value, ctx.currentTime);
       master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.6);
-      setTimeout(() => { if (!timer && ctx.state === "running") ctx.suspend(); }, 4000);
+      setTimeout(() => { if (!timer && ctx.state === "running") ctx.suspend(); if (!timer && unlockEl) unlockEl.pause(); }, 4000);
       api.onchange && api.onchange(api);
     },
     setVolume(v) {
