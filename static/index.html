@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -49,6 +49,13 @@
   --metal:#8A6A9C; --alert:#FF5E7E; --ok:#7FE3A6; --jacket:#24120C; --jacket2:#3A1E16; --hair:#1A0B14; --lens:#120812;
   --glow:color-mix(in srgb, #FFB547 40%, transparent);
   --display:"Righteous", "Nunito", sans-serif; color-scheme:dark;
+}
+:root[data-look="diner"]{
+  --sky:#BFE8DC; --surface:#FFF8EE; --ink:#1E1E24; --muted:#47555A; --line:#8DBDB0;
+  --denim:#D7263D; --denim-ink:#FFFFFF; --mustard:#2BB3A3; --mustard-ink:#062A26;
+  --metal:#C9D3D8; --alert:#B3412E; --ok:#1F8A70; --jacket:#141416; --jacket2:#2A2A2E; --hair:#141416; --lens:#141416;
+  --glow:color-mix(in srgb, #D7263D 30%, transparent);
+  --display:"Lobster", "Nunito", cursive; color-scheme:light;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -196,7 +203,7 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .plate-nudge:hover{background:var(--surface)}
 
 /* settings menu */
-.looks{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px}
+.looks{display:grid; grid-template-columns:repeat(2, 1fr); gap:10px}
 .look{border:2px solid var(--line); border-radius:16px; background:transparent; padding:8px; cursor:pointer; text-align:left; display:flex; flex-direction:column; gap:6px}
 .look[aria-checked="true"]{border-color:var(--mustard); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 35%, transparent)}
 .look .pv{height:64px; border-radius:10px; position:relative; overflow:hidden; display:grid; place-items:center}
@@ -225,6 +232,37 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .skill[aria-pressed="true"] .chk::after{content:""; width:9px; height:5px; border:solid var(--mustard-ink); border-width:0 0 2.5px 2.5px; transform:rotate(-45deg) translate(1px,-1px)}
 .plate-new{animation:plate .6s ease-out 1}
 @keyframes plate{0%{transform:scale(.2); opacity:0} 70%{transform:scale(1.25)} 100%{transform:scale(1); opacity:1}}
+
+/* ---------- Diner '55 ---------- */
+:root[data-look="diner"] .top{position:relative; z-index:6; border-bottom:0;
+  background:linear-gradient(180deg, #FBFCFD 0%, #D5DDE1 46%, #F2F5F6 54%, #B4BFC5 100%)}
+:root[data-look="diner"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-10px; height:10px;
+  background:repeating-conic-gradient(#1E1E24 0 25%, #FFFFFF 0 50%) 0 0 / 20px 20px}
+:root[data-look="diner"] .top h1{font-weight:400; font-size:1.55rem; color:#D7263D; letter-spacing:.01em; text-shadow:1px 1px 0 #fff}
+:root[data-look="diner"] .top .icon-btn,:root[data-look="diner"] .top .ghost{background:rgba(255,255,255,.55); border-color:#8C979D}
+:root[data-look="diner"] .log{padding-top:34px}
+:root[data-look="diner"] .hello h2{font-weight:400; letter-spacing:0; font-size:clamp(2.3rem, 7.5vw, 3.3rem); line-height:1.08; color:#D7263D;
+  text-shadow:2px 2px 0 #fff, 4px 4px 0 rgba(30,30,36,.12)}
+:root[data-look="diner"] .hello::before{content:""; position:absolute; z-index:-1; top:14px; left:-18px; width:124px; height:124px; background:#2BB3A3;
+  clip-path:polygon(50% 0, 58% 33%, 85% 15%, 67% 42%, 100% 50%, 67% 58%, 85% 85%, 58% 67%, 50% 100%, 42% 67%, 15% 85%, 33% 58%, 0 50%, 33% 42%, 15% 15%, 42% 33%)}
+:root[data-look="diner"] .card h2,:root[data-look="diner"] .side-head h2,:root[data-look="diner"] .widget > b,:root[data-look="diner"] .widget .w-title,:root[data-look="diner"] .extra b,:root[data-look="diner"] .belt-rank,:root[data-look="diner"] .timer,:root[data-look="diner"] .big-num{font-weight:400; letter-spacing:.01em}
+:root[data-look="diner"] .card h2{color:#D7263D}
+:root[data-look="diner"] .robo .bubble,:root[data-look="diner"] .widget,:root[data-look="diner"] .extra{border:1.5px solid #AEB9BF; box-shadow:inset 0 0 0 3px #FFF8EE, inset 0 0 0 4px #DCE3E7}
+:root[data-look="diner"] .chip{border-color:#D7263D; color:#B01D31; background:#FFF8EE}
+:root[data-look="diner"] .chip:hover{background:#D7263D; color:#fff}
+.diner-art{display:none; width:100%; max-width:430px; margin-top:6px}
+.diner-art svg{display:block; width:100%; height:auto}
+:root[data-look="diner"] .diner-art{display:block}
+/* thinking icon: a spinning 45 record in the diner, a cassette elsewhere */
+.cassette .vinyl,.cassette .t-diner{display:none}
+:root[data-look="diner"] .cassette .tape-svg,:root[data-look="diner"] .cassette .t-tape{display:none}
+:root[data-look="diner"] .cassette .vinyl{display:block; width:30px; height:30px; animation:spin45 1.3s linear infinite}
+:root[data-look="diner"] .cassette .t-diner{display:inline}
+@keyframes spin45{to{transform:rotate(360deg)}}
+.pv.diner{background:linear-gradient(#BFE8DC 70%, transparent 70%), repeating-conic-gradient(#1E1E24 0 25%, #fff 0 50%) 0 0 / 12px 12px}
+.pv.diner::before{content:""; position:absolute; width:44px; height:44px; background:#2BB3A3; top:6px;
+  clip-path:polygon(50% 0, 58% 33%, 85% 15%, 67% 42%, 100% 50%, 67% 58%, 85% 85%, 58% 67%, 50% 100%, 42% 67%, 15% 85%, 33% 58%, 0 50%, 33% 42%, 15% 15%, 42% 33%)}
+.pv svg{position:relative}
 
 /* ---------- dashboard widgets ---------- */
 .side{display:none}
@@ -382,6 +420,13 @@ textarea::placeholder{color:var(--muted)}
     <g class="reel"><circle cx="33" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M33 9.5v7M29.5 13h7" stroke="currentColor" stroke-width="1.6"/></g>
     <path d="M12 28.5l3-5h18l3 5" fill="none" stroke="currentColor" stroke-width="2"/>
   </symbol>
+  <symbol id="i-record" viewBox="0 0 32 32">
+    <circle cx="16" cy="16" r="15" fill="#1E1E24"/>
+    <circle cx="16" cy="16" r="12" fill="none" stroke="#3A3A44" stroke-width=".8"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="#3A3A44" stroke-width=".8"/>
+    <circle cx="16" cy="16" r="6" fill="#D7263D"/><path d="M12.5 13.5 A4.5 4.5 0 0 1 19 12.5" fill="none" stroke="#FFF8EE" stroke-width="1.2"/>
+    <circle cx="16" cy="16" r="1.4" fill="#FFF8EE"/>
+    <path d="M5 11 A12 12 0 0 1 11 4.5" fill="none" stroke="#fff" stroke-width="1.4" opacity=".35" stroke-linecap="round"/>
+  </symbol>
   <symbol id="i-belt" viewBox="0 0 24 24"><rect x="1.5" y="8" width="21" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></symbol>
   <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="10" width="8" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
@@ -431,6 +476,46 @@ textarea::placeholder{color:var(--muted)}
         <button class="chip" type="button">Help me prep for a job interview</button>
         <button class="chip" type="button">Tell me a dad joke</button>
       </div>
+      <div class="diner-art" aria-hidden="true"><svg viewBox="0 0 330 80" role="presentation">
+  <!-- tail-finned cruiser -->
+  <g transform="translate(0,6)">
+    <path d="M8 46 Q9 36 28 34 L60 32 Q72 18 98 17 L126 17 Q140 19 150 30 L176 31 L194 21 Q198 30 196 40 Q195 47 188 48 L14 50 Q7 50 8 46 Z" fill="#D7263D" stroke="#1E1E24" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M70 31 Q78 21 97 21 L111 21 L111 31 Z M115 21 L125 21 Q137 22 145 31 L115 31 Z" fill="#BFE8DC" stroke="#1E1E24" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M22 41 L184 39" stroke="#F4F7F8" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M22 43 L184 41" stroke="#8C979D" stroke-width="1"/>
+    <path d="M176 31 L194 21" stroke="#F4F7F8" stroke-width="1.6" stroke-linecap="round"/>
+    <rect x="3" y="44" width="16" height="6" rx="3" fill="#DCE3E7" stroke="#1E1E24" stroke-width="1.5"/>
+    <rect x="182" y="43" width="16" height="6" rx="3" fill="#DCE3E7" stroke="#1E1E24" stroke-width="1.5"/>
+    <circle cx="14" cy="39" r="3" fill="#FFF3B0" stroke="#1E1E24" stroke-width="1.2"/>
+    <circle cx="191" cy="36" r="2.4" fill="#FF6B6B" stroke="#1E1E24" stroke-width="1"/>
+    <circle cx="48" cy="51" r="10" fill="#1E1E24"/><circle cx="48" cy="51" r="6.5" fill="#fff"/><circle cx="48" cy="51" r="3.6" fill="#DCE3E7" stroke="#1E1E24" stroke-width="1"/><circle cx="152" cy="51" r="10" fill="#1E1E24"/><circle cx="152" cy="51" r="6.5" fill="#fff"/><circle cx="152" cy="51" r="3.6" fill="#DCE3E7" stroke="#1E1E24" stroke-width="1"/>
+  </g>
+  <!-- milkshake -->
+  <g transform="translate(212,4)">
+    <path d="M22 18 L34 -3" stroke="#D7263D" stroke-width="3" stroke-linecap="round"/>
+    <path d="M22 18 L34 -3" stroke="#fff" stroke-width="3" stroke-linecap="butt" stroke-dasharray="2.5 3"/>
+    <circle cx="10" cy="20" r="6" fill="#FFF8EE" stroke="#1E1E24" stroke-width="1.5"/><circle cx="18" cy="16" r="7" fill="#FFF8EE" stroke="#1E1E24" stroke-width="1.5"/><circle cx="26" cy="20" r="6" fill="#FFF8EE" stroke="#1E1E24" stroke-width="1.5"/>
+    <circle cx="18" cy="8" r="3.6" fill="#D7263D" stroke="#1E1E24" stroke-width="1.2"/><path d="M18 5 Q20 1 23 0" fill="none" stroke="#1E1E24" stroke-width="1.2"/>
+    <path d="M4 22 L32 22 L27 64 L9 64 Z" fill="#F7B6C2" stroke="#1E1E24" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M6.5 32 L29.5 32" stroke="#fff" stroke-width="2" opacity=".7"/>
+    <rect x="7" y="64" width="22" height="5" rx="2" fill="#DCE3E7" stroke="#1E1E24" stroke-width="1.5"/>
+  </g>
+  <!-- burger -->
+  <g transform="translate(252,30)">
+    <path d="M2 18 Q2 2 22 2 Q42 2 42 18 Z" fill="#E9A84C" stroke="#1E1E24" stroke-width="2"/>
+    <path d="M12 9 l2 -1 M22 7 l2 1 M31 10 l2 -1 M17 13 l2 0" stroke="#FFF8EE" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M1 20 Q6 17 11 20 T21 20 T31 20 T43 20 L43 23 L1 23 Z" fill="#7BC67E" stroke="#1E1E24" stroke-width="1.4"/>
+    <path d="M3 23 L41 23 L36 28 L8 28 Z" fill="#F6C945" stroke="#1E1E24" stroke-width="1.4"/>
+    <rect x="2" y="27" width="40" height="7" rx="3.5" fill="#6B3A22" stroke="#1E1E24" stroke-width="1.6"/>
+    <path d="M2 35 L42 35 Q42 44 22 44 Q2 44 2 35 Z" fill="#E9A84C" stroke="#1E1E24" stroke-width="2"/>
+  </g>
+  <!-- fries -->
+  <g transform="translate(298,22)">
+    <rect x="4" y="2" width="4" height="22" rx="1.5" fill="#F6C945" stroke="#1E1E24" stroke-width="1.2" transform="rotate(-10 6 24)"/><rect x="9" y="6" width="4" height="22" rx="1.5" fill="#F6C945" stroke="#1E1E24" stroke-width="1.2" transform="rotate(-5 11 24)"/><rect x="14" y="2" width="4" height="22" rx="1.5" fill="#F6C945" stroke="#1E1E24" stroke-width="1.2" transform="rotate(0 16 24)"/><rect x="19" y="6" width="4" height="22" rx="1.5" fill="#F6C945" stroke="#1E1E24" stroke-width="1.2" transform="rotate(5 21 24)"/><rect x="24" y="2" width="4" height="22" rx="1.5" fill="#F6C945" stroke="#1E1E24" stroke-width="1.2" transform="rotate(10 26 24)"/>
+    <path d="M1 18 L31 18 L27 52 L5 52 Z" fill="#D7263D" stroke="#1E1E24" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M9 19 L10.5 52 M16 19 L16 52 M23 19 L21.5 52" stroke="#FFF8EE" stroke-width="2.2"/>
+  </g>
+</svg></div>
     </section>
   </div>
 </main>
@@ -460,6 +545,7 @@ textarea::placeholder{color:var(--muted)}
       <button class="chipbtn" type="button" role="radio" data-st="lounge" aria-checked="true">Lobby Lounge</button>
       <button class="chipbtn" type="button" role="radio" data-st="canon" aria-checked="false">Canon in D</button>
       <button class="chipbtn" type="button" role="radio" data-st="drive" aria-checked="false">Midnight Drive</button>
+      <button class="chipbtn" type="button" role="radio" data-st="jukebox" aria-checked="false">Jukebox '55</button>
     </div>
     <label class="sr" for="radioVol">Volume</label>
     <input type="range" id="radioVol" min="0" max="100" value="35">
@@ -531,6 +617,10 @@ textarea::placeholder{color:var(--muted)}
       <button class="look" type="button" role="radio" data-look="vhs" aria-checked="false">
         <span class="pv vhs"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
         <strong>VHS Sunset</strong><small>Rewind to 1987</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="diner" aria-checked="false">
+        <span class="pv diner"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <strong>Diner '55</strong><small>Shakes, chrome and checkerboard</small>
       </button>
     </div>
     <div>
@@ -719,7 +809,7 @@ textarea::placeholder{color:var(--muted)}
     const el = document.createElement("div");
     el.className = "msg robo";
     el.innerHTML = `<svg class="bot bot-mini" width="34" height="34" aria-hidden="true"><use href="#robodad"/></svg>
-      <div class="stack"><div class="bubble"><span class="cassette"><svg aria-hidden="true"><use href="#i-cassette"/></svg>Rewinding the tape…</span></div></div>`;
+      <div class="stack"><div class="bubble"><span class="cassette"><svg class="tape-svg" aria-hidden="true"><use href="#i-cassette"/></svg><svg class="vinyl" aria-hidden="true"><use href="#i-record"/></svg><span class="t-tape">Rewinding the tape…</span><span class="t-diner">Spinning a 45…</span></span></div></div>`;
     log.appendChild(el); scrollDown();
     return { bubble: el.querySelector(".bubble"), stack: el.querySelector(".stack") };
   }
@@ -942,12 +1032,17 @@ textarea::placeholder{color:var(--muted)}
 
   // ---------- looks ----------
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D" };
+  const WAKE_COPY = {
+    diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
+    other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
+  };
   const menuDlg = $("menuDlg");
   function applyLook(look){
     if (!THEME_COLORS[look]) look = "classic";
     if (look === "classic") delete document.documentElement.dataset.look; else document.documentElement.dataset.look = look;
     document.querySelector('meta[name="theme-color"]').content = THEME_COLORS[look];
+    if (!/Signal lost/.test(wakeText.textContent)) wakeText.textContent = WAKE_COPY[look] || WAKE_COPY.other;
     menuDlg.querySelectorAll(".look").forEach(b => b.setAttribute("aria-checked", String(b.dataset.look === look)));
     setPref(LOOK_KEY, look);
   }
@@ -1062,6 +1157,12 @@ textarea::placeholder{color:var(--muted)}
     angry: [["Take It Easy", "Eagles"], ["Three Little Birds", "Bob Marley & The Wailers"]],
     pumped: [["Eye of the Tiger", "Survivor"], ["Livin' on a Prayer", "Bon Jovi"], ["Walking on Sunshine", "Katrina and the Waves"]],
   };
+  const JUKEBOX = {
+    stress: [["Blueberry Hill", "Fats Domino"], ["Earth Angel", "The Penguins"], ["Only You (And You Alone)", "The Platters"]],
+    lonely: [["Stand by Me", "Ben E. King"], ["Earth Angel", "The Penguins"], ["Only You (And You Alone)", "The Platters"]],
+    angry: [["Blueberry Hill", "Fats Domino"], ["Rockin' Robin", "Bobby Day"]],
+    pumped: [["Johnny B. Goode", "Chuck Berry"], ["Rock Around the Clock", "Bill Haley & His Comets"], ["Tutti Frutti", "Little Richard"], ["La Bamba", "Ritchie Valens"]],
+  };
   const MOOD_BY_INTENT = {
     life_skill_study:"stress", life_skill_school:"stress", life_skill_homework:"stress", life_skill_focus:"stress",
     life_skill_time:"stress", life_skill_emotions:"stress", life_skill_sleep:"stress",
@@ -1095,7 +1196,11 @@ textarea::placeholder{color:var(--muted)}
     const score = meta.sentiment?.compound ?? 0, low = score <= -0.3;
     const mood = MOOD_BY_INTENT[meta.intent] || MOOD_BY_INTENT[meta.top_intent] || (score <= -0.5 ? "lonely" : null);
     if (mood && (low || mood === "pumped" && meta.intent === "encouragement")) {
-      const [song, artist] = pick(MIXTAPE[mood]); return { type:"mixtape", song, artist };
+      const diner = document.documentElement.dataset.look === "diner";
+      const [song, artist] = pick((diner ? JUKEBOX : MIXTAPE)[mood]);
+      return diner
+        ? { type:"mixtape", song, artist, title:"Jukebox Pick", note:"Ask a grandparent if they spun it on a 45.", icon:"i-record" }
+        : { type:"mixtape", song, artist };
     }
     if (low) return null;                                           // no small talk when they're upset
     const q = STARTERS[meta.intent];
@@ -1115,8 +1220,8 @@ textarea::placeholder{color:var(--muted)}
     const x = item.extra; if (!x) return;
     const card = document.createElement("div"); card.className = "extra";
     if (x.type === "mixtape") {
-      card.innerHTML = `<svg aria-hidden="true"><use href="#i-cassette"/></svg><div><b>Dad's Mixtape</b>
-        <p>Track for today: <q>${esc(x.song)}</q> by ${esc(x.artist)}.</p><p>Ask a parent if they had it on cassette.</p></div>`;
+      card.innerHTML = `<svg aria-hidden="true"><use href="#${x.icon || "i-cassette"}"/></svg><div><b>${esc(x.title || "Dad's Mixtape")}</b>
+        <p>Track for today: <q>${esc(x.song)}</q> by ${esc(x.artist)}.</p><p>${esc(x.note || "Ask a parent if they had it on cassette.")}</p></div>`;
     } else {
       card.innerHTML = `<svg aria-hidden="true"><use href="#i-chat"/></svg><div><b>Ask your real one</b>
         <p>Try asking a parent or trusted adult: <q>${esc(x.text)}</q></p>

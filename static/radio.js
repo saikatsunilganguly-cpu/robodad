@@ -5,6 +5,7 @@
  * Audio API, so there are no recordings and no licences to worry about. The
  * "Canon in D" station plays Pachelbel's chord progression and opening violin
  * line, a composition written around 1700 and long in the public domain.
+ * "Jukebox '55" is an original doo-wop tune on the classic I-vi-IV-V changes.
  *
  *   RoboRadio.play("lounge" | "canon" | "drive")
  *   RoboRadio.stop()
@@ -108,6 +109,30 @@
     o.start(t); o.stop(t + dur + 0.2);
   }
 
+  let noiseBuf = null;
+  function brush(t, level = 0.05) {
+    if (!noiseBuf || noiseBuf.sampleRate !== ctx.sampleRate) {
+      noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.3, ctx.sampleRate);
+      const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    n.buffer = noiseBuf; f.type = "bandpass"; f.frequency.value = 3200; f.Q.value = 0.7;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    n.connect(f).connect(g); out(g); n.start(t); n.stop(t + 0.2);
+  }
+
+  function sax(n, t, dur, level = 0.05) {
+    const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    const lfo = ctx.createOscillator(), lg = ctx.createGain();
+    o.type = "sawtooth"; o.frequency.value = mtof(n);
+    lfo.frequency.value = 5.2; lg.gain.value = 6; lfo.connect(lg).connect(o.detune);
+    f.type = "lowpass"; f.frequency.value = 1400; f.Q.value = 1.2;
+    env(g, t, 0.06, level, 0.2, level * 0.75, 0.25, t + dur);
+    o.connect(f).connect(g); out(g);
+    o.start(t); lfo.start(t); o.stop(t + dur + 0.3); lfo.stop(t + dur + 0.3);
+  }
+
   function softKick(t, level = 0.16) {
     const o = ctx.createOscillator(), g = ctx.createGain();
     o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.22);
@@ -162,6 +187,32 @@
           const order = cycle % 2 === 0 ? [0, 1, 2, 3] : [3, 2, 1, 2];
           order.forEach((o, j) => pluck(c.arp[o] + (cycle % 3 === 2 ? 12 : 0), ct + j * b / 2, { level: 0.1, decay: 1.8 }));
           if (cycle >= 1) pad([c.top], ct, 2 * b, { type: "triangle", cutoff: 2600, level: 0.05 });
+        }
+      },
+    },
+    // Jukebox '55: original doo-wop on I-vi-IV-V, swung 12/8 feel
+    jukebox: {
+      name: "Jukebox '55", bpm: 66,
+      bars: [
+        { walk: [36, 40, 43, 45], chord: [60, 64, 67], tones: [72, 76, 79] }, // C
+        { walk: [33, 36, 40, 45], chord: [60, 64, 69], tones: [72, 76, 81] }, // Am
+        { walk: [29, 33, 36, 38], chord: [60, 65, 69], tones: [72, 77, 81] }, // F
+        { walk: [31, 35, 38, 40], chord: [59, 62, 67], tones: [71, 74, 79] }, // G
+      ],
+      play(i, t, b) {
+        const { walk, chord, tones } = this.bars[i % 4];
+        for (let beat = 0; beat < 4; beat++) {
+          for (let tr = 0; tr < 3; tr++) {
+            const tt = t + beat * b + tr * b / 3, acc = tr === 0 ? 1 : 0.6;
+            chord.forEach((n) => pluck(n, tt, { type: "triangle", level: 0.035 * acc, decay: 0.45, cutoff: 2600 }));
+          }
+          bass(walk[beat], t + beat * b, b * 0.85, { level: 0.15, cutoff: 600 });
+          if (beat % 2 === 1) brush(t + beat * b, 0.06);
+        }
+        pad(chord.map((n) => n - 12), t, 4 * b, { type: "triangle", cutoff: 1600, level: 0.022 });
+        if (i % 8 >= 4) {
+          const motif = i % 2 ? [tones[2], tones[1], tones[0]] : [tones[0], tones[1], tones[2]];
+          sax(motif[0], t, b * 1.4); sax(motif[1], t + b * 1.67, b * 0.6); sax(motif[2], t + b * 2.33, b * 1.4);
         }
       },
     },
