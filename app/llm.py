@@ -94,15 +94,15 @@ def detect_provider() -> Provider | None:
             name="Claude",
             kind="anthropic",
             model=os.getenv("ANTHROPIC_MODEL", "claude-haiku-5-5"),
-            api_key=os.environ["ANTHROPIC_API_KEY"],
+            api_key=os.environ["ANTHROPIC_API_KEY"].strip(),
             base_url=os.getenv("ANTHROPIC_BASE_URL", "https://api.anthropic.com"),
         )
     if choice in ("auto", "groq") and os.getenv("GROQ_API_KEY"):
         return Provider(
             name="Groq",
             kind="openai",
-            model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-            api_key=os.environ["GROQ_API_KEY"],
+            model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
+            api_key=os.environ["GROQ_API_KEY"].strip(),
             base_url="https://api.groq.com/openai/v1",
         )
     if choice in ("auto", "openai") and os.getenv("OPENAI_API_KEY"):
@@ -110,7 +110,7 @@ def detect_provider() -> Provider | None:
             name="OpenAI-compatible",
             kind="openai",
             model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            api_key=os.environ["OPENAI_API_KEY"],
+            api_key=os.environ["OPENAI_API_KEY"].strip(),
             base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
         )
     return None
@@ -166,17 +166,23 @@ async def stream_reply(
         return
 
     # OpenAI-compatible chat completions
+    payload = {
+        "model": provider.model,
+        "messages": [{"role": "system", "content": system}, *messages],
+        "max_tokens": MAX_TOKENS,
+        "temperature": TEMPERATURE,
+        "stream": True,
+    }
+    if "gpt-oss" in provider.model:
+        # Reasoning model: keep thinking short (chat replies are simple) and leave
+        # room for the hidden reasoning tokens, which count towards max_tokens.
+        payload["reasoning_effort"] = os.getenv("LLM_REASONING_EFFORT", "low")
+        payload["max_tokens"] = MAX_TOKENS + 1500
     req = client.stream(
         "POST",
         f"{provider.base_url}/chat/completions",
         headers={"Authorization": f"Bearer {provider.api_key}", "content-type": "application/json"},
-        json={
-            "model": provider.model,
-            "messages": [{"role": "system", "content": system}, *messages],
-            "max_tokens": MAX_TOKENS,
-            "temperature": TEMPERATURE,
-            "stream": True,
-        },
+        json=payload,
     )
     async with req as resp:
         if resp.status_code != 200:
