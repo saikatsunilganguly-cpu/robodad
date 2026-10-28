@@ -126,6 +126,7 @@ class Analysis:
     sentiment: dict
     entities: list[dict]
     examples: list[dict] = field(default_factory=list)
+    top_intent: str = ""  # best guess even when below the fallback threshold
 
     @property
     def is_fallback(self) -> bool:
@@ -138,6 +139,7 @@ class Analysis:
             "sentiment": self.sentiment,
             "entities": self.entities,
             "examples": self.examples,
+            "top_intent": self.top_intent or self.intent,
         }
 
 
@@ -227,10 +229,10 @@ class RoboDadNLP:
         return out
 
     def analyse(self, text: str) -> Analysis:
-        intent, conf = self.classify(text)
-        if conf < FALLBACK_THRESHOLD:
-            intent = "fallback"
+        top, conf = self.classify(text)
+        intent = "fallback" if conf < FALLBACK_THRESHOLD else top
         return Analysis(
+            top_intent=top,
             intent=intent,
             confidence=conf,
             sentiment=self.sia.polarity_scores(text),
