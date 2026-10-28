@@ -14,6 +14,7 @@ import asyncio
 import json
 import logging
 import os
+import re
 import time
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
@@ -43,12 +44,32 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse  # n
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-from .llm import build_system_prompt, detect_provider, stream_with_failover  # noqa: E402
+from .llm import build_system_prompt, clean_secret, detect_provider, stream_with_failover  # noqa: E402
 from .nlp import RoboDadNLP  # noqa: E402
 from .safety import CRISIS_RESPONSE, clean_user_text, is_crisis  # noqa: E402
 
 log = logging.getLogger("robodad")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+
+_SECRET_PATTERNS = re.compile(r"(sb_secret_|sb_publishable_|gsk_|sk-ant-|sk-)[A-Za-z0-9_\-\\n]+")
+
+
+class _RedactSecrets(logging.Filter):
+    """Never let an API key reach the logs, even inside an error message."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        msg = record.getMessage()
+        for name in ("SUPABASE_KEY", "GROQ_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):
+            raw = os.getenv(name)
+            if raw:
+                for v in {raw, raw.strip(), clean_secret(raw)} | set(raw.split()):
+                    if len(v) >= 8:
+                        msg = msg.replace(v, "[redacted]")
+        record.msg, record.args = _SECRET_PATTERNS.sub(r"\1[redacted]", msg), ()
+        return True
+
+
+log.addFilter(_RedactSecrets())
 
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
@@ -59,7 +80,7 @@ DAILY_LLM_LIMIT = int(os.getenv("DAILY_LLM_LIMIT", "1500"))  # protects your API
 # Optional feedback storage (free Supabase project). Without these, thumbs
 # up/down are still written to the server log.
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").strip().rstrip("/")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "").strip()
+SUPABASE_KEY = clean_secret(os.getenv("SUPABASE_KEY"))
 
 state: dict = {}
 
