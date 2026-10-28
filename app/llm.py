@@ -90,6 +90,12 @@ class Provider:
         return f"{self.name} · {self.model}"
 
 
+def clean_secret(value: str | None) -> str:
+    """Remove every space and line break: keys copied from dashboards often
+    pick up a hidden newline where the page wrapped them."""
+    return re.sub(r"\s+", "", value or "")
+
+
 def _csv(value: str) -> list[str]:
     return [v.strip() for v in value.split(",") if v.strip()]
 
@@ -104,7 +110,7 @@ def detect_provider() -> Provider | None:
             name="Claude",
             kind="anthropic",
             model=os.getenv("ANTHROPIC_MODEL", "claude-haiku-5-5"),
-            api_key=os.environ["ANTHROPIC_API_KEY"].strip(),
+            api_key=clean_secret(os.environ["ANTHROPIC_API_KEY"]),
             base_url=os.getenv("ANTHROPIC_BASE_URL", "https://api.anthropic.com"),
             backups=_csv(os.getenv("ANTHROPIC_BACKUP_MODELS", "")),
         )
@@ -113,7 +119,7 @@ def detect_provider() -> Provider | None:
             name="Groq",
             kind="openai",
             model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
-            api_key=os.environ["GROQ_API_KEY"].strip(),
+            api_key=clean_secret(os.environ["GROQ_API_KEY"]),
             base_url="https://api.groq.com/openai/v1",
             backups=_csv(os.getenv("GROQ_BACKUP_MODELS", "openai/gpt-oss-20b")),
         )
@@ -122,7 +128,7 @@ def detect_provider() -> Provider | None:
             name="OpenAI-compatible",
             kind="openai",
             model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
-            api_key=os.environ["OPENAI_API_KEY"].strip(),
+            api_key=clean_secret(os.environ["OPENAI_API_KEY"]),
             base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/"),
             backups=_csv(os.getenv("OPENAI_BACKUP_MODELS", "")),
         )
