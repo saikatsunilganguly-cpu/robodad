@@ -8,7 +8,8 @@
  * "Jukebox '55" is an original doo-wop tune on the classic I-vi-IV-V changes.
  * "Half-Pipe '99", "Respawn Lounge" and "Block Party '03" are original loops in
  * the style of late-90s pop-punk, mid-2000s game-lobby electronica and
- * early-2000s boom-bap; they borrow no melodies from real songs.
+ * early-2000s boom-bap; "Haunted Hayride" is an original spooky tune for
+ * Halloween. None of them borrow melodies from real songs.
  *
  *   RoboRadio.play("lounge" | "canon" | "drive")
  *   RoboRadio.stop()
@@ -205,6 +206,18 @@
     pre.connect(ws).connect(f).connect(g); out(g);
   }
 
+  // a wobbly, gliding sine: the "theremin" for the Halloween station
+  function theremin(notes, t, step, level = 0.05) {
+    const o = ctx.createOscillator(), g = ctx.createGain(), lfo = ctx.createOscillator(), lg = ctx.createGain();
+    o.type = "sine"; lfo.frequency.value = 6; lg.gain.value = 14; lfo.connect(lg).connect(o.detune);
+    o.frequency.setValueAtTime(mtof(notes[0]), t);
+    notes.forEach((n, k) => { if (k) o.frequency.setTargetAtTime(mtof(n), t + k * step - 0.05, 0.07); });
+    const end = t + notes.length * step;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.25);
+    g.gain.setValueAtTime(level, end - 0.3); g.gain.exponentialRampToValueAtTime(0.0001, end + 0.4);
+    o.connect(g); out(g, true); o.start(t); lfo.start(t); o.stop(end + 0.5); lfo.stop(end + 0.5);
+  }
+
   // ---------- stations ----------
   const STATIONS = {
     // Lobby Lounge: smooth "elevator" jazz in F
@@ -359,6 +372,26 @@
       for (let e = 0; e < 8; e++) hat(t + e * b / 2 + (e % 2 ? sw : 0), e % 2 ? 0.013 : 0.02);
       if (rand() < 0.6) hit(t + rand() * 4 * b, { level: 0.006, decay: 0.01, freq: 3000 });   // vinyl crackle
       if (i % 8 >= 4) [0.5, 2, 3].forEach((p) => { if (rand() < 0.7) pluck(pickOne([69, 72, 74, 76, 79]), t + p * b + sw, { type: "sine", level: 0.05, decay: 1.2, cutoff: 3000 }); });
+    },
+  };
+
+  // Haunted Hayride: original spooky organ, music box and theremin in D minor (i-VI-iv-V)
+  STATIONS.haunt = {
+    name: "Haunted Hayride", bpm: 96,
+    bars: [
+      { root: 38, chord: [62, 65, 69], box: [74, 77, 81, 77] }, // Dm
+      { root: 34, chord: [62, 65, 70], box: [74, 77, 82, 77] }, // Bb
+      { root: 43, chord: [62, 67, 70], box: [74, 79, 82, 79] }, // Gm
+      { root: 45, chord: [61, 64, 69], box: [73, 76, 81, 76] }, // A
+    ],
+    tunes: [[74, 73, 74, 77], [70, 69, 67, 69], [74, 77, 76, 74], [73, 76, 73, 69]],
+    play(i, t, b) {
+      const { root, chord, box } = this.bars[i % 4];
+      pad(chord.map((n) => n - 12), t, 4 * b, { type: "square", cutoff: 900, level: 0.03 });
+      bass(root, t, b * 1.8, { level: 0.11, cutoff: 300 }); bass(root + 7, t + 2 * b, b * 1.8, { level: 0.08, cutoff: 300 });
+      for (let k = 0; k < 8; k++) pluck(box[k % 4] + 12, t + k * b / 2, { type: "triangle", level: 0.035, decay: 0.9, cutoff: 4000, echo: k % 4 === 3 });
+      if (i % 8 >= 4) theremin(this.tunes[i % 4], t, b, 0.05);
+      softKick(t, 0.12); brush(t + 2 * b, 0.04);
     },
   };
 

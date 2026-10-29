@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>RoboDad for Parents</title>
+<meta name="description" content="What RoboDad is, how it keeps teens safe, and what happens to their information, in two minutes.">
+<meta name="theme-color" content="#2E5C8A">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#E8EFF5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5A6B7E; --line:#D3DEE8; --denim:#2E5C8A; --mustard:#F2B533; --ok:#2F7D5B; --alert:#B3412E; color-scheme:light}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --alert:#E07A66; color-scheme:dark}
+}
+:root[data-theme="dark"]{--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --alert:#E07A66; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0; background:var(--sky); color:var(--ink); font:17px/1.6 "Nunito", ui-rounded, system-ui, sans-serif}
+main{max-width:720px; margin:0 auto; padding:28px 16px 64px; display:flex; flex-direction:column; gap:16px}
+.back{color:var(--denim); font-weight:800}
+h1{margin:0; font-size:clamp(1.9rem, 6vw, 2.5rem); line-height:1.08; font-weight:900; letter-spacing:-.02em}
+.lede{margin:0; color:var(--muted); max-width:60ch}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:18px 20px}
+.card h2{margin:0 0 8px; font-size:1.15rem; font-weight:900}
+.card p{margin:0 0 8px; max-width:64ch} .card p:last-child{margin-bottom:0}
+ul{margin:0; padding-left:1.2em} li{margin-bottom:6px; max-width:64ch}
+.grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px}
+.fact{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px 16px}
+.fact b{display:block; font-size:1.05rem; font-weight:900; margin-bottom:2px}
+.fact span{color:var(--muted); font-size:.95rem}
+.yes{color:var(--ok); font-weight:900} .no{color:var(--alert); font-weight:900}
+a{color:var(--denim); font-weight:800}
+.fine{font-size:.85rem; color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← Back to RoboDad</a>
+  <h1>RoboDad for parents</h1>
+  <p class="lede">A two-minute read on what RoboDad is, how it keeps teens safe, and what happens to their information.</p>
+
+  <div class="grid" aria-label="Quick facts">
+    <div class="fact"><b>Ages 13+</b><span>A birth-year check on first visit. Under-13s are turned away.</span></div>
+    <div class="fact"><b>No account</b><span>No name, email or phone number needed.</span></div>
+    <div class="fact"><b>Chats aren't saved</b><span>Conversations stay on the teen's own device.</span></div>
+    <div class="fact"><b>Free, no ads</b><span>Nothing to buy, nothing sold, no tracking cookies.</span></div>
+  </div>
+
+  <section class="card">
+    <h2>What RoboDad is</h2>
+    <p>RoboDad is an AI chatbot with the personality of a friendly, slightly corny dad. Teens ask it about everyday life: cooking, laundry, money, school stress, first jobs, friendships and getting around. It answers in a few practical sentences and tells terrible dad jokes.</p>
+    <p>It started as a college coursework project by Saikat Sunil Ganguly, a dad in Toronto, and it's built to <strong>send teens back to the real adults in their lives</strong>, not replace them. "Ask your real one" cards suggest questions to ask a parent, and the only Legendary life-skill badge is earned by having a real talk with a parent or trusted adult.</p>
+  </section>
+
+  <section class="card">
+    <h2>How it keeps teens safe</h2>
+    <ul>
+      <li><strong>Crisis messages skip the AI entirely.</strong> If a teen mentions self-harm, being threatened with intimate photos, an eating disorder, dating violence or abuse at home, RoboDad shows a fixed help message straight away, with tap-to-call numbers for Kids Help Phone (1-800-668-6868, or text CONNECT to 686868) and 911.</li>
+      <li><strong>Firm boundaries.</strong> Nothing sexual. No help getting or hiding vapes, alcohol or drugs. No diet plans or weight-loss tips. No weapons, violence or cheating. RoboDad explains why in a sentence and points to something helpful instead of a cold refusal.</li>
+      <li><strong>Privacy reminders.</strong> RoboDad never asks for personal details, and if a teen shares their address, school or passwords, it reminds them to keep those private.</li>
+      <li><strong>Honest about being an AI.</strong> It says plainly that it isn't a real parent, and it can get things wrong.</li>
+      <li><strong>Tested against tricks.</strong> We regularly test it with the kinds of messages teens use to try to break chatbots ("ignore your rules", "it's for a school project").</li>
+      <li><strong>A Report button on every reply.</strong> Reports come to us so we can fix problems.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>What happens to their information</h2>
+    <ul>
+      <li><span class="no">Not saved:</span> what your teen types. Messages are sent to the AI service (Groq) to write a reply, then they're gone from our side. The chat history stays in their browser, and "New chat" clears it.</li>
+      <li><span class="yes">Saved, anonymously:</span> thumbs up/down and reports, with RoboDad's reply, never your teen's message, and nothing that identifies them.</li>
+      <li><span class="yes">On the device only:</span> nickname, look, settings and earned badges.</li>
+      <li>The full details are in our plain-language <a href="/privacy">privacy policy</a>.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Good to know</h2>
+    <ul>
+      <li>RoboDad gives general life advice. It isn't a doctor, lawyer, counsellor or a replacement for you.</li>
+      <li>It can read replies aloud and play relaxing background music made right on the device. Both are off until your teen turns them on.</li>
+      <li>Badges are on the honour system and have no streaks, so there's nothing to feel guilty about missing.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>A conversation starter</h2>
+    <p>Ask your teen what RoboDad told them this week, or which badge they're going for. Then tell them about your first job, your worst laundry disaster or the first thing you saved up for. That's the conversation RoboDad is trying to start.</p>
+  </section>
+
+  <p class="fine">Questions or concerns? Email <a href="mailto:saikatsunilganguly@gmail.com">saikatsunilganguly@gmail.com</a>. If you think a child under 13 has used RoboDad, let us know and we'll help.</p>
+</main>
+</body>
+</html>
