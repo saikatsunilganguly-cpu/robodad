@@ -330,3 +330,9 @@ Groq's free tier allows about 3,600 characters of speech a day for the Orpheus v
 - **Easter egg**: tap RoboDad 5 times quickly, or say "back in my day", to unlock Robo-Grandpa.
 - **For parents** page at `/parents`.
 - **Keep-awake**: `.github/workflows/keep-awake.yml` pings `/health` every 10 minutes (free on public repos; GitHub pauses scheduled jobs after 60 days without commits).
+
+## Bollywood '75 and Diwali Lights (v1.17)
+
+- **Bollywood '75** (permanent look): 1970s hand-painted poster style, Filmi Hero Dad (wind-machine hair flip, shoulder shimmy, "Dhishoom!" punch), film-reel player and the original **Filmi Nights '75** station (dholak-style drums, harmonium, sitar-like melody, strings). No real films, actors, dialogue or songs are referenced.
+- **Diwali Lights** (seasonal, Nov 5 to 12; Diwali 2026 is Nov 8, so update `SEASONS` each year): lights, rangoli, diyas, Festive Dad (diya, sparkler, namaste "Happy Diwali!"), diya player and the original **Diya Glow** station. Preview with `/?season=diwali`.
+- Seasons are listed in `SEASONS` in `static/index.html`; each switches on once per year, remembers the previous look and restores it afterwards.
