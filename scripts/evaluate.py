@@ -8,7 +8,6 @@ examples in data/augmented_utterances.csv are added to the training folds
 only, and any that exactly match an original example are dropped first, so no
 test sentence can leak into training.
 """
-import csv
 import os
 import sys
 

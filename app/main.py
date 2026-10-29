@@ -352,6 +352,7 @@ async def daily(random_pick: bool = False):
 # voice is the same on every phone. The page falls back to the device's own
 # voice whenever this is unavailable (no key, limits reached, an error).
 TTS_MODEL = os.getenv("TTS_MODEL", "canopylabs/orpheus-v1-english")
+TTS_URL = os.getenv("TTS_URL", "https://api.groq.com/openai/v1/audio/speech")
 TTS_VOICES = ("troy", "austin")
 TTS_VOICE = os.getenv("TTS_VOICE", "troy")
 TTS_DAILY_LIMIT = int(os.getenv("TTS_DAILY_LIMIT", "400"))  # clips per day
@@ -385,7 +386,7 @@ async def tts(req: TTSRequest, request: Request):
     text = re.sub(r"\s+", " ", req.text).strip()
     try:
         r = await state["client"].post(
-            "https://api.groq.com/openai/v1/audio/speech",
+            TTS_URL,
             headers={"Authorization": f"Bearer {key}"},
             json={"model": TTS_MODEL, "voice": voice, "input": text, "response_format": "wav"},
         )
