@@ -10,7 +10,9 @@ pinned: false
 
 # RoboDad: from intent classifier to a hosted LLM chatbot
 
-**Live demo: https://robodad.onrender.com** (free hosting: the first visit after a quiet spell takes up to a minute to wake up)
+**Live: https://robodad.app** · for parents: https://robodad.ca · Learn with Dad: https://robodad.online
+
+(Free hosting: the first visit after a quiet spell can take up to a minute to wake up. The old robodad.onrender.com address forwards to robodad.app.)
 
 RoboDad started as my CONL725 coursework chatbot: TF-IDF + Logistic Regression
 intent classification, VADER sentiment, regex NER and canned responses in a
@@ -312,7 +314,7 @@ then asks the provider for its current models and picks a chat model.
 
 ## Collecting Play Store testers
 
-Google needs 12 testers for 14 days before a new personal developer account can publish. Share `https://robodad.onrender.com/testers` (or print `static/testers-qr.png`). Sign-ups land in Supabase:
+Google needs 12 testers for 14 days before a new personal developer account can publish. Share `https://robodad.app/testers` (or print `static/testers-qr.png`). Sign-ups land in Supabase:
 
 ```sql
 create table if not exists testers (
@@ -390,3 +392,24 @@ See [SECURITY.md](SECURITY.md) for how to report a problem. In short:
 The code is published so people can see how RoboDad works, not for reuse: see [LICENSE](LICENSE).
 "RoboDad"™, the logo, the avatar characters and the app icons are trademarks of Saikat Sunil Ganguly.
 
+
+
+## Domains and link counts
+
+One free Render service answers for all three addresses (see `route_domains` in `app/main.py`):
+
+| Address | What it shows |
+|---|---|
+| robodad.app | The app (main address). Render custom domain. |
+| robodad.ca | The parents page. Anything else on .ca goes to robodad.app. Render custom domain. |
+| robodad.online | Porkbun URL forwarding (with path) to robodad.app/learn, the Learn with Dad hub. |
+
+Setting `CANONICAL_HOST=robodad.app` sends visitors on robodad.onrender.com to robodad.app (health checks and the API stay put).
+
+Short links for bios and posts count visits by platform: `robodad.app/go/ig`, `/go/tiktok`, `/go/yt`, `/go/threads`, `/go/x`, `/go/reddit`, `/go/fb`, `/go/linkedin`, `/go/qr`, or `robodad.online/ig` and so on for the learning hub. Each visit stores only the platform name in the Supabase `clicks` table: no cookies, no IP addresses. "I want this" votes on the learning hub go to the same table.
+
+```sql
+create table if not exists public.clicks (id bigint generated always as identity primary key,
+  created_at timestamptz not null default now(), kind text not null, name text not null);
+alter table public.clicks enable row level security;
+```
