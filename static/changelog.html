@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's new in RoboDad</title>
+<meta name="description" content="Everything that's changed in RoboDad, from a terminal chatbot to a full app.">
+<meta name="theme-color" content="#2E5C8A">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#E8EFF5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5A6B7E; --line:#D3DEE8; --denim:#2E5C8A; --mustard:#F2B533; --mustard-ink:#2A1E00; color-scheme:light}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; color-scheme:dark}
+}
+:root[data-theme="dark"]{--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0; background:var(--sky); color:var(--ink); font:17px/1.55 "Nunito", ui-rounded, system-ui, sans-serif}
+main{max-width:720px; margin:0 auto; padding:28px 16px 64px}
+.back{display:inline-block; margin-bottom:16px; color:var(--denim); font-weight:800}
+h1{margin:0 0 6px; font-size:clamp(1.9rem, 6vw, 2.5rem); line-height:1.08; font-weight:900; letter-spacing:-.02em}
+.lede{margin:0 0 24px; color:var(--muted); max-width:58ch}
+.timeline{list-style:none; margin:0; padding:0 0 0 22px; border-left:3px solid var(--line); display:flex; flex-direction:column; gap:18px}
+.rel{position:relative; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px 18px}
+.rel::before{content:""; position:absolute; left:-32px; top:20px; width:15px; height:15px; border-radius:50%; background:var(--surface); border:3px solid var(--denim)}
+.rel.latest::before{background:var(--mustard); border-color:var(--mustard)}
+.ver{display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-bottom:6px}
+.ver b{font-size:.78rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.ver h2{margin:0; font-size:1.2rem; font-weight:900; line-height:1.2}
+.tag{font-size:.72rem; font-weight:900; text-transform:uppercase; letter-spacing:.06em; background:var(--mustard); color:var(--mustard-ink); border-radius:999px; padding:2px 9px}
+ul.items{margin:0; padding-left:1.15em} ul.items li{margin-bottom:5px} ul.items li::marker{color:var(--denim)}
+.fine{margin-top:28px; font-size:.85rem; color:var(--muted)}
+a{color:var(--denim); font-weight:800}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="/">← Back to RoboDad</a>
+  <h1>What's new</h1>
+  <p class="lede">RoboDad started life as a college chatbot that ran in a terminal window. Here's everything that's changed since then, newest first.</p>
+
+  <ol class="timeline">
+    <li class="rel latest">
+      <div class="ver"><b>Version 1.12 · October 2026</b><span class="tag">Latest</span></div>
+      <div class="ver"><h2>His own voice, and quick controls</h2></div>
+      <ul class="items">
+        <li>RoboDad now reads replies in his own deep, calm voice, and it sounds the same on every phone.</li>
+        <li>Pick from three voices: Daniel (deep), Troy (brighter) or Austin (easygoing). Or use your device's own voice, which works offline.</li>
+        <li>New <strong>Voice</strong> and <strong>Music</strong> buttons just above the message box, so you can switch the voice or the station without opening Settings.</li>
+        <li>This "What's new" page, linked from Settings and the bottom of the chat.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.11</b></div>
+      <div class="ver"><h2>Collectible badges</h2></div>
+      <ul class="items">
+        <li>The Life Skills Belt plates are now 12 collectible badges in four rarities: Common, Rare, Epic and Legendary.</li>
+        <li>Five secret bonus badges unlock when you complete a set, including the Legendary <strong>Undisputed</strong> badge for collecting all 12.</li>
+        <li>Unlocking a badge plays a reveal with light rays, confetti and a chime.</li>
+        <li>Share any badge you've earned as an image for your story or group chat.</li>
+        <li>A few names changed: Ride or Die is now <strong>Got Your Back</strong>, Kitchen Boss is <strong>Head Chef</strong>, and the Y2K Aero look is <strong>Y2K Gloss</strong>.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.10</b></div>
+      <div class="ver"><h2>Help test RoboDad, plus little touches</h2></div>
+      <ul class="items">
+        <li>A <a href="/testers">Help test RoboDad</a> page, with a QR code, for people who want to help get RoboDad onto the Google Play Store.</li>
+        <li>RoboDad nods when you send a message, new belt plates get a gold shine, and a ring around his face counts down the focus timer.</li>
+        <li>Replies no longer start with a stiff "I'm sorry, but I can't help with that."</li>
+        <li>Fixed: pages like Privacy now open properly when RoboDad is installed on your phone.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.9</b></div>
+      <div class="ver"><h2>Dad Mode</h2></div>
+      <ul class="items">
+        <li>Trick questions, trolling and "what happens if…" messages now get a real dad answer instead of a flat "Sorry, I can't help with that."</li>
+        <li>RoboDad still won't help anyone get hurt, but he'll explain why and point you somewhere useful.</li>
+        <li>He handles busy moments better, so you get an AI answer more often instead of a basic one.</li>
+        <li>He won't write out song lyrics or recite movie lines, and he won't pretend to be a real person.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.8</b></div>
+      <div class="ver"><h2>Music players for every look</h2></div>
+      <ul class="items">
+        <li>The music button at the top is now an animated player that matches your look: a smart speaker, a spinning CD, a cassette player, an MP3 player or a jukebox.</li>
+        <li>The music is easier to find and hear, including on iPhone.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.7</b></div>
+      <div class="ver"><h2>Diner '55</h2></div>
+      <ul class="items">
+        <li>A new 1950s diner look, with chrome, a checkerboard trim, neon lettering, a tail-finned cruiser, a shake, a burger and fries, and a spinning 45 while RoboDad thinks.</li>
+        <li>A new doo-wop radio station, Jukebox '55, and Jukebox Pick song suggestions in the Diner look.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.6</b></div>
+      <div class="ver"><h2>RoboDad Radio and the dashboard</h2></div>
+      <ul class="items">
+        <li>RoboDad Radio: relaxing stations made live on your device, with no ads and no downloads. The music dips while RoboDad talks.</li>
+        <li>A dashboard with the radio, a focus timer, a countdown, the dad joke and tip of the day, your belt and a help card.</li>
+        <li>A new look for RoboDad himself: slicked-back hair, aviators and a leather jacket over a white shirt.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.5</b></div>
+      <div class="ver"><h2>Retro looks and the Life Skills Belt</h2></div>
+      <ul class="items">
+        <li>Pick a look: Classic, Arcade Neon, VHS Sunset or Y2K.</li>
+        <li>The Life Skills Belt: earn plates for real-life skills, like cooking a meal or making a budget.</li>
+        <li>Dad's Mixtape song picks when you're having a rough day, and "Ask your real one" questions to take to a parent.</li>
+        <li>Rate RoboDad's dad jokes with the groan buttons.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.4</b></div>
+      <div class="ver"><h2>Made for teens</h2></div>
+      <ul class="items">
+        <li>Advice for teen life: first jobs, life after high school, friendships, healthy relationships, peer pressure, budgeting and getting around.</li>
+        <li>A quick age check, an optional nickname and a plain-language <a href="/privacy">privacy page</a>.</li>
+        <li>If something serious comes up, RoboDad shows real help right away, with tap-to-call numbers for Kids Help Phone and others.</li>
+        <li>A Report button on every reply.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.3</b></div>
+      <div class="ver"><h2>Smarter, and still free</h2></div>
+      <ul class="items">
+        <li>RoboDad understands what you mean more often.</li>
+        <li>He remembers the conversation so far, so you don't have to repeat yourself.</li>
+        <li>Talk instead of typing, and have replies read aloud.</li>
+        <li>Install RoboDad on your home screen like an app.</li>
+        <li>Thumbs up and down on replies, so RoboDad can get better.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.2</b></div>
+      <div class="ver"><h2>RoboDad goes online</h2></div>
+      <ul class="items">
+        <li>RoboDad moved from a terminal window to a website that works on phones and computers.</li>
+        <li>Real AI replies that appear word by word, written in RoboDad's voice.</li>
+        <li>If the free server is asleep, you'll see a "waking up" message instead of a blank screen.</li>
+      </ul>
+    </li>
+    <li class="rel">
+      <div class="ver"><b>Version 1.0</b></div>
+      <div class="ver"><h2>Where it started</h2></div>
+      <ul class="items">
+        <li>RoboDad began as a CONL725 coursework chatbot: it worked out the topic of your message, picked a ready-made dad answer and ran in a terminal.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <p class="fine">RoboDad is a student project by Saikat Sunil Ganguly in Toronto. Questions? Read the <a href="/privacy">privacy policy</a> or <a href="/">go back to RoboDad</a>.</p>
+</main>
+</body>
+</html>

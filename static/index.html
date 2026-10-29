@@ -493,6 +493,23 @@ textarea::placeholder{color:var(--muted)}
   font-weight:900; padding:10px 18px; cursor:pointer;
 }
 .send:disabled{opacity:.45; cursor:default}
+.quick{max-width:720px; margin:0 auto 6px; display:flex; gap:8px}
+.qwrap{position:relative}
+.qchip{display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px;
+  padding:5px 12px 5px 9px; font:inherit; font-weight:800; font-size:.85rem; cursor:pointer; max-width:46vw; white-space:nowrap}
+.qchip span{overflow:hidden; text-overflow:ellipsis}
+.qchip svg{width:16px; height:16px; flex:none; color:var(--muted)}
+.qchip:hover{border-color:var(--denim)}
+.qchip.on{border-color:var(--denim); background:color-mix(in srgb, var(--denim) 10%, var(--surface))} .qchip.on svg{color:var(--denim)}
+.qpop{position:absolute; bottom:calc(100% + 8px); left:0; z-index:15; width:240px; background:var(--surface); color:var(--ink); border:1.5px solid var(--line);
+  border-radius:16px; padding:8px; box-shadow:0 14px 34px rgba(0,0,0,.22); display:flex; flex-direction:column; gap:2px}
+.qpop[hidden]{display:none}
+.qrow{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:4px 6px 8px; font-weight:900; border-bottom:1px solid var(--line); margin-bottom:4px}
+.qopt{display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:0; background:transparent; font:inherit; font-weight:700; color:var(--ink); padding:8px; border-radius:10px; cursor:pointer}
+.qopt:hover{background:var(--sky)}
+.qopt .dot{width:16px; height:16px; border-radius:50%; border:2px solid var(--line); flex:none; box-sizing:border-box}
+.qopt[aria-checked="true"] .dot{border:5px solid var(--denim)}
+.qopt small{margin-left:auto; color:var(--muted); font-weight:600; font-size:.8rem}
 .fine{max-width:720px; margin:6px auto 0; font-size:.78rem; color:var(--muted); text-align:center}
 
 @media (max-width:520px){
@@ -646,6 +663,16 @@ textarea::placeholder{color:var(--muted)}
 </main>
 
 <div class="composer">
+  <div class="quick" id="quick">
+    <div class="qwrap">
+      <button class="qchip" id="qVoice" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="qVoicePop"><svg aria-hidden="true"><use href="#i-speaker"/></svg><span id="qVoiceText">Voice off</span></button>
+      <div class="qpop" id="qVoicePop" role="group" aria-label="RoboDad's voice" hidden></div>
+    </div>
+    <div class="qwrap" id="qMusicWrap">
+      <button class="qchip" id="qMusic" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="qMusicPop"><svg aria-hidden="true"><use href="#i-note"/></svg><span id="qMusicText">Music off</span></button>
+      <div class="qpop" id="qMusicPop" role="group" aria-label="Music" hidden></div>
+    </div>
+  </div>
   <form id="form" autocomplete="off">
     <label for="input" class="sr">Message RoboDad</label>
     <textarea id="input" rows="1" maxlength="1000" placeholder="Talk to RoboDad…"></textarea>
@@ -654,7 +681,7 @@ textarea::placeholder{color:var(--muted)}
     </button>
     <button class="send" id="send" type="submit" disabled>Send</button>
   </form>
-  <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a></p>
+  <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a> · <a href="/changelog">What's new</a></p>
 </div>
 
 <aside class="side" id="side" aria-label="RoboDad dashboard">
@@ -762,6 +789,7 @@ textarea::placeholder{color:var(--muted)}
         <button class="ghost" id="nameBtn" type="button">Set a nickname</button></div>
       <div class="setting" id="installRow" hidden><span>Put RoboDad on your home screen</span>
         <button class="ghost" id="install" type="button">Install app</button></div>
+      <div class="setting"><span>Everything that's changed</span><a class="ghost" href="/changelog" style="text-decoration:none">What's new</a></div>
       <div class="setting"><span>How your information is used</span><a class="ghost" href="/privacy" style="text-decoration:none">Privacy</a></div>
     </div>
     <div class="row"><button class="primary" id="menuDone" type="button">Done</button></div>
@@ -969,13 +997,7 @@ textarea::placeholder{color:var(--muted)}
   if (canSpeak) {
     readBtn.hidden = false;
     readBtn.setAttribute("aria-pressed", String(readAloud));
-    readBtn.addEventListener("click", () => {
-      readAloud = !readAloud;
-      readBtn.setAttribute("aria-pressed", String(readAloud));
-      readBtn.title = readAloud ? "Stop reading replies aloud" : "Read replies aloud";
-      setPref(READ_KEY, readAloud ? "on" : "off");
-      if (!readAloud) stopSpeaking();
-    });
+    readBtn.addEventListener("click", () => setReadAloud(!readAloud));
   }
 
   // ---------- voice input ----------
@@ -1338,8 +1360,7 @@ const PLAYERS = {
   menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
   applyLook(getPref(LOOK_KEY) || "classic");
   if (canSpeak) { $("readRow").hidden = false; $("voiceRow").hidden = false; fillVoices();
-    $("voiceSel").addEventListener("change", (e) => { voicePref = e.target.value; setPref(VOICE_KEY, voicePref);
-      speak("Hey, it's RoboDad. This is my voice now. Dishes go in the dishwasher, not next to it."); }); }
+    $("voiceSel").addEventListener("change", (e) => setVoice(e.target.value)); }
 
   // ---------- toast ----------
   let toastTimer;
@@ -1706,6 +1727,67 @@ const PLAYERS = {
   $("beltMiniOpen").addEventListener("click", () => { side.classList.remove("open"); $("beltBtn").click(); });
   updateBeltMini();
 
+  // ---------- quick controls on the main screen: voice + music ----------
+  const VOICE_NAMES = { daniel:"Daniel", troy:"Troy", austin:"Austin" };
+  const voiceLabel = () => voicePref.startsWith("device") ? "Device" : (VOICE_NAMES[voicePref] || "Daniel");
+  function setReadAloud(on){
+    readAloud = on; readBtn.setAttribute("aria-pressed", String(on));
+    readBtn.title = on ? "Stop reading replies aloud" : "Read replies aloud";
+    setPref(READ_KEY, on ? "on" : "off"); if (!on) stopSpeaking(); quickUI();
+  }
+  function setVoice(v){
+    voicePref = v; setPref(VOICE_KEY, v); if ($("voiceSel")) $("voiceSel").value = v;
+    setReadAloud(true); speak("Hey, it's RoboDad. This is my voice now. Dishes go in the dishwasher, not next to it.");
+  }
+  function renderVoicePop(){
+    const opt = (v, label, note) => `<button class="qopt" type="button" data-voice="${v}" aria-pressed="${readAloud && (v === "device" ? voicePref.startsWith("device") : voicePref === v)}"><span class="dot"></span>${label}<small>${note}</small></button>`;
+    $("qVoicePop").innerHTML = `<div class="qrow"><span>Read replies aloud</span><button class="switch" type="button" data-act="read" aria-pressed="${readAloud}"><span class="sr">Read replies aloud</span></button></div>
+      ${opt("daniel", "Daniel", "deep")}${opt("troy", "Troy", "brighter")}${opt("austin", "Austin", "easygoing")}${opt("device", "This device", "works offline")}`;
+    $("qVoicePop").querySelectorAll(".qopt").forEach(b => b.setAttribute("aria-checked", b.getAttribute("aria-pressed")));
+  }
+  function renderMusicPop(){
+    const R = window.RoboRadio; if (!R) return; const on = !!R.playing;
+    $("qMusicPop").innerHTML = `<div class="qrow"><span>Music</span><button class="switch" type="button" data-act="music" aria-pressed="${on}"><span class="sr">Music on or off</span></button></div>
+      ${Object.entries(R.stations).map(([k, name]) => `<button class="qopt" type="button" data-st="${k}" aria-pressed="${radioPrefs.st === k}" aria-checked="${radioPrefs.st === k}"><span class="dot"></span>${esc(name)}</button>`).join("")}`;
+  }
+  function quickUI(){
+    $("qVoiceText").textContent = readAloud ? `Voice: ${voiceLabel()}` : "Voice off";
+    $("qVoice").classList.toggle("on", readAloud);
+    const R = window.RoboRadio, on = !!(R && R.playing);
+    $("qMusicText").textContent = on ? R.stations[R.station] : "Music off";
+    $("qMusic").classList.toggle("on", on);
+    if (!$("qVoicePop").hidden) renderVoicePop();
+    if (!$("qMusicPop").hidden) renderMusicPop();
+  }
+  function closePops(){
+    ["qVoicePop", "qMusicPop"].forEach(id => $(id).hidden = true);
+    ["qVoice", "qMusic"].forEach(id => $(id).setAttribute("aria-expanded", "false"));
+  }
+  function openPop(name){
+    const pop = $(name === "voice" ? "qVoicePop" : "qMusicPop"), btn = $(name === "voice" ? "qVoice" : "qMusic");
+    const wasOpen = !pop.hidden; closePops(); if (wasOpen) return;
+    (name === "voice" ? renderVoicePop : renderMusicPop)();
+    pop.hidden = false; btn.setAttribute("aria-expanded", "true"); pop.querySelector("button")?.focus();
+  }
+  const refocus = (pop, b) => { const sel = b.dataset.act ? `[data-act="${b.dataset.act}"]` : b.dataset.voice ? `[data-voice="${b.dataset.voice}"]` : `[data-st="${b.dataset.st}"]`; pop.querySelector(sel)?.focus(); };
+  $("qVoice").addEventListener("click", () => openPop("voice"));
+  $("qMusic").addEventListener("click", () => openPop("music"));
+  document.addEventListener("click", (e) => { if (!e.composedPath().some(n => n.classList && n.classList.contains("qwrap"))) closePops(); });
+  $("quick").addEventListener("keydown", (e) => { if (e.key === "Escape" && (!$("qVoicePop").hidden || !$("qMusicPop").hidden)) { e.stopPropagation(); const v = !$("qVoicePop").hidden; closePops(); $(v ? "qVoice" : "qMusic").focus(); } });
+  $("qVoicePop").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.act === "read") setReadAloud(!readAloud); else if (b.dataset.voice) setVoice(b.dataset.voice);
+    renderVoicePop(); refocus($("qVoicePop"), b);
+  });
+  $("qMusicPop").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b || !window.RoboRadio) return;
+    if (b.dataset.act === "music") { RoboRadio.playing ? RoboRadio.stop() : startMusic(); }
+    else if (b.dataset.st) { radioPrefs.st = b.dataset.st; saveRadio(); RoboRadio.play(radioPrefs.st); }
+    radioUI(); renderMusicPop(); refocus($("qMusicPop"), b);
+  });
+  if (!canSpeak) $("qVoice").parentElement.hidden = true;
+  if (!window.RoboRadio) $("qMusicWrap").hidden = true;
+
   // RoboDad Radio
   const RADIO_KEY = "robodad.radio";
   let radioPrefs = { st: "lounge", vol: 35 };
@@ -1724,6 +1806,7 @@ const PLAYERS = {
     $("musicArt").classList.toggle("on", on); $("radioArt").classList.toggle("on", on);
     $("musicBtn").title = on ? `Pause music (${R.stations[R.station]})` : "Play music";
     $("musicLabel").textContent = $("musicBtn").title;
+    quickUI();
   }
   let musicTipShown = false;
   function startMusic(){
@@ -1742,6 +1825,7 @@ const PLAYERS = {
     radioVol.addEventListener("input", () => { radioPrefs.vol = Number(radioVol.value); saveRadio(); RoboRadio.setVolume(radioPrefs.vol / 100); });
     radioUI();
   } else { radioW.hidden = true; $("musicBtn").hidden = true; }
+  quickUI();
 
   // Focus timer
   let tMinutes = 25, tRemaining = 25 * 60, tEnd = 0, tTick = null;
