@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Creepster&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -83,6 +83,13 @@
   --denim:#E2541F; --denim-ink:#FFFFFF; --mustard:#1FA2D8; --mustard-ink:#FFFFFF;
   --metal:#D3DCE3; --alert:#C2413A; --ok:#2E8B57; --glow:color-mix(in srgb, #F2B533 45%, transparent);
   --display:"Graduate", "Nunito", serif; color-scheme:light;
+}
+:root[data-look="halloween"]{
+  --sky:#160D26; --surface:#231638; --ink:#F6EEFF; --muted:#BBA6D6; --line:#3B2758;
+  --denim:#FF7A1A; --denim-ink:#1A0B00; --mustard:#8BE04E; --mustard-ink:#0B1A03;
+  --metal:#8F8AAE; --alert:#FF5E7E; --ok:#8BE04E; --jacket:#16121F; --jacket2:#2A2238; --hair:#15121C; --lens:#05030A;
+  --glow:color-mix(in srgb, #FF7A1A 45%, transparent);
+  --display:"Creepster", "Nunito", cursive; color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -175,8 +182,39 @@ button,textarea{font:inherit;color:inherit}
 :root[data-look="y2k"] .cassette .buffer{display:block; width:24px; height:24px; animation:spin45 .9s linear infinite}
 :root[data-look="y2k"] .cassette .t-y2k{display:inline}
 
+/* ---------- Haunted House (Halloween, seasonal) ---------- */
+:root[data-look="halloween"] body{background:radial-gradient(ellipse at 85% -10%, #3A1F5C 0, transparent 55%), linear-gradient(#160D26, #0F0919) fixed}
+:root[data-look="halloween"] .top{background:rgba(22,13,38,.92); border-bottom:1px solid #3B2758; box-shadow:0 1px 0 rgba(255,122,26,.25)}
+:root[data-look="halloween"] .hello h2{color:#FF7A1A; text-shadow:0 0 18px var(--glow); letter-spacing:.03em; line-height:1.12}
+:root[data-look="halloween"] .hello::before{content:""; position:absolute; z-index:-1; top:-4px; right:-6px; width:150px; height:130px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 130'%3E%3Cg fill='%23120A1E' stroke='%233B2758' stroke-width='.4'%3E%3Cpath transform='translate%2814 38%29 scale%282.1%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z'/%3E%3Cpath transform='translate%2898 92%29 scale%281.5%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z'/%3E%3Cpath transform='translate%2830 104%29 scale%281.1%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z'/%3E%3C/g%3E%3C/svg%3E") no-repeat, radial-gradient(circle at 62% 38%, #FFF4CF 0 22%, rgba(255,244,207,.22) 23%, transparent 34%);
+  animation:batfloat 5s ease-in-out infinite alternate}
+@keyframes batfloat{to{transform:translateY(-6px)}}
+:root[data-look="halloween"] .hello::after{content:""; position:absolute; z-index:-1; right:-16px; bottom:-20px; width:150px; height:120px; transform:scaleY(-1);
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 120'%3E%3Cpath d='M150 0 L150.0 110.0 M150 0 L116.0 104.6 M150 0 L85.3 89.0 M150 0 L61.0 64.7 M150 0 L45.4 34.0 M150 0 L40.0 0.0 M150.0 28.0 Q142.7 30.3 141.3 26.6 Q134.4 27.6 133.5 22.7 Q127.4 22.6 127.3 16.5 Q122.4 15.6 123.4 8.7 Q119.7 7.3 122.0 0.0 M150.0 52.0 Q139.0 53.7 133.9 49.5 Q123.7 48.8 119.4 42.1 Q110.7 39.3 107.9 30.6 Q101.2 26.3 100.5 16.1 Q96.3 11.0 98.0 0.0 M150.0 76.0 Q135.3 77.1 126.5 72.3 Q112.9 69.9 105.3 61.5 Q93.9 56.1 88.5 44.7 Q80.1 37.1 77.7 23.5 Q72.9 14.7 74.0 0.0 M150.0 100.0 Q131.5 100.6 119.1 95.1 Q102.2 91.0 91.2 80.9 Q77.2 72.8 69.1 58.8 Q59.0 47.8 54.9 30.9 Q49.4 18.5 50.0 0.0' fill='none' stroke='%23BBA6D6' stroke-opacity='.35' stroke-width='1'/%3E%3C/svg%3E") no-repeat}
+:root[data-look="halloween"] :is(.robo .bubble,.widget,.extra,.card){box-shadow:0 0 0 1px #3B2758, 0 0 22px rgba(255,122,26,.08)}
+:root[data-look="halloween"] :is(.send,.primary){box-shadow:0 0 14px rgba(255,122,26,.45)}
+.pv.halloween{background:linear-gradient(#2A1A44, #160D26)}
+.pv.halloween::before{content:""; position:absolute; width:30px; height:30px; right:10px; top:6px; border-radius:50%; background:radial-gradient(circle, #FFF4CF 0 55%, rgba(255,244,207,.25) 56% 70%, transparent 71%)}
+.look .seasonal-tag{display:inline-block; margin-left:6px; font-size:.65rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; background:#FF7A1A; color:#1A0B00; border-radius:999px; padding:1px 7px; vertical-align:middle}
+.pl-art .glowface{opacity:0}
+.pl-art.on .glowface{animation:plflick 1.3s ease-in-out infinite}
+@keyframes plflick{0%,100%{opacity:.95} 35%{opacity:.45} 55%{opacity:1} 80%{opacity:.65}}
+/* Count Dadcula's moves */
+.bot .collar2,.bot .fangs{transform-box:fill-box; transform-origin:50% 100%}
+.do-cape .collar2{animation:av-flap 2.4s ease-in-out}
+@keyframes av-flap{0%,100%{transform:none} 25%,65%{transform:scale(1.18, 1.12)} 45%{transform:scale(1.08, 1.05)}}
+.do-cape .hd{animation:av-smug 2.4s ease-in-out}
+.do-bat .mv-bat{animation:av-batfly 2.6s ease-in-out}
+@keyframes av-batfly{0%{opacity:0; transform:translate(30px,34px) scale(.3)} 15%{opacity:1} 50%{transform:translate(44px,14px) scale(.8) rotate(-10deg)} 75%{transform:translate(52px,6px) scale(.9) rotate(8deg)} 100%{opacity:0; transform:translate(62px,-4px) scale(1)}}
+.do-bleh .mouth{animation:av-bleh 2.2s ease-in-out}
+@keyframes av-bleh{0%,100%{transform:none} 25%,70%{transform:scale(1.25, 2)}}
+.do-bleh .fangs{animation:av-fangs 2.2s ease-in-out}
+@keyframes av-fangs{0%,100%{transform:none} 25%,70%{transform:scaleY(1.5) translateY(1px)}}
+.do-bleh .hd{animation:av-hop 2.2s ease-out}
+
 /* ---------- Skate Park '99 ---------- */
-:root:is([data-look="skate"],[data-look="summer"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
+:root:is([data-look="skate"],[data-look="summer"],[data-look="halloween"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
 :root[data-look="skate"] body{background:#E7E3DA radial-gradient(rgba(0,0,0,.06) 1px, transparent 1.4px) 0 0 / 7px 7px fixed}
 :root[data-look="skate"] .top{position:relative; z-index:6; border-bottom:0}
 :root[data-look="skate"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-7px; height:7px;
@@ -450,6 +488,17 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .do-victory .mv-vic{animation:av-pump 2.6s ease-in-out}
 @keyframes av-pump{0%{opacity:0; transform:translateY(14px)} 15%{opacity:1; transform:none} 28%,52%{transform:translateY(-4px)} 40%,64%{transform:none} 85%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(14px)}}
 .do-victory .mv-sparks{animation:av-spark 2.6s ease-out}
+/* secret: Robo-Grandpa */
+.bot .specs{transform-box:fill-box; transform-origin:center}
+.bot .mv-gfist{transform-origin:50% 100%}
+.do-glasses .specs{animation:av-specs 2.6s ease-in-out}
+@keyframes av-specs{0%,100%{transform:none} 25%,60%{transform:translateY(4px)} 75%{transform:translateY(-.5px)}}
+.do-nap .eye{animation:av-shut 3.2s ease-in-out}
+@keyframes av-shut{0%,100%{transform:none} 15%,85%{transform:scaleY(.12)}}
+.do-nap .hd{animation:av-droop 3.2s ease-in-out}
+@keyframes av-droop{0%,100%{transform:none} 20%,80%{transform:rotate(6deg) translateY(2px)}}
+.do-nap .mv-zzz{animation:av-notes 3.2s ease-out}
+.do-kids .mv-gfist{animation:av-shaka 2.6s ease-in-out}
 /* early-2000s bucket hat */
 .do-hattip .bucket{animation:av-tip 2.4s ease-in-out}
 .do-hattip .hd{animation:av-smug 2.4s ease-in-out}
@@ -705,6 +754,14 @@ textarea::placeholder{color:var(--muted)}
 .bub .fnote{display:none; position:absolute; right:-7px; top:-9px; pointer-events:none}
 .bub.thought[aria-pressed="true"] .fnote{display:block; font-size:.7rem; font-weight:900; color:var(--denim); animation:notefloat 2.4s ease-out infinite}
 @keyframes notefloat{0%{opacity:0; transform:translate(0,4px)} 25%{opacity:1} 100%{opacity:0; transform:translate(5px,-10px) rotate(15deg)}}
+.challenge{align-self:stretch; display:flex; flex-direction:column; gap:6px; background:var(--surface); border:2px dashed var(--mustard); border-radius:18px; padding:12px 14px; max-width:520px}
+.ch-tag{font-size:.72rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:var(--denim)}
+.ch-text{margin:0!important; font-weight:800; color:var(--ink)!important; font-size:1.02rem; line-height:1.35}
+.ch-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.ch-row .primary{padding:7px 16px; font-size:.9rem}
+.ch-row small{color:var(--muted); font-weight:700}
+.challenge.done{border-style:solid; border-color:var(--ok)}
+.challenge.done .ch-done{background:var(--ok); color:#fff}
 .qtip{margin:6px 6px 2px; font-size:.75rem; color:var(--muted); line-height:1.3}
 .bubcap{position:absolute; left:0; top:calc(100% + 12px); z-index:16; white-space:nowrap; background:var(--ink); color:var(--surface); border-radius:999px; padding:5px 6px 5px 12px;
   font-size:.82rem; font-weight:800; display:flex; align-items:center; gap:8px; box-shadow:0 8px 20px rgba(0,0,0,.2); animation:sayin .25s ease-out}
@@ -861,6 +918,11 @@ textarea::placeholder{color:var(--muted)}
         <button class="chip" type="button">Help me prep for a job interview</button>
         <button class="chip" type="button">Tell me a dad joke</button>
       </div>
+      <section class="challenge" aria-label="Daily Dad Challenge">
+        <span class="ch-tag">Daily Dad Challenge</span>
+        <p class="ch-text"></p>
+        <div class="ch-row"><button class="primary ch-done" type="button">Done it!</button><small class="ch-count"></small></div>
+      </section>
       <div class="diner-art" aria-hidden="true"><svg viewBox="0 0 330 80" role="presentation">
   <!-- tail-finned cruiser -->
   <g transform="translate(0,6)">
@@ -914,7 +976,7 @@ textarea::placeholder{color:var(--muted)}
     </button>
     <button class="send" id="send" type="submit" disabled>Send</button>
   </form>
-  <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a> · <a href="/changelog">What's new</a></p>
+  <p class="fine">RoboDad is an AI for ages 13+, not a real parent, and can get things wrong. Never share your full name, address, school or passwords. In an emergency, call 911. <a href="/privacy">Privacy</a> · <a href="/parents">For parents</a> · <a href="/changelog">What's new</a></p>
 </div>
 
 <aside class="side" id="side" aria-label="RoboDad dashboard">
@@ -934,6 +996,7 @@ textarea::placeholder{color:var(--muted)}
       <button class="chipbtn" type="button" role="radio" data-st="skate" aria-checked="false">Half-Pipe '99</button>
       <button class="chipbtn" type="button" role="radio" data-st="block" aria-checked="false">Block Party '03</button>
       <button class="chipbtn" type="button" role="radio" data-st="lobby" aria-checked="false">Respawn Lounge</button>
+      <button class="chipbtn" type="button" role="radio" data-st="haunt" aria-checked="false">Haunted Hayride</button>
     </div>
     <label class="sr" for="radioVol">Volume</label>
     <input type="range" id="radioVol" min="0" max="100" value="35">
@@ -963,10 +1026,16 @@ textarea::placeholder{color:var(--muted)}
     </form>
   </section>
 
+  <section class="widget challenge" aria-label="Daily Dad Challenge">
+        <span class="ch-tag">Daily Dad Challenge</span>
+        <p class="ch-text"></p>
+        <div class="ch-row"><button class="primary ch-done" type="button">Done it!</button><small class="ch-count"></small></div>
+      </section>
+
   <section class="widget" aria-label="Dad joke of the day">
     <b>Dad joke of the day</b>
     <p id="dailyJoke">Loading a fresh groaner…</p>
-    <div class="row"><button class="chipbtn" id="jokeMore" type="button">Another one</button></div>
+    <div class="row"><button class="chipbtn" id="jokeMore" type="button">Another one</button><button class="chipbtn" id="jokeShare" type="button">Share it</button></div>
   </section>
 
   <section class="widget" aria-label="Tip of the day">
@@ -1027,6 +1096,10 @@ textarea::placeholder{color:var(--muted)}
         <span class="pv gamer"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-gamer"/></svg></span>
         <strong>Game Night '05</strong><small>Headset on, lobby loading</small>
       </button>
+      <button class="look" type="button" role="radio" data-look="halloween" aria-checked="false" hidden>
+        <span class="pv halloween"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-dracula"/></svg></span>
+        <strong>Haunted House<span class="seasonal-tag">Halloween</span></strong><small>Bats, moonlight and Count Dadcula</small>
+      </button>
     </div>
     <div class="avpick">
       <p class="coll-head" style="margin:0!important"><span>Avatar</span><small>Tap RoboDad any time to see a move</small></p>
@@ -1042,6 +1115,7 @@ textarea::placeholder{color:var(--muted)}
       <div class="setting" id="installRow" hidden><span>Put RoboDad on your home screen</span>
         <button class="ghost" id="install" type="button">Install app</button></div>
       <div class="setting"><span>Everything that's changed</span><a class="ghost" href="/changelog" style="text-decoration:none">What's new</a></div>
+      <div class="setting"><span>Show a parent how RoboDad works</span><a class="ghost" href="/parents" style="text-decoration:none">For parents</a></div>
       <div class="setting"><span>How your information is used</span><a class="ghost" href="/privacy" style="text-decoration:none">Privacy</a></div>
     </div>
     <div class="row"><button class="primary" id="menuDone" type="button">Done</button></div>
@@ -1106,8 +1180,8 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js?v=28"></script>
-<script src="/static/avatars.js?v=28"></script>
+<script src="/static/radio.js?v=31"></script>
+<script src="/static/avatars.js?v=31"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1402,7 +1476,12 @@ textarea::placeholder{color:var(--muted)}
           body: JSON.stringify({ kind:"report", reason, rating:-1, intent:meta.intent||"", confidence:meta.confidence||0, mode:meta.mode||"", model:meta.model||"", reply:item.content.slice(0,4000) }) })
           .catch(() => {});
       });
-      tools.append(rate, thanks, rep, box);
+      if (isJoke) {
+        const sj = document.createElement("button");
+        sj.type = "button"; sj.className = "report-btn share-joke"; sj.textContent = "Share joke";
+        sj.addEventListener("click", () => shareJoke(item.content));
+        tools.append(rate, thanks, sj, rep, box);
+      } else tools.append(rate, thanks, rep, box);
       renderExtras(tools, item);
     }
 
@@ -1529,6 +1608,7 @@ textarea::placeholder{color:var(--muted)}
     const a = $("avatar"); a.classList.remove("nod"); void a.offsetWidth; a.classList.add("nod");
   }
   function submit(text){
+    if (/\bback in my day\b/i.test(text || "")) setTimeout(unlockGrandpa, 2500);   // Easter egg
     text = text.trim();
     if (!text || busy || !$("gate").hidden) return;
     nod();
@@ -1613,6 +1693,12 @@ const PLAYERS = {
     <rect x="17.5" y="20.5" width="13" height="13" rx="4.5" fill="#F2F7FB" stroke="#4D7699" stroke-width="1.2"/>
     <rect x="21.3" y="24.3" width="5.4" height="5.4" rx="1.8" fill="none" stroke="#9DB7CC" stroke-width="1"/>
     <path d="M15 4.5 Q24 3 33 4.5" stroke="#fff" stroke-width="1.2" opacity=".8" fill="none"/></svg>`,
+  halloween: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <path d="M24 10 C24 6.5 25.5 4.2 28.5 3" stroke="#3E7A2C" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="24" cy="23.5" rx="19" ry="14.5" fill="#FF7A1A" stroke="#1A0B00" stroke-width="1.4"/>
+    <path d="M14 13.5 C11.5 20 11.5 27 14.5 34 M34 13.5 C36.5 20 36.5 27 33.5 34 M24 9.5 V38" stroke="#C85A0C" stroke-width="1.2" fill="none"/>
+    <g fill="#2A1400"><path d="M15.5 19.5 L20.2 15.6 L21.6 21.4Z M32.5 19.5 L27.8 15.6 L26.4 21.4Z"/><path d="M14.8 26.5 Q24 34 33.2 26.5 L30 28 L28.6 26.2 L26.1 28.6 L24 26.6 L21.9 28.6 L19.4 26.2 L18 28Z"/></g>
+    <g class="glowface" fill="#FFD45C"><path d="M15.5 19.5 L20.2 15.6 L21.6 21.4Z M32.5 19.5 L27.8 15.6 L26.4 21.4Z"/><path d="M14.8 26.5 Q24 34 33.2 26.5 L30 28 L28.6 26.2 L26.1 28.6 L24 26.6 L21.9 28.6 L19.4 26.2 L18 28Z"/></g></svg>`,
   skate: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
     <g class="waves" stroke="#13A3AE" stroke-width="1.8" stroke-linecap="round" fill="none"><path d="M1 27 h5"/><path d="M0 32 h7"/></g>
     <path d="M7 21.5 C4.5 21.5 3 19.5 3.6 17.5 L5.2 18.6 C5.7 19.5 6.4 19.8 7.2 19.8 H40.8 C41.6 19.8 42.3 19.5 42.8 18.6 L44.4 17.5 C45 19.5 43.5 21.5 41 21.5Z" fill="#E8572A" stroke="#1C1C1C" stroke-width="1.4" stroke-linejoin="round"/>
@@ -1645,11 +1731,23 @@ const PLAYERS = {
 
   // ---------- looks ----------
   // ---------- avatars: a robot dad for each decade, with idle moves ----------
+  // ---------- seasons: looks that switch on by themselves for a holiday ----------
+  const SEASONS = { halloween: { from:[10, 15], to:[11, 2] } };
+  const seasonForce = new URLSearchParams(location.search).get("season");   // ?season=halloween to preview, ?season=off to hide
+  function seasonActive(name){
+    if (seasonForce) return seasonForce === name;
+    const s = SEASONS[name], d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate();
+    return md >= s.from[0] * 100 + s.from[1] && md <= s.to[0] * 100 + s.to[1];
+  }
   const AV_KEY = "robodad.avatar";
   const AV = window.RoboAvatars;
   let avPref = getPref(AV_KEY) || "auto", avKind = "fifties", avLast = "";
   if (AV) AV.installSymbols(document.querySelector('svg[width="0"]'));
-  const avKindFor = (look) => avPref !== "auto" && AV?.AVATARS[avPref] ? avPref : (AV?.LOOK_AVATAR[look] || "fifties");
+  const avKindFor = (look) => {
+    const a = avPref !== "auto" && AV?.AVATARS[avPref];
+    if (a && !(a.seasonal && !seasonActive("halloween"))) return avPref;   // seasonal avatars go home after the holiday
+    return AV?.LOOK_AVATAR[look] || "fifties";
+  };
   function mountAvatar(look){
     if (!AV) return;
     avKind = avKindFor(look);
@@ -1670,30 +1768,55 @@ const PLAYERS = {
       clearTimeout(el._avT); el._avT = setTimeout(() => el.classList.remove("do-" + move), 3300);
     });
   }
-  if (AV) {
+  function renderAvPick(){
     $("avPick").innerHTML = `<button class="avb" type="button" role="radio" data-av="auto"><span class="auto">Auto</span><b>Match my look</b><small>Changes with it</small></button>` +
-      Object.entries(AV.AVATARS).map(([k, a]) => `<button class="avb" type="button" role="radio" data-av="${k}"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-${k}"/></svg><b>${esc(a.name)}</b><small>${esc(a.era)}</small></button>`).join("");
+      Object.entries(AV.AVATARS).filter(([k, a]) => (!a.secret || getPref("robodad.grandpa")) && (!a.seasonal || seasonActive("halloween"))).map(([k, a]) => `<button class="avb" type="button" role="radio" data-av="${k}"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-${k}"/></svg><b>${esc(a.name)}</b><small>${esc(a.era)}</small></button>`).join("");
+    $("avPick").querySelectorAll(".avb").forEach(b => b.setAttribute("aria-checked", String(b.dataset.av === avPref)));
+  }
+  // Easter egg: tap RoboDad 5 times quickly (or say "back in my day") to meet Robo-Grandpa
+  let taps = [];
+  function tapAvatar(){
+    const now = Date.now(); taps = taps.filter(t => now - t < 3000); taps.push(now);
+    if (taps.length >= 5 && AV?.AVATARS.grandpa && !getPref("robodad.grandpa")) { taps = []; unlockGrandpa(); } else avPlay();
+  }
+  function unlockGrandpa(){
+    if (!AV?.AVATARS.grandpa || getPref("robodad.grandpa")) return;
+    setPref("robodad.grandpa", "1"); renderAvPick();
+    const el = $("reveal"); if (el.hidden) revealReturn = document.activeElement;
+    el.style.setProperty("--rc", "#C9A227"); el.dataset.id = "";
+    el.innerHTML = `<div class="rays"></div><div class="confetti">${confetti(RARITY.legendary)}</div><div class="rv">
+      <p class="kicker">SECRET UNLOCKED</p>
+      <div class="big"><svg viewBox="0 0 64 64" aria-hidden="true">${AV.AVATARS.grandpa.svg}</svg></div>
+      <p class="rar">Hidden avatar</p><h2 id="revealTitle">Robo-Grandpa</h2>
+      <p class="did">Back in my day, we chatted uphill both ways. In the snow.</p>
+      <div class="row"><button class="primary" data-act="grandpa">Make him my avatar</button><button class="ghost" data-act="next">Maybe later</button></div></div>`;
+    el.hidden = false; el.querySelector("[data-act=grandpa]").focus();
+    try { window.RoboRadio && RoboRadio.chime(); } catch {}
+  }
+  if (AV) {
+    renderAvPick();
     $("avPick").addEventListener("click", (e) => {
       const b = e.target.closest(".avb"); if (!b) return;
       avPref = b.dataset.av; setPref(AV_KEY, avPref);
       mountAvatar(document.documentElement.dataset.look || "classic"); setTimeout(() => avPlay(), 250);
     });
-    $("avatar").addEventListener("click", () => avPlay());
-    $("avHero")?.addEventListener("click", () => avPlay());
+    $("avatar").addEventListener("click", tapAvatar);
+    $("avHero")?.addEventListener("click", tapAvatar);
     // a little move every 5 minutes (first one after 40 seconds), only while the page is on screen
     const idle = () => { if (!document.hidden && !document.querySelector(".overlay:not([hidden])")) avPlay(); };
     setTimeout(idle, 40000); setInterval(idle, 5 * 60 * 1000);
   }
 
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F" };
-  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26" };
+  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block", halloween:"haunt" };
   const WAKE_COPY = {
     diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
     y2k: "Dialing up at 56k… RoboDad will be ready in about 30 seconds.",
     skate: "Waxing the ledge… RoboDad will be ready in about 30 seconds.",
     gamer: "Finding a match… RoboDad will be ready in about 30 seconds.",
     summer: "Firing up the grill… RoboDad will be ready in about 30 seconds.",
+    halloween: "Waking the dead… RoboDad will be ready in about 30 seconds.",
     other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
   };
   const menuDlg = $("menuDlg");
@@ -1728,6 +1851,17 @@ const PLAYERS = {
   $("menuDone").addEventListener("click", () => { closeMenu(); input.focus(); });
   menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
   applyLook(getPref(LOOK_KEY) || "classic");
+  (function seasonal(){                        // Halloween look turns itself on once a season, and off after
+    const on = seasonActive("halloween"), look = getPref(LOOK_KEY) || "classic", flag = "robodad.season.halloween." + new Date().getFullYear();
+    menuDlg.querySelector('.look[data-look="halloween"]').hidden = !on;
+    if (on && !getPref(flag) && look !== "halloween") {
+      setPref(flag, look); applyLook("halloween");
+      setTimeout(() => { lookStation("halloween"); showCap("", "🎃 Happy Halloween! I dressed up. Change the look any time in ☰"); }, 2600);
+    } else if (!on && look === "halloween") {
+      const prev = getPref(flag) || getPref("robodad.season.halloween." + (new Date().getFullYear() - 1));
+      applyLook(prev && prev !== "halloween" ? prev : "classic");
+    }
+  })();
   if (canSpeak) { $("readRow").hidden = false; $("voiceRow").hidden = false; fillVoices();
     $("voiceSel").addEventListener("change", (e) => setVoice(e.target.value)); }
 
@@ -1765,6 +1899,7 @@ const PLAYERS = {
     squad:'<path d="M12 20.5s-8-4.6-8-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 8 2.3c0 5.6-8 10.2-8 10.2Z"/>',
     glow:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/><circle cx="12" cy="12" r="2.5"/>',
     champ:'<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5zM5 19h14"/>',
+    challenge:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/><path d="M12 3V1M21 12h2"/>',
   };
   // [id, badge name, mission, what you did, rarity]
   const SKILLS = [
@@ -1791,6 +1926,13 @@ const PLAYERS = {
   const BADGES = {};
   SKILLS.forEach(([id, name, todo, did, rar]) => BADGES[id] = { id, name, todo, did, rar });
   SETS.forEach(([id, name, did, rar, set]) => BADGES[id] = { id, name, did, rar, set });
+  // secret badge for doing 7 Daily Dad Challenges (see the challenge section)
+  const CHALLENGE_GOAL = 7;
+  BADGES.challenge = { id:"challenge", name:"Challenge Accepted", did:`${CHALLENGE_GOAL} Daily Dad Challenges done, for real.`, rar:"epic", special:true };
+  const BONUS = [...SETS.map(([id]) => id), "challenge"];
+  const isBonus = (b) => !!(b.set || b.special);
+  const CH_KEY = "robodad.challenges";
+  let chDone = []; try { chDone = JSON.parse(localStorage.getItem(CH_KEY) || "[]") || []; } catch { chDone = []; }
   const SKILL_BY_INTENT = {
     life_skill_cooking:"cook", life_skill_food:"cook", life_skill_laundry:"laundry", life_skill_money:"budget",
     life_skill_jobs:"job", life_skill_study:"study", life_skill_homework:"study", life_skill_sleep:"sleep",
@@ -1802,7 +1944,7 @@ const PLAYERS = {
   let belt = loadBelt();
   let dates = {}; try { dates = JSON.parse(localStorage.getItem(DATES_KEY) || "{}") || {}; } catch {}
   const saveBelt = () => { setPref(BELT_KEY, JSON.stringify([...belt])); setPref(DATES_KEY, JSON.stringify(dates)); };
-  const isEarned = (b) => b.set ? b.set.every(x => belt.has(x)) : belt.has(b.id);
+  const isEarned = (b) => b.special ? chDone.length >= CHALLENGE_GOAL : b.set ? b.set.every(x => belt.has(x)) : belt.has(b.id);
   const fmtDate = (d) => { try { return new Date(d + "T12:00:00").toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" }); } catch { return d; } };
   function rank(n){
     if (n >= 12) return "Undisputed Life Skills Champion";
@@ -1822,7 +1964,7 @@ const PLAYERS = {
   function badgeSVG(b, locked, opts = {}){
     const u = "bg" + (++svgUid), r = RARITY[b.rar], d = SHAPES[b.rar];
     const holo = !locked && !opts.still && (b.rar === "epic" || b.rar === "legendary");
-    const art = locked && b.set
+    const art = locked && isBonus(b)
       ? `<text x="50" y="65" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="42" fill="#fff">?</text>`
       : `<g transform="translate(26 26) scale(2)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[b.id]}</g>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"${opts.w ? ` width="${opts.w}" height="${opts.w}"` : ""} aria-hidden="true">
@@ -1868,7 +2010,7 @@ const PLAYERS = {
     $("beltMiniBadges").innerHTML = recent.map(b => `<span>${badgeSVG(b, false, { still:true })}</span>`).join("");
   }
   function cardHTML(b, justEarned){
-    const on = isEarned(b), secret = b.set && !on, r = RARITY[b.rar];
+    const on = isEarned(b), secret = isBonus(b) && !on, r = RARITY[b.rar];
     const label = `${secret ? "Secret badge" : b.name}, ${r.label}, ${on ? "unlocked" : "locked"}`;
     return `<button class="bcard ${on ? "earned" : "locked"}${b.id === justEarned ? " new" : ""}" type="button" data-badge="${b.id}" style="--rc:${r.c}" aria-label="${esc(label)}">
       <span class="bw">${badgeSVG(b, !on)}</span><span class="bn">${esc(secret ? "???" : b.name)}</span><span class="br">${secret ? "Secret" : r.label}</span></button>`;
@@ -1879,18 +2021,22 @@ const PLAYERS = {
     $("beltRank").textContent = rank(belt.size);
     $("collCount").textContent = `${belt.size} of ${SKILLS.length} unlocked`;
     $("badgeGrid").innerHTML = SKILLS.map(([id]) => cardHTML(BADGES[id], justEarned)).join("");
-    $("setGrid").innerHTML = SETS.map(([id]) => cardHTML(BADGES[id], justEarned)).join("");
+    $("setGrid").innerHTML = BONUS.map((id) => cardHTML(BADGES[id], justEarned)).join("");
   }
 
   // badge details: mission, unlock (honour system), share, remove
   let badgeReturn = null;
   function openBadge(id){
-    const b = BADGES[id], on = isEarned(b), r = RARITY[b.rar], secret = b.set && !on;
+    const b = BADGES[id], on = isEarned(b), r = RARITY[b.rar], secret = isBonus(b) && !on;
     let h = `<div class="bd-art${on ? "" : " locked"}" style="--rc:${r.c}">${badgeSVG(b, !on)}</div>
-      <p class="bd-rar" style="color:${r.c}">${secret ? "Secret bonus badge" : r.label + (b.set ? " bonus badge" : " badge")}</p>
+      <p class="bd-rar" style="color:${r.c}">${secret ? "Secret bonus badge" : r.label + (isBonus(b) ? " bonus badge" : " badge")}</p>
       <h2 id="badgeTitle">${esc(secret ? "???" : b.name)}</h2>`;
     let btns = "";
-    if (b.set) {
+    if (b.special) {
+      h += on ? `<p>${esc(b.did)}</p><p>Unlocked ${esc(fmtDate(chDone[CHALLENGE_GOAL - 1] || ""))}</p>`
+              : `<p>Do ${CHALLENGE_GOAL} Daily Dad Challenges to unlock it. You've done ${chDone.length}. Find today's on the welcome screen or in the dashboard.</p>`;
+      btns = on ? `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>` : `<button class="primary" data-act="close">Got it</button>`;
+    } else if (b.set) {
       if (on) h += `<p>${esc(b.did)}</p><p>Unlocked ${esc(fmtDate(b.set.map(x => dates[x] || "").sort().pop() || ""))}</p>`;
       else if (b.id === "champ") h += `<p>Unlock all ${SKILLS.length} life skill badges to claim this one. You have ${belt.size}.</p>`;
       else h += `<p>Collect these three to unlock it:</p><ul class="bd-need">${b.set.map(x => `<li class="${belt.has(x) ? "ok" : ""}">${esc(BADGES[x].name)}</li>`).join("")}</ul>`;
@@ -1903,7 +2049,7 @@ const PLAYERS = {
       btns = `<button class="primary" data-act="unlock">I did it for real!</button><button class="ghost" data-act="close">Not yet</button>`;
     }
     h += `<div class="row">${btns}</div>`;
-    if (on && !b.set) h += `<button class="linkbtn" data-act="remove">Remove this badge</button>`;
+    if (on && !isBonus(b)) h += `<button class="linkbtn" data-act="remove">Remove this badge</button>`;
     const body = $("badgeBody"); body.innerHTML = h; body.dataset.id = id;
     badgeReturn = document.activeElement;
     $("badgeDlg").hidden = false; body.querySelector(".row button").focus();
@@ -1935,10 +2081,10 @@ const PLAYERS = {
     const b = BADGES[id], r = RARITY[b.rar];
     el.style.setProperty("--rc", r.c); el.dataset.id = id;
     el.innerHTML = `<div class="rays"></div><div class="confetti">${confetti(r)}</div><div class="rv">
-      <p class="kicker">${b.set ? "SECRET BADGE UNLOCKED" : "BADGE UNLOCKED"}</p>
+      <p class="kicker">${isBonus(b) ? "SECRET BADGE UNLOCKED" : "BADGE UNLOCKED"}</p>
       <div class="big">${badgeSVG(b, false)}</div>
       <p class="rar">${r.label}</p><h2 id="revealTitle">${esc(b.name)}</h2>
-      <p class="did">${b.set ? esc(b.did) : "&ldquo;" + esc(b.did) + "&rdquo;"}</p>
+      <p class="did">${isBonus(b) ? esc(b.did) : "&ldquo;" + esc(b.did) + "&rdquo;"}</p>
       <div class="row"><button class="primary" data-act="next">${revealQ.length ? "Next badge" : "Let's go!"}</button><button class="ghost" data-act="share">Share</button></div></div>`;
     el.hidden = false; el.querySelector("[data-act=next]").focus();
     try { window.RoboRadio && RoboRadio.chime(); } catch {}
@@ -1946,6 +2092,7 @@ const PLAYERS = {
   $("reveal").addEventListener("click", (e) => {
     const act = e.target.closest("[data-act]")?.dataset.act;
     if (act === "next") showReveal(); else if (act === "share") shareBadge($("reveal").dataset.id);
+    else if (act === "grandpa") { avPref = "grandpa"; setPref(AV_KEY, avPref); mountAvatar(document.documentElement.dataset.look || "classic"); showReveal(); setTimeout(() => avPlay("kids"), 700); }
   });
   $("reveal").addEventListener("keydown", (e) => { if (e.key === "Escape") { revealQ.length = 0; showReveal(); } });
 
@@ -1964,11 +2111,11 @@ const PLAYERS = {
       try { await document.fonts.load("900 80px Nunito"); } catch {}
       const F = (w, px) => `${w} ${px}px Nunito, ui-rounded, system-ui, sans-serif`;
       x.textAlign = "center"; x.fillStyle = "#fff"; x.globalAlpha = .9; x.font = F(900, 36);
-      x.fillText(b.set ? "SECRET BADGE UNLOCKED" : "BADGE UNLOCKED", W / 2, 170);
+      x.fillText(isBonus(b) ? "SECRET BADGE UNLOCKED" : "BADGE UNLOCKED", W / 2, 170);
       x.globalAlpha = 1; x.fillStyle = r.g[0]; x.font = F(900, 40); x.fillText(r.label.toUpperCase(), W / 2, 905);
       x.fillStyle = "#fff"; x.font = F(900, 100); x.fillText(b.name, W / 2, 1015);
       x.globalAlpha = .85; x.font = F(700, 42);
-      const words = (b.set ? b.did : `"${b.did}"`).split(" "); let line = "", y = 1095;
+      const words = (isBonus(b) ? b.did : `"${b.did}"`).split(" "); let line = "", y = 1095;
       for (const w of words) { if (x.measureText(line + w).width > 900) { x.fillText(line.trim(), W / 2, y); y += 54; line = ""; } line += w + " "; }
       x.fillText(line.trim(), W / 2, y);
       x.globalAlpha = .7; x.font = F(800, 32); x.fillText("RoboDad · Life Skills", W / 2, 1290);
@@ -1982,6 +2129,58 @@ const PLAYERS = {
         toast("Badge image saved. Post it anywhere!");
       }
     } catch (e) { if (e?.name !== "AbortError") toast("Couldn't make the badge image. Try again."); }
+  }
+
+  // ---------- shareable picture cards (dad jokes) ----------
+  const CARD_PALETTE = { ink:"#1B2A3A", metal:"#B9C7D4", jacket:"#2B211C", jacket2:"#3D2F27", hair:"#1B2A3A", lens:"#1B2A3A", muted:"#5A6B7E" };
+  function avatarImage(px){                     // the current RoboDad as a picture, in fixed daytime colours
+    const markup = (AV ? AV.AVATARS[avKind].svg : document.getElementById("robodad").innerHTML)
+      .replace(/var\(--([a-z0-9]+)\)/g, (m, k) => CARD_PALETTE[k] || "#8896A5");
+    const img = new Image();
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${px}" height="${px}">${markup}</svg>`);
+    return img.decode().then(() => img);
+  }
+  async function deliverImage(canvas, filename, title, text){
+    const blob = await new Promise(res => canvas.toBlob(res, "image/png"));
+    const file = new File([blob], filename, { type:"image/png" });
+    if (navigator.canShare && navigator.canShare({ files:[file] })) await navigator.share({ files:[file], title, text });
+    else {
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+      toast("Picture saved. Post it anywhere!");
+    }
+  }
+  async function shareJoke(joke, kicker = "RoboDad's dad joke"){
+    joke = plain(joke).replace(/\s+/g, " ").trim(); if (!joke) return;
+    try {
+      const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+      const bg = x.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, "#FFE9A8"); bg.addColorStop(1, "#F2B533"); x.fillStyle = bg; x.fillRect(0, 0, W, H);
+      x.fillStyle = "rgba(255,255,255,.18)"; for (let i = 0; i < 14; i++) { x.beginPath(); x.arc(80 + i * 75, 120 + (i % 2) * 40, 18, 0, Math.PI * 2); x.fill(); }
+      try { await document.fonts.load("900 64px Nunito"); } catch {}
+      const F = (w, px) => `${w} ${px}px Nunito, ui-rounded, system-ui, sans-serif`;
+      x.fillStyle = "#1B2A3A"; x.font = F(900, 40); x.textAlign = "center"; x.fillText(kicker.toUpperCase(), W / 2, 130);
+      // speech bubble
+      const bx = 80, by = 190, bw = W - 160, bh = 700, r = 48;
+      x.fillStyle = "#FFFFFF"; x.strokeStyle = "#1B2A3A"; x.lineWidth = 8;
+      x.beginPath(); x.moveTo(bx + r, by); x.arcTo(bx + bw, by, bx + bw, by + bh, r); x.arcTo(bx + bw, by + bh, bx, by + bh, r);
+      x.lineTo(bx + 330, by + bh); x.lineTo(bx + 230, by + bh + 110); x.lineTo(bx + 240, by + bh);
+      x.arcTo(bx, by + bh, bx, by, r); x.arcTo(bx, by, bx + bw, by, r); x.closePath(); x.fill(); x.stroke();
+      // fit the joke inside the bubble
+      let size = 72, lines = [];
+      for (; size >= 34; size -= 4) {
+        x.font = F(800, size); lines = []; let line = "";
+        for (const w of joke.split(" ")) { if (x.measureText(line + w).width > bw - 120 && line) { lines.push(line.trim()); line = ""; } line += w + " "; }
+        if (line.trim()) lines.push(line.trim());
+        if (lines.length * size * 1.3 <= bh - 120) break;
+      }
+      x.fillStyle = "#1B2A3A"; x.textAlign = "left";
+      const top = by + (bh - lines.length * size * 1.3) / 2 + size;
+      lines.forEach((l, i) => x.fillText(l, bx + 60, top + i * size * 1.3));
+      x.drawImage(await avatarImage(360), 70, H - 400, 360, 360);
+      x.textAlign = "right"; x.font = F(900, 52); x.fillText("😩 or 😂?", W - 80, H - 230);
+      x.font = F(800, 34); x.globalAlpha = .75; x.fillText("RoboDad · robodad.onrender.com", W - 80, H - 90);
+      await deliverImage(c, "robodad-dad-joke.png", "A RoboDad dad joke", "Groan-worthy dad joke from RoboDad: robodad.onrender.com");
+    } catch (e) { if (e?.name !== "AbortError") toast("Couldn't make the joke picture. Try again."); }
   }
 
   let pendingShine = null;
@@ -2171,13 +2370,59 @@ const PLAYERS = {
   if (!canSpeak) $("qVoiceWrap").hidden = true;
   // RoboDad "says" a word in his speech bubble during some idle moves
   const SAY = { gg:"GG!", oneup:"1UP!", wave:"Hey!", peace:"Peace!", fistbump:"Bump!", victory:"Yes!", dad:"#1!", tipcap:"Howdy!",
-    hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it." };
+    hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it.", glasses:"Hmm?", nap:"Zzz…", kids:"Kids these days!", bleh:"Bleh!", cape:"Good evening.", bat:"Eek!" };
   let sayTimer = null;
   function bubbleSay(move){
     const word = SAY[move]; if (!word || !$("bubCap").hidden || !$("qVoicePop").hidden) return;
     const vb = $("voiceBtn"); $("saySpan").textContent = word; vb.classList.add("saying");
     clearTimeout(sayTimer); sayTimer = setTimeout(() => vb.classList.remove("saying"), 2200);
   }
+  function bubbleWord(word){
+    const vb = $("voiceBtn"); $("saySpan").textContent = word; vb.classList.add("saying");
+    clearTimeout(sayTimer); sayTimer = setTimeout(() => vb.classList.remove("saying"), 2600);
+  }
+
+  // ---------- Daily Dad Challenge: one small real-world task a day, no streaks ----------
+  const CHALLENGES = [
+    "Make your bed before you leave the house.", "Text or call a grandparent or relative just to say hi.", "Cook, or help cook, one meal.",
+    "Fold and put away a load of laundry.", "Write down three things you spent money on this week.", "Drink a glass of water before you look at a screen.",
+    "Go for a 15-minute walk outside.", "Tidy one drawer or shelf.", "Thank someone who doesn't usually hear it.",
+    "Ask an adult to show you how to check a tire's air pressure.", "Write tomorrow's top three to-dos tonight.", "Put your phone in another room for one hour.",
+    "Ask a parent about their very first job.", "Empty the dishwasher without being asked.", "Read something that isn't a screen for 20 minutes.",
+    "At the store, compare the unit price on two snacks.", "Take out the trash and recycling.", "Start the homework you've been avoiding first.",
+    "Learn to tie one useful knot.", "Do something kind for a sibling or a friend.", "Pack your bag the night before.",
+    "Fix or clean that one thing that's been bugging you.", "Save a little money today, even a toonie.", "Wipe down the bathroom sink.",
+    "Look up the bus or train route to somewhere new.", "Make a simple snack from scratch.", "Go to bed 30 minutes earlier tonight.",
+    "Practise introducing yourself with a firm handshake.", "Water a plant, or start one.", "Ask someone how their day was, and really listen.",
+    "Ask an adult where the main water shut-off is at home.", "Send someone a thank-you message.", "Stretch for 10 minutes.",
+    "Clean out your backpack.", "Compare two prices before you buy something.", "Help with the groceries and read the receipt.",
+    "Learn how to sew on a button.", "Hold the door for someone today.", "Plan one healthy lunch for tomorrow.",
+    "Tell a dad joke to someone in your family. Groans count.",
+  ];
+  const todayKey = () => new Date().toLocaleDateString("en-CA");
+  function todaysChallenge(){
+    const d = new Date(); const n = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);
+    return CHALLENGES[n % CHALLENGES.length];
+  }
+  function renderChallenge(){
+    const done = chDone.includes(todayKey()), n = chDone.length;
+    document.querySelectorAll(".challenge").forEach(c => {
+      c.classList.toggle("done", done);
+      c.querySelector(".ch-text").textContent = todaysChallenge();
+      const btn = c.querySelector(".ch-done"); btn.disabled = done; btn.textContent = done ? "Done today ✓" : "Done it!";
+      c.querySelector(".ch-count").textContent = n ? `${n} done so far. No streaks, no pressure.` : "Honour system. A new one every day.";
+    });
+  }
+  document.querySelectorAll(".ch-done").forEach(b => b.addEventListener("click", () => {
+    if (chDone.includes(todayKey())) return;
+    const before = isEarned(BADGES.challenge);
+    chDone.push(todayKey()); setPref(CH_KEY, JSON.stringify(chDone)); renderChallenge(); updateBeltMini();
+    nod(); bubbleWord(pick(["Proud of you!", "That's my kid!", "Atta kid!", "Nailed it!"]));
+    if (!before && isEarned(BADGES.challenge)) { revealReturn = document.activeElement; revealQ.push("challenge"); if ($("reveal").hidden) showReveal(); }
+    else toast(chDone.length === 1 ? "First challenge done. See you tomorrow for the next one." : `Nice work. That's ${chDone.length} challenges done.`);
+  }));
+  renderChallenge();
+
   // first visit: the bubbles bob once and say what they do
   function bubbleHint(){
     if (getPref("robodad.bubHint")) return;
@@ -2300,6 +2545,7 @@ const PLAYERS = {
     } catch { $("dailyJoke").textContent = "Couldn't load today's joke. Check your internet connection."; }
   }
   $("jokeMore").addEventListener("click", () => loadDaily(true));
+  $("jokeShare").addEventListener("click", () => shareJoke($("dailyJoke").textContent, "Dad joke of the day"));
 
   // ---------- nickname ----------
   const NAME_KEY = "robodad.nickname", AGE_KEY = "robodad.ageCheck";

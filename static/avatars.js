@@ -175,8 +175,49 @@
         ${eyes}${smile}
       </g>`,
     },
+    dracula: {
+      name: "Count Dadcula", era: "Halloween", seasonal: true, moves: ["cape", "bat", "bleh"],
+      svg: `<g class="collar2"><path d="M11 50 L3.5 28 L18.5 40 Z M53 50 L60.5 28 L45.5 40 Z" fill="#B3122E" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9 44 L5.5 32 M55 44 L58.5 32" stroke="#E04A64" stroke-width="1.2" opacity=".8"/></g>
+      <g class="body">${torso("#16121F")}
+        <path d="M23 49.5 L41 49.5 L32 62 Z" fill="#fff" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M24 49.5 L32 56 L40 49.5" fill="none" stroke="#B3122E" stroke-width="1.8"/>
+        <circle cx="32" cy="57.6" r="2.5" fill="#F2B533" stroke="${INK}" stroke-width=".8"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M13 25 C12 15 19 8.5 32 8 C45 8.5 52 15 51 25 C49 21 45 19.5 40 19.5 C37 19.5 34.5 20.5 32 24.5 C29.5 20.5 27 19.5 24 19.5 C19 19.5 15 21 13 25Z" fill="#15121C" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M19 14 C24 10.5 30 10 33 11 M36 11.5 C40 11 44 12.5 46.5 15" fill="none" stroke="#fff" stroke-width="1.2" opacity=".35" stroke-linecap="round"/>
+        <path d="M17.5 25.8 L27 24 M37 24 L46.5 25.8" stroke="${INK}" stroke-width="2" stroke-linecap="round"/>
+        ${eyes}${smile}
+        <path class="fangs" d="M28.3 40.5 L29.4 43.6 L30.5 40.9 Z M33.5 40.9 L34.6 43.6 L35.7 40.5 Z" fill="#fff" stroke="${INK}" stroke-width=".8" stroke-linejoin="round"/>
+      </g>
+      <path class="mv mv-bat" opacity="0" d="M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z" fill="#2A1F3D" stroke="#B3122E" stroke-width=".5"/>`,
+    },
+    grandpa: {
+      name: "Robo-Grandpa", era: "Secret", secret: true, moves: ["glasses", "nap", "kids"],
+      svg: `<g class="body">${torso("#8E3B46")}
+        <path d="M23.5 49.5 L40.5 49.5 L35 64 L29 64Z" fill="#DCE8F2" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M24 49.2 L32 53.5 L28 57 L22.5 51Z M40 49.2 L32 53.5 L36 57 L41.5 51Z" fill="#fff" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>
+        <circle cx="27.6" cy="60" r="1.1" fill="#F2D7A0" stroke="${INK}" stroke-width=".5"/><circle cx="36.4" cy="60" r="1.1" fill="#F2D7A0" stroke="${INK}" stroke-width=".5"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M19.5 20 Q25 17.3 30.5 18.2" stroke="#fff" stroke-width="1.7" opacity=".65" fill="none" stroke-linecap="round"/>
+        <path d="M12.5 21.5 C8.5 20.5 7.2 24.6 9.4 26.8 C7.3 28.3 8.6 32.4 12.4 31.4Z M51.5 21.5 C55.5 20.5 56.8 24.6 54.6 26.8 C56.7 28.3 55.4 32.4 51.6 31.4Z" fill="#EEF1F4" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M17.8 24.6 C20 22.4 25 22.4 27.6 24.6 M36.4 24.6 C39 22.4 44 22.4 46.2 24.6" stroke="${INK}" stroke-width="4.4" stroke-linecap="round" fill="none"/>
+        <path d="M17.8 24.6 C20 22.4 25 22.4 27.6 24.6 M36.4 24.6 C39 22.4 44 22.4 46.2 24.6" stroke="#EEF1F4" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+        ${eyes}
+        <g class="specs"><circle cx="23" cy="31" r="5.2" fill="#fff" fill-opacity=".18" stroke="#8A6A2E" stroke-width="1.5"/><circle cx="41" cy="31" r="5.2" fill="#fff" fill-opacity=".18" stroke="#8A6A2E" stroke-width="1.5"/>
+          <path d="M28.2 31 Q32 29 35.8 31" fill="none" stroke="#8A6A2E" stroke-width="1.5"/></g>
+        ${smile}
+      </g>
+      <g class="mv mv-zzz" opacity="0"><text x="45" y="15" font-family="Nunito, sans-serif" font-weight="900" font-size="9" fill="#5B8EC8">Z</text>
+        <text x="52" y="8" font-family="Nunito, sans-serif" font-weight="900" font-size="6.5" fill="#5B8EC8">z</text></g>
+      <g class="mv mv-gfist" opacity="0"><rect x="51.5" y="47" width="7" height="19" rx="2" fill="#8E3B46" stroke="${INK}" stroke-width="1.6"/>
+        <rect x="49.5" y="38" width="11" height="10" rx="3.5" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
+        <path d="M52.5 38.5 v3.5 M55 38.5 v3.5 M57.5 38.5 v3.5" stroke="${INK}" stroke-width="1.2"/></g>`,
+    },
   };
-  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket" };
+  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula" };
 
   function installSymbols(sprite){
     for (const [k, a] of Object.entries(AVATARS)) {
