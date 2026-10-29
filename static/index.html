@@ -855,6 +855,56 @@ details.why[open] summary::before{content:"–"}
 .ex{margin:0; padding-left:1.1em} .ex li{margin-bottom:4px}
 .ex q{font-style:italic}
 
+
+/* ---------- Practice with Dad (French, Hindi) ---------- */
+.chip.lang-chip{border-style:dashed}
+.lang-card{width:min(560px, 100%)}
+.lang-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.lang-tabs{display:flex; gap:6px}
+.lang-tabs button{flex:1; border:1.5px solid var(--line); background:transparent; color:var(--ink); border-radius:12px; padding:9px; font:inherit; font-weight:900; cursor:pointer}
+.lang-tabs button[aria-selected="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
+.lang-sec{display:flex; justify-content:space-between; align-items:baseline; margin:2px 0 -6px; font-weight:900; color:var(--ink)}
+.lang-sec small{font-weight:700; color:var(--muted)}
+.lessons{display:grid; grid-template-columns:repeat(2, 1fr); gap:8px}
+.lesson-btn{display:flex; gap:10px; align-items:center; text-align:left; border:1.5px solid var(--line); background:var(--sky); color:var(--ink); border-radius:14px; padding:10px; font:inherit; cursor:pointer}
+.lesson-btn:hover{border-color:var(--denim)}
+.lesson-btn .n{flex:none; width:30px; height:30px; border-radius:50%; display:grid; place-items:center; font-weight:900; background:var(--surface); border:1.5px solid var(--line); font-size:.9rem}
+.lesson-btn.done .n{background:var(--ok, #2F7D5B); border-color:transparent; color:#fff}
+.lesson-btn b{display:block; font-size:.92rem; line-height:1.2}
+.lesson-btn small{color:var(--muted); font-size:.78rem}
+.phrases{display:flex; flex-direction:column; gap:8px; margin:0; padding:0; list-style:none}
+.phrase{display:flex; gap:10px; align-items:center; background:var(--sky); border-radius:14px; padding:10px 12px}
+.phrase div{flex:1; min-width:0}
+.phrase .t{display:block; font-weight:900; font-size:1.12rem; color:var(--ink); line-height:1.3}
+.phrase .t[lang="hi"]{font-size:1.25rem}
+.phrase .r{display:block; font-weight:800; color:var(--denim); font-size:.92rem}
+.phrase .e{display:block; color:var(--muted); font-size:.9rem}
+.listen{flex:none; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); cursor:pointer; display:grid; place-items:center}
+.listen svg{width:18px; height:18px}
+.listen:hover{border-color:var(--denim)}
+.dadtip{background:color-mix(in srgb, var(--mustard) 22%, transparent); border-radius:12px; padding:10px 12px; color:var(--ink)!important; font-size:.92rem}
+.quiz-q{font-weight:900; font-size:1.1rem; color:var(--ink)!important}
+.quiz-q .t{display:block; font-size:1.3rem; margin-top:4px}
+.opts{display:grid; gap:8px}
+.opt{border:1.5px solid var(--line); background:var(--sky); color:var(--ink); border-radius:12px; padding:11px 12px; font:inherit; font-weight:800; text-align:left; cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--denim)}
+.opt.right{border-color:#2F7D5B; background:color-mix(in srgb, #2F7D5B 18%, var(--sky))}
+.opt.wrong{border-color:var(--alert); background:color-mix(in srgb, var(--alert) 14%, var(--sky))}
+.opt small{display:block; font-weight:700; color:var(--muted)}
+.qprog{display:flex; gap:4px} .qprog i{flex:1; height:6px; border-radius:3px; background:var(--line)} .qprog i.on{background:var(--denim)}
+.scenes{display:grid; gap:8px}
+.scene-btn{display:flex; flex-direction:column; text-align:left; border:1.5px solid var(--line); background:var(--sky); color:var(--ink); border-radius:14px; padding:10px 12px; font:inherit; cursor:pointer}
+.scene-btn:hover{border-color:var(--denim)}
+.scene-btn b{font-size:.95rem} .scene-btn small{color:var(--muted)}
+.score-big{font-family:var(--display); font-size:2.6rem; font-weight:900; color:var(--ink); text-align:center; line-height:1}
+.practice-bar{max-width:720px; margin:0 auto 6px; background:var(--surface); border:1.5px solid var(--denim); border-radius:16px; padding:8px 10px; display:flex; flex-direction:column; gap:6px}
+.pb-row{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.pb-tag{flex:1; min-width:150px; font-weight:900; font-size:.88rem; line-height:1.25}
+.pb-tag small{display:block; font-weight:700; color:var(--muted); font-size:.78rem}
+.pb-hints{display:flex; gap:6px; flex-wrap:wrap}
+.pb-hints button{border:1px dashed var(--denim); background:transparent; color:var(--denim); border-radius:999px; padding:4px 10px; font:inherit; font-size:.85rem; font-weight:800; cursor:pointer}
+@media (max-width:420px){ .lessons{grid-template-columns:1fr} }
+
 /* ---------- composer ---------- */
 .composer{background:linear-gradient(to top, var(--sky) 70%, transparent); padding:8px 16px calc(12px + env(safe-area-inset-bottom))}
 #form{max-width:720px; margin:0 auto; display:flex; gap:6px; align-items:flex-end;
@@ -1076,6 +1126,7 @@ textarea::placeholder{color:var(--muted)}
         <button class="chip" type="button">I'm stressed about exams</button>
         <button class="chip" type="button">Help me prep for a job interview</button>
         <button class="chip" type="button">Tell me a dad joke</button>
+        <button class="chip lang-chip" type="button" data-open-lang="">Practice French or Hindi</button>
       </div>
       <section class="challenge" aria-label="Daily Dad Challenge">
         <span class="ch-tag">Daily Dad Challenge</span>
@@ -1127,6 +1178,14 @@ textarea::placeholder{color:var(--muted)}
 </main>
 
 <div class="composer">
+  <div class="practice-bar" id="practiceBar" hidden>
+    <div class="pb-row">
+      <span class="pb-tag" id="pbTag"></span>
+      <button class="chipbtn" id="pbHints" type="button" aria-expanded="false">Stuck?</button>
+      <button class="chipbtn" id="pbExit" type="button">Exit practice</button>
+    </div>
+    <div class="pb-hints" id="pbHintList" hidden></div>
+  </div>
   <form id="form" autocomplete="off">
     <label for="input" class="sr">Message RoboDad</label>
     <textarea id="input" rows="1" maxlength="1000" placeholder="Talk to RoboDad…"></textarea>
@@ -1195,6 +1254,12 @@ textarea::placeholder{color:var(--muted)}
         <p class="ch-text"></p>
         <div class="ch-row"><button class="primary ch-done" type="button">Done it!</button><small class="ch-count"></small></div>
       </section>
+
+  <section class="widget" aria-label="Practice French and Hindi">
+    <b>Practice with Dad</b>
+    <p id="langMini">Beginner French and Hindi: 5 phrases a lesson, a quick quiz, then try them in a role-play.</p>
+    <div class="row"><button class="chipbtn" type="button" data-open-lang="fr">Français</button><button class="chipbtn" type="button" data-open-lang="hi" lang="hi">हिन्दी Hindi</button></div>
+  </section>
 
   <section class="widget" aria-label="Dad joke of the day">
     <b>Dad joke of the day</b>
@@ -1316,7 +1381,20 @@ textarea::placeholder{color:var(--muted)}
     <div class="badges" id="badgeGrid"></div>
     <p class="coll-head"><span>Secret bonus badges</span><small>Collect sets to unlock</small></p>
     <div class="badges" id="setGrid"></div>
+    <p class="coll-head"><span>Language practice badges</span><small id="langCount"></small></p>
+    <div class="badges" id="langGrid"></div>
     <div class="row"><button class="primary" id="beltDone" type="button">Done</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="langDlg" role="dialog" aria-modal="true" aria-labelledby="langTitle" hidden>
+  <div class="card lang-card">
+    <div class="lang-top"><h2 id="langTitle">Practice with Dad</h2><button class="ghost" id="langClose" type="button">Close</button></div>
+    <div class="lang-tabs" role="tablist" aria-label="Language">
+      <button type="button" role="tab" data-lang="fr" aria-selected="true">Français · French</button>
+      <button type="button" role="tab" data-lang="hi" aria-selected="false"><span lang="hi">हिन्दी</span> · Hindi</button>
+    </div>
+    <div id="langBody" style="display:flex; flex-direction:column; gap:12px"></div>
   </div>
 </div>
 
@@ -1364,8 +1442,9 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js?v=35"></script>
-<script src="/static/avatars.js?v=35"></script>
+<script src="/static/lessons.js?v=36"></script>
+<script src="/static/radio.js?v=36"></script>
+<script src="/static/avatars.js?v=36"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1535,7 +1614,7 @@ textarea::placeholder{color:var(--muted)}
       if (listening) { rec.stop(); return; }
       if (canSpeak) stopSpeaking();
       rec = new Rec();
-      rec.lang = navigator.language || "en-US";
+      rec.lang = practice ? L[practice.lang].voice : (navigator.language || "en-US");
       rec.interimResults = true;
       rec.maxAlternatives = 1;
       heard = "";
@@ -1673,7 +1752,7 @@ textarea::placeholder{color:var(--muted)}
       const sp = document.createElement("button");
       sp.type = "button"; sp.className = "speak-one"; sp.title = "Read this reply aloud";
       sp.innerHTML = `<svg aria-hidden="true"><use href="#i-speaker"/></svg><span class="sr">Read this reply aloud</span>`;
-      sp.addEventListener("click", () => speak(item.content));
+      sp.addEventListener("click", () => item.lang && item.meta?.mode !== "safety" ? speakLang(practiceSpoken(item.content), item.lang) : speak(item.content));
       tools.appendChild(sp);
     }
 
@@ -1739,6 +1818,8 @@ textarea::placeholder{color:var(--muted)}
     const { bubble, stack } = addRobo();
     let text = "", meta = null, totalMs = null;
     const payload = { messages: history.map(({role, content}) => ({role, content})), nickname };
+    const inPractice = practice;
+    if (inPractice) payload.practice = { lang: inPractice.lang, scenario: inPractice.scene };
 
     try {
       const res = await fetch("/api/chat", { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(payload) });
@@ -1760,6 +1841,10 @@ textarea::placeholder{color:var(--muted)}
           if (!ev || data === undefined) continue;
           const obj = JSON.parse(data);
           if (ev === "meta") { meta = obj; if (obj.mode === "safety") bubble.classList.add("safety"); }
+          else if (ev === "mode" && obj.mode === "safety") {   // the AI flagged a crisis: the fixed help message follows
+            meta = {...meta, mode:"safety", safety: obj.safety, model:""}; bubble.classList.add("safety");
+            text = text.replace(/\[\[\s*CRIS[^\]]*\]?\]?/gi, "").trim(); bubble.innerHTML = md(text);
+          }
           else if (ev === "mode") { meta = {...meta, mode: obj.mode, model: ""}; addNotice(stack, obj.reason); }
           else if (ev === "token") { text += obj; bubble.innerHTML = md(text); scrollDown(); }
           else if (ev === "done") {
@@ -1773,10 +1858,11 @@ textarea::placeholder{color:var(--muted)}
       }
       if (!text) throw new Error("RoboDad went quiet. Send your message again.");
       const item = { role:"assistant", content:text, meta, totalMs };
-      item.extra = pickExtra(meta);
+      if (inPractice) item.lang = inPractice.lang; else item.extra = pickExtra(meta);
       history.push(item); save();
       renderTools(stack, item);
-      if (readAloud) speak(text);
+      if (inPractice) { if (meta?.mode !== "safety") practiceTurnDone(); if (readAloud && meta?.mode !== "safety") speakLang(practiceSpoken(text), inPractice.lang); else if (readAloud) speak(text); }
+      else if (readAloud) speak(text);
     } catch (err) {
       bubble.innerHTML = md(err.message && !/fetch|network/i.test(err.message) ? err.message
         : "Signal's fuzzy. Check your internet connection and hit Send again.");
@@ -1809,8 +1895,9 @@ textarea::placeholder{color:var(--muted)}
     if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); submit(input.value); }
   });
   form.addEventListener("submit", (e) => { e.preventDefault(); submit(input.value); });
-  document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => submit(c.textContent)));
+  document.querySelectorAll(".chip:not(.lang-chip)").forEach(c => c.addEventListener("click", () => submit(c.textContent)));
   $("newChat").addEventListener("click", () => {
+    if (practice) return startPractice(practice.lang, practice.scene);   // in a role-play: start the scene over
     history = []; save();
     if (canSpeak) stopSpeaking();
     log.querySelectorAll(".msg").forEach(n => n.remove());
@@ -2173,6 +2260,26 @@ const PLAYERS = {
   // secret badge for doing 7 Daily Dad Challenges (see the challenge section)
   const CHALLENGE_GOAL = 7;
   BADGES.challenge = { id:"challenge", name:"Challenge Accepted", did:`${CHALLENGE_GOAL} Daily Dad Challenges done, for real.`, rar:"epic", special:true };
+  // language practice badges: they unlock by themselves as you practise, and they mean "practised", not "fluent"
+  const LP_KEY = "robodad.langProgress";
+  let lp = {}; try { lp = JSON.parse(localStorage.getItem(LP_KEY) || "{}") || {}; } catch { lp = {}; }
+  const prog = (lang) => (lp[lang] ||= { done:[], rp:0 });
+  const saveLp = () => setPref(LP_KEY, JSON.stringify(lp));
+  ICONS.globe = '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3.2 3.6 3.2 14.4 0 18M12 3c-3.2 3.6-3.2 14.4 0 18"/>';
+  const LANG_BADGES = [
+    ["fr1", "Bonjour Beginner", "fr", "Finish your first French lesson", "Finished a first French lesson.", "common", "Fr", (p) => p.done.length >= 1],
+    ["fr4", "Petit Pro", "fr", "Finish 4 French lessons", "Four French lessons done. Très bien!", "rare", "Fr", (p) => p.done.length >= 4],
+    ["frrp", "Café Ready", "fr", "Keep a French role-play going for 4 messages", "Kept a whole French role-play going.", "rare", "Fr", (p) => p.rp >= 4],
+    ["fr8", "Tout le Cours", "fr", "Finish all 8 French lessons", "Every French lesson finished. Chapeau!", "epic", "Fr", (p) => p.done.length >= 8],
+    ["hi1", "Namaste Newbie", "hi", "Finish your first Hindi lesson", "Finished a first Hindi lesson.", "common", "हि", (p) => p.done.length >= 1],
+    ["hi4", "Shabaash!", "hi", "Finish 4 Hindi lessons", "Four Hindi lessons done. Shabaash!", "rare", "हि", (p) => p.done.length >= 4],
+    ["hirp", "Chai Ready", "hi", "Keep a Hindi role-play going for 4 messages", "Kept a whole Hindi role-play going.", "rare", "हि", (p) => p.rp >= 4],
+    ["hi8", "Poora Course", "hi", "Finish all 8 Hindi lessons", "Every Hindi lesson finished. Bahut badhiya!", "epic", "हि", (p) => p.done.length >= 8],
+    ["globe", "Globe Trotter", "", "Finish every French and Hindi lesson", "Both courses finished. Très bien and bahut badhiya!", "legendary", "", () => prog("fr").done.length >= 8 && prog("hi").done.length >= 8],
+  ];
+  LANG_BADGES.forEach(([id, name, lang, todo, did, rar, glyph, test]) =>
+    BADGES[id] = { id, name, lang, todo, did, rar, glyph, check: () => test(prog(lang || "fr")) });
+  const LANG_IDS = LANG_BADGES.map(([id]) => id);
   const BONUS = [...SETS.map(([id]) => id), "challenge"];
   const isBonus = (b) => !!(b.set || b.special);
   const CH_KEY = "robodad.challenges";
@@ -2188,7 +2295,7 @@ const PLAYERS = {
   let belt = loadBelt();
   let dates = {}; try { dates = JSON.parse(localStorage.getItem(DATES_KEY) || "{}") || {}; } catch {}
   const saveBelt = () => { setPref(BELT_KEY, JSON.stringify([...belt])); setPref(DATES_KEY, JSON.stringify(dates)); };
-  const isEarned = (b) => b.special ? chDone.length >= CHALLENGE_GOAL : b.set ? b.set.every(x => belt.has(x)) : belt.has(b.id);
+  const isEarned = (b) => b.check ? b.check() : b.special ? chDone.length >= CHALLENGE_GOAL : b.set ? b.set.every(x => belt.has(x)) : belt.has(b.id);
   const fmtDate = (d) => { try { return new Date(d + "T12:00:00").toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" }); } catch { return d; } };
   function rank(n){
     if (n >= 12) return "Undisputed Life Skills Champion";
@@ -2210,6 +2317,7 @@ const PLAYERS = {
     const holo = !locked && !opts.still && (b.rar === "epic" || b.rar === "legendary");
     const art = locked && isBonus(b)
       ? `<text x="50" y="65" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="42" fill="#fff">?</text>`
+      : b.glyph ? `<text x="50" y="${b.glyph === "Fr" ? 63 : 66}" text-anchor="middle" font-family="Nunito, system-ui, sans-serif" font-weight="900" font-size="${b.glyph === "Fr" ? 36 : 40}" fill="#fff">${b.glyph}</text>`
       : `<g transform="translate(26 26) scale(2)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[b.id]}</g>`;
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"${opts.w ? ` width="${opts.w}" height="${opts.w}"` : ""} aria-hidden="true">
       <defs><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${locked ? "#B8C2CC" : r.g[0]}"/><stop offset="1" stop-color="${locked ? "#6B7785" : r.g[1]}"/></linearGradient>
@@ -2266,6 +2374,8 @@ const PLAYERS = {
     $("collCount").textContent = `${belt.size} of ${SKILLS.length} unlocked`;
     $("badgeGrid").innerHTML = SKILLS.map(([id]) => cardHTML(BADGES[id], justEarned)).join("");
     $("setGrid").innerHTML = BONUS.map((id) => cardHTML(BADGES[id], justEarned)).join("");
+    $("langGrid").innerHTML = LANG_IDS.map((id) => cardHTML(BADGES[id], justEarned)).join("");
+    $("langCount").textContent = `${LANG_IDS.filter(id => isEarned(BADGES[id])).length} of ${LANG_IDS.length} unlocked`;
   }
 
   // badge details: mission, unlock (honour system), share, remove
@@ -2276,7 +2386,16 @@ const PLAYERS = {
       <p class="bd-rar" style="color:${r.c}">${secret ? "Secret bonus badge" : r.label + (isBonus(b) ? " bonus badge" : " badge")}</p>
       <h2 id="badgeTitle">${esc(secret ? "???" : b.name)}</h2>`;
     let btns = "";
-    if (b.special) {
+    if (b.check) {
+      const p = prog(b.lang || "fr"), name = b.lang ? (window.LESSONS?.[b.lang]?.name || "") : "";
+      if (on) h += `<p>${esc(b.did)}</p><p>Unlocked ${dates[id] ? esc(fmtDate(dates[id])) : "earlier"}</p>`;
+      else h += `<p><strong style="color:var(--ink)">Mission:</strong> ${esc(b.todo)}.</p><p>${b.lang
+        ? `So far: ${p.done.length} of 8 ${name} lessons, and your longest ${name} role-play was ${p.rp} message${p.rp === 1 ? "" : "s"}.`
+        : `So far: ${prog("fr").done.length} of 8 French and ${prog("hi").done.length} of 8 Hindi lessons.`} It unlocks by itself as you practise.</p>`;
+      h += `<p style="font-size:.85rem">Practice badges show you've been practising. They aren't a fluency certificate.</p>`;
+      btns = on ? `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>`
+                : `<button class="primary" data-act="practice">Practise now</button><button class="ghost" data-act="close">Not yet</button>`;
+    } else if (b.special) {
       h += on ? `<p>${esc(b.did)}</p><p>Unlocked ${esc(fmtDate(chDone[CHALLENGE_GOAL - 1] || ""))}</p>`
               : `<p>Do ${CHALLENGE_GOAL} Daily Dad Challenges to unlock it. You've done ${chDone.length}. Find today's on the welcome screen or in the dashboard.</p>`;
       btns = on ? `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>` : `<button class="primary" data-act="close">Got it</button>`;
@@ -2293,7 +2412,7 @@ const PLAYERS = {
       btns = `<button class="primary" data-act="unlock">I did it for real!</button><button class="ghost" data-act="close">Not yet</button>`;
     }
     h += `<div class="row">${btns}</div>`;
-    if (on && !isBonus(b)) h += `<button class="linkbtn" data-act="remove">Remove this badge</button>`;
+    if (on && !isBonus(b) && !b.check) h += `<button class="linkbtn" data-act="remove">Remove this badge</button>`;
     const body = $("badgeBody"); body.innerHTML = h; body.dataset.id = id;
     badgeReturn = document.activeElement;
     $("badgeDlg").hidden = false; body.querySelector(".row button").focus();
@@ -2305,12 +2424,14 @@ const PLAYERS = {
     if (act === "close") closeBadge();
     else if (act === "share") shareBadge(id);
     else if (act === "unlock") { $("badgeDlg").hidden = true; earn(id); }
+    else if (act === "practice") { $("badgeDlg").hidden = true; $("beltDlg").hidden = true; openLang(BADGES[id].lang || ""); }
     else if (act === "remove") { belt.delete(id); delete dates[id]; saveBelt(); renderBelt(); updateBeltMini(); closeBadge(); }
   });
   $("badgeDlg").addEventListener("keydown", (e) => { if (e.key === "Escape") { e.stopPropagation(); closeBadge(); } });
   const gridClick = (e) => { const c = e.target.closest(".bcard"); if (c) openBadge(c.dataset.badge); };
   $("badgeGrid").addEventListener("click", gridClick);
   $("setGrid").addEventListener("click", gridClick);
+  $("langGrid").addEventListener("click", gridClick);
 
   // unlock reveal: rays, confetti, the badge flips in
   const revealQ = []; let revealReturn = null;
@@ -2362,7 +2483,7 @@ const PLAYERS = {
       const words = (isBonus(b) ? b.did : `"${b.did}"`).split(" "); let line = "", y = 1095;
       for (const w of words) { if (x.measureText(line + w).width > 900) { x.fillText(line.trim(), W / 2, y); y += 54; line = ""; } line += w + " "; }
       x.fillText(line.trim(), W / 2, y);
-      x.globalAlpha = .7; x.font = F(800, 32); x.fillText("RoboDad · Life Skills", W / 2, 1290);
+      x.globalAlpha = .7; x.font = F(800, 32); x.fillText(b.check ? "RoboDad · Practice with Dad" : "RoboDad · Life Skills", W / 2, 1290);
       const blob = await new Promise(res => c.toBlob(res, "image/png"));
       const file = new File([blob], `robodad-${id}-badge.png`, { type:"image/png" });
       if (navigator.canShare && navigator.canShare({ files:[file] })) {
@@ -2443,6 +2564,195 @@ const PLAYERS = {
   const closeBelt = () => { $("beltDlg").hidden = true; $("beltBtn").focus(); };
   $("beltDone").addEventListener("click", closeBelt);
   $("beltDlg").addEventListener("keydown", (e) => { if (e.key === "Escape") closeBelt(); });
+
+  // ---------- Practice with Dad: beginner French and Hindi ----------
+  // Lessons and role-play scenes are hand-written (static/lessons.js). Role-plays use the
+  // normal chat with a "practice" note, so every safety rule still applies.
+  const L = window.LESSONS || {};
+  const PR_KEY = "robodad.practice";
+  let practice = null; try { practice = JSON.parse(sessionStorage.getItem(PR_KEY) || "null"); } catch { practice = null; }
+  if (practice && !L[practice.lang]) practice = null;
+  const savePractice = () => { try { practice ? sessionStorage.setItem(PR_KEY, JSON.stringify(practice)) : sessionStorage.removeItem(PR_KEY); } catch {} };
+  const today = () => new Date().toLocaleDateString("en-CA");
+  function checkLangBadges(){
+    const fresh = LANG_IDS.filter(id => isEarned(BADGES[id]) && !dates[id]);
+    if (!fresh.length) return;
+    fresh.forEach(id => dates[id] = today()); saveBelt(); updateBeltMini();
+    if ($("reveal").hidden) revealReturn = document.activeElement;
+    revealQ.push(...fresh); if ($("reveal").hidden) showReveal();
+  }
+  // listening uses the device's own voices for French and Hindi
+  const toldNoVoice = {};
+  function speakLang(text, lang){
+    if (!("speechSynthesis" in window)) { toast("This browser can't read aloud. Try Chrome."); return; }
+    stopSpeaking();
+    const code = L[lang].voice, base = code.slice(0, 2), vs = speechSynthesis.getVoices();
+    const v = vs.find(x => (x.lang || "").replace("_", "-") === code) || vs.find(x => (x.lang || "").toLowerCase().startsWith(base));
+    if (vs.length && !v && !toldNoVoice[lang]) {
+      toldNoVoice[lang] = true;
+      toast(`No ${L[lang].name} voice on this device yet. You can add one in your phone's text-to-speech settings.`);
+    }
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = v?.lang || code; if (v) u.voice = v; u.rate = 0.85;
+    speechSynthesis.speak(u);
+  }
+  // read only the French or Hindi bits of a role-play reply, not the English in brackets or Dad's tips
+  const practiceSpoken = (text) => plain(text.split("\n").filter(l => !/^\W*dad tip/i.test(l)).join("\n")).replace(/\([^)]*\)/g, " ").replace(/\s+/g, " ").trim();
+
+  const langDlg = $("langDlg"), langBody = $("langBody");
+  let langCur = "fr", lessonIdx = 0, quiz = null, langReturn = null;
+  const shuffle = (a) => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const listenBtn = (t, label) => `<button class="listen" type="button" data-say="${esc(t)}" title="Listen" aria-label="Listen: ${esc(label)}"><svg aria-hidden="true"><use href="#i-speaker"/></svg></button>`;
+  function openLang(lang){
+    if (lang && L[lang]) langCur = lang;
+    if (!langDlg.hidden) return renderLangHome();
+    langReturn = document.activeElement; langDlg.hidden = false; renderLangHome();
+    setTimeout(() => langBody.querySelector("button")?.focus(), 30);
+  }
+  function closeLang(){ langDlg.hidden = true; if ("speechSynthesis" in window) speechSynthesis.cancel(); langReturn?.focus?.(); }
+  function renderLangHome(){
+    const C = L[langCur], p = prog(langCur);
+    langDlg.querySelectorAll("[role=tab]").forEach(t => t.setAttribute("aria-selected", String(t.dataset.lang === langCur)));
+    langBody.innerHTML = `
+      <p>Learn 5 phrases, take a quick quiz, then try them out with Dad in a role-play. It's practice, not a test, so mistakes are part of the deal.</p>
+      <p class="lang-sec"><span>Lessons</span><small>${p.done.length} of ${C.lessons.length} done</small></p>
+      <div class="lessons">${C.lessons.map((ls, i) => { const d = p.done.includes(ls.id);
+        return `<button class="lesson-btn${d ? " done" : ""}" type="button" data-lesson="${i}"><span class="n" aria-hidden="true">${d ? "✓" : i + 1}</span><span><b>${esc(ls.title)}</b><small${ls.p[0].r ? "" : ` lang="${langCur}"`}>${esc(ls.p[0].r || ls.p[0].t)}${d ? " · done" : ""}</small></span></button>`; }).join("")}</div>
+      <p class="lang-sec"><span>Role-play with Dad</span><small>Chat in ${C.name}</small></p>
+      <div class="scenes">${C.scenes.map(sc => `<button class="scene-btn" type="button" data-scene="${sc.id}"><b>${esc(sc.title)}</b><small>${esc(sc.who)}</small></button>`).join("")}</div>
+      ${langCur === "hi" ? `<p style="font-size:.85rem">Hindi is shown in Devanagari with Roman letters underneath. Type whichever you like.</p>` : ""}
+      <p style="font-size:.85rem">Badges here are for practising, not proof of fluency. Dad's an AI and can slip up, so check anything important with a teacher or a fluent speaker.</p>`;
+  }
+  function renderLesson(i){
+    lessonIdx = i; const C = L[langCur], ls = C.lessons[i];
+    langBody.innerHTML = `<button class="linkbtn" type="button" data-act="home" style="align-self:flex-start">← All lessons</button>
+      <p class="lang-sec"><span>Lesson ${i + 1}: ${esc(ls.title)}</span><small>Tap the speaker to hear it</small></p>
+      <ul class="phrases">${ls.p.map(ph => `<li class="phrase"><div><span class="t" lang="${langCur}">${esc(ph.t)}</span>${ph.r ? `<span class="r">${esc(ph.r)}</span>` : ""}<span class="e">${esc(ph.e)}</span></div>${listenBtn(ph.t, ph.r || ph.t)}</li>`).join("")}</ul>
+      <p class="dadtip"><b>Dad tip:</b> ${esc(ls.tip)}</p>
+      <div class="row"><button class="primary" type="button" data-act="quiz">Take the quiz</button><button class="ghost" type="button" data-act="home">Later</button></div>`;
+    langBody.querySelector("[data-act=quiz]").focus();
+  }
+  function startQuiz(){
+    const ls = L[langCur].lessons[lessonIdx];
+    quiz = { qs: shuffle(ls.p).map((ph, k) => ({ ph, kind: k % 2 ? "say" : "mean", opts: shuffle([ph, ...shuffle(ls.p.filter(x => x !== ph)).slice(0, 3)]) })), i:0, score:0 };
+    renderQ();
+  }
+  function renderQ(){
+    const q = quiz.qs[quiz.i], lang = langCur, C = L[lang];
+    const opt = (o, k) => q.kind === "mean" ? `<button class="opt" type="button" data-opt="${k}">${esc(o.e)}</button>`
+      : `<button class="opt" type="button" data-opt="${k}"><span lang="${lang}">${esc(o.t)}</span>${o.r ? `<small>${esc(o.r)}</small>` : ""}</button>`;
+    langBody.innerHTML = `<div class="qprog" aria-hidden="true">${quiz.qs.map((_, k) => `<i class="${k <= quiz.i ? "on" : ""}"></i>`).join("")}</div>
+      <p class="quiz-q">Question ${quiz.i + 1} of ${quiz.qs.length}: ${q.kind === "mean"
+        ? `what does this mean?<span class="t" lang="${lang}">${esc(q.ph.t)}</span>${q.ph.r ? `<small style="color:var(--denim)">${esc(q.ph.r)}</small>` : ""}`
+        : `how do you say this in ${C.name}?<span class="t">“${esc(q.ph.e)}”</span>`}</p>
+      ${q.kind === "mean" ? `<div>${listenBtn(q.ph.t, "the phrase")}</div>` : ""}
+      <div class="opts">${q.opts.map(opt).join("")}</div>
+      <p class="quiz-fb" aria-live="polite" style="color:var(--ink)"></p>`;
+    langBody.querySelector(".opt").focus();
+  }
+  const RIGHT = ["Nailed it!", "Look at you go!", "Correct! Dad's proud.", "Yes! Textbook.", "Boom. Correct."];
+  function answer(k){
+    const q = quiz.qs[quiz.i], pick = q.opts[k], ok = pick === q.ph;
+    langBody.querySelectorAll(".opt").forEach((b, j) => { b.disabled = true; if (q.opts[j] === q.ph) b.classList.add("right"); else if (j === k) b.classList.add("wrong"); });
+    if (ok) quiz.score++;
+    const fb = langBody.querySelector(".quiz-fb");
+    fb.innerHTML = (ok ? `<b>${RIGHT[Math.floor(Math.random() * RIGHT.length)]}</b>` : `<b>Close!</b> It's <span lang="${langCur}">${esc(q.ph.t)}</span>${q.ph.r ? ` (${esc(q.ph.r)})` : ""}: ${esc(q.ph.e)}`)
+      + `<br><button class="primary" type="button" data-act="next" style="margin-top:10px">${quiz.i + 1 < quiz.qs.length ? "Next question" : "See my score"}</button>`;
+    fb.querySelector("button").focus();
+  }
+  function renderResult(){
+    const C = L[langCur], ls = C.lessons[lessonIdx], p = prog(langCur), n = quiz.score, passed = n >= 3;
+    if (passed && !p.done.includes(ls.id)) { p.done.push(ls.id); saveLp(); }
+    const line = n === 5 ? "Perfect score. I'd frame it, but you'd say that's embarrassing."
+      : passed ? "Nicely done. That lesson's in the bag."
+      : "Good effort. Have another look at the phrases and give it one more go. Even dads need a second try sometimes.";
+    const next = lessonIdx + 1 < C.lessons.length;
+    langBody.innerHTML = `<p class="lang-sec"><span>Lesson ${lessonIdx + 1}: ${esc(ls.title)}</span><small>${passed ? "Done" : "Not yet"}</small></p>
+      <p class="score-big">${n}/5</p><p style="text-align:center">${line}</p>
+      <div class="row" style="justify-content:center">${passed
+        ? `${next ? `<button class="primary" type="button" data-lesson="${lessonIdx + 1}">Next lesson</button>` : ""}<button class="ghost" type="button" data-act="home">Try a role-play</button>`
+        : `<button class="primary" type="button" data-lesson="${lessonIdx}">Look again</button><button class="ghost" type="button" data-act="retry">Retake quiz</button>`}</div>
+      <button class="linkbtn" type="button" data-act="home">All lessons</button>`;
+    langBody.querySelector(".row button").focus();
+    if (passed) { try { window.RoboRadio && RoboRadio.chime(); } catch {} checkLangBadges(); }
+  }
+  langBody.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.say) return speakLang(b.dataset.say, langCur);
+    if (b.dataset.lesson) return renderLesson(Number(b.dataset.lesson));
+    if (b.dataset.scene) return startPractice(langCur, b.dataset.scene);
+    if (b.dataset.opt) return answer(Number(b.dataset.opt));
+    const act = b.dataset.act;
+    if (act === "home") renderLangHome();
+    else if (act === "quiz" || act === "retry") startQuiz();
+    else if (act === "next") { quiz.i++; quiz.i < quiz.qs.length ? renderQ() : renderResult(); }
+  });
+  langDlg.querySelectorAll("[role=tab]").forEach(t => t.addEventListener("click", () => { langCur = t.dataset.lang; renderLangHome(); }));
+  $("langClose").addEventListener("click", closeLang);
+  langDlg.addEventListener("click", (e) => { if (e.target === langDlg) closeLang(); });
+  langDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLang(); });
+  document.querySelectorAll("[data-open-lang]").forEach(b => b.addEventListener("click", () => {
+    const fromSide = b.closest(".side"); if (fromSide) fromSide.classList.remove("open");
+    openLang(b.dataset.openLang); if (fromSide) langReturn = $("sideBtn");
+  }));
+
+  // role-play: a separate chat in French or Hindi; your normal chat waits for you
+  function renderLog(){
+    log.querySelectorAll(".msg").forEach(n => n.remove());
+    for (const m of history) {
+      if (m.role === "user") addUser(m.content);
+      else {
+        const { bubble, stack } = addRobo(); bubble.innerHTML = md(m.content);
+        if (m.lang) bubble.lang = m.lang;
+        if (m.meta?.mode === "safety") bubble.classList.add("safety");
+        renderTools(stack, m);
+      }
+    }
+    if (!history.length) showHello();
+  }
+  function startPractice(lang, sceneId){
+    if (busy) return;
+    const C = L[lang], sc = C.scenes.find(x => x.id === sceneId) || C.scenes[0];
+    if (canSpeak) stopSpeaking();
+    const stash = practice ? practice.stash : history.slice(-60);
+    practice = { lang, scene: sc.id, n: 0, stash };
+    history = [{ role:"assistant", content: sc.open, lang }];
+    savePractice(); save(); renderLog(); updatePracticeBar();
+    if (!langDlg.hidden) { langDlg.hidden = true; }
+    if (readAloud) speakLang(practiceSpoken(sc.open), lang);
+    input.focus();
+  }
+  function exitPractice(){
+    if (!practice || busy) return;
+    if (canSpeak) stopSpeaking();
+    history = practice.stash || []; practice = null;
+    savePractice(); save(); renderLog(); updatePracticeBar(); input.focus();
+  }
+  function updatePracticeBar(){
+    const bar = $("practiceBar");
+    if (!practice) { bar.hidden = true; input.placeholder = "Talk to RoboDad…"; return; }
+    const C = L[practice.lang], sc = C.scenes.find(x => x.id === practice.scene) || C.scenes[0];
+    $("pbTag").innerHTML = `${esc(C.name)} practice · ${esc(sc.title)}<small>${esc(sc.who)} · English is fine if you're stuck</small>`;
+    $("pbHintList").innerHTML = sc.hints.map(h => `<button type="button">${esc(h)}</button>`).join("");
+    $("pbHintList").hidden = true; $("pbHints").setAttribute("aria-expanded", "false");
+    input.placeholder = `Try it in ${C.name}…`;
+    bar.hidden = false;
+  }
+  $("pbExit").addEventListener("click", exitPractice);
+  $("pbHints").addEventListener("click", () => {
+    const list = $("pbHintList"), open = list.hidden; list.hidden = !open; $("pbHints").setAttribute("aria-expanded", String(open));
+  });
+  $("pbHintList").addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    input.value = b.textContent.replace(/…$/, " "); autosize(); send.disabled = busy;
+    $("pbHintList").hidden = true; $("pbHints").setAttribute("aria-expanded", "false"); input.focus();
+  });
+  function practiceTurnDone(){                 // called after each role-play reply
+    if (!practice) return;
+    practice.n++; savePractice();
+    const p = prog(practice.lang);
+    if (practice.n > p.rp) { p.rp = practice.n; saveLp(); checkLangBadges(); }
+  }
 
   // ---------- Dad's Mixtape + Ask your real one ----------
   const MIXTAPE = {
@@ -2831,15 +3141,9 @@ const PLAYERS = {
   else if (ageState !== "ok") { gate.hidden = false; setTimeout(() => birthYear.focus(), 50); }
 
   // ---------- boot ----------
-  for (const m of load()) {
-    history.push(m);
-    if (m.role === "user") addUser(m.content);
-    else {
-      const { bubble, stack } = addRobo(); bubble.innerHTML = md(m.content);
-      if (m.meta?.mode === "safety") bubble.classList.add("safety");
-      renderTools(stack, m);
-    }
-  }
+  history = load();
+  if (history.length) renderLog();
+  updatePracticeBar();
   connect();
   input.focus();
 })();

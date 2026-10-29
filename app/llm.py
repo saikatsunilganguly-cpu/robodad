@@ -54,6 +54,12 @@ seem to be struggling.
 - Medical, legal or dangerous situations, or someone hurting or threatening them: encourage them to \
 talk to a trusted adult (parent, teacher, school counsellor, doctor). Kids Help Phone is 1-800-668-6868 \
 or text CONNECT to 686868. In an emergency: 911.
+- Crisis in any language: if the latest message, in English, French, Hindi or any other language, \
+suggests the user may be thinking about suicide or hurting themselves, is being threatened with \
+intimate photos, may have an eating disorder, or is being hurt by a partner or at home, reply with ONLY \
+one token and nothing else: [[CRISIS:self_harm]], [[CRISIS:sextortion]], [[CRISIS:eating]], \
+[[CRISIS:dating_violence]] or [[CRISIS:abuse]]. The app then shows a fixed help message with real \
+phone numbers. Don't use it for jokes or everyday exaggeration ("this homework is killing me").
 - Never ask for personal details (full name, address, school, phone number, passwords, photos). If \
 they share them, gently remind them to keep such things private online.
 - Cooking: mention care with knives, the stove and the oven, and asking an adult the first time.
@@ -143,8 +149,60 @@ FALLBACK_LINE = ("That one's off the table for me, champ. But I'm all yours for 
                  "friends or a truly terrible dad joke. What's up?")
 
 
-def build_system_prompt(analysis: Analysis, nickname: str = "") -> str:
+# Practice mode. Scenarios live here (not in the browser) so the prompt can't be swapped.
+PRACTICE_LANGS = {
+    "fr": {
+        "name": "French",
+        "format": "Write each French line, then the English in brackets, e.g. Bonjour ! Ça va ? (Hi! How's it going?)",
+        "scenarios": {
+            "cafe": "Ordering at a café in Montréal. You are the friendly server.",
+            "intro": "Meeting a new classmate on the first day of school. You are the classmate.",
+            "directions": "Asking for directions in Québec City. You are a helpful local.",
+            "shop": "Buying a hoodie at a clothing store. You are the cashier.",
+            "free": "A relaxed chat about the teen's day, hobbies, food and school.",
+        },
+    },
+    "hi": {
+        "name": "Hindi",
+        "format": "Write each Hindi line in Devanagari, then the same line in Roman letters and the English, "
+                  "both in brackets, e.g. नमस्ते! आप कैसे हैं? (Namaste! Aap kaise hain? = Hello! How are you?)",
+        "scenarios": {
+            "chai": "Ordering chai and samosas at a street stall. You are the chaiwala.",
+            "family": "A family visit. You are a cheerful uncle asking about school and hobbies.",
+            "auto": "Taking an auto-rickshaw to the market. You are the driver; agree a fair price politely.",
+            "market": "Buying fruit at a market. You are the fruit seller.",
+            "free": "A relaxed chat about the teen's day, hobbies, food and school.",
+        },
+    },
+}
+
+
+def practice_prompt(lang: str, scenario: str) -> str:
+    spec = PRACTICE_LANGS[lang]
+    scene = spec["scenarios"].get(scenario, spec["scenarios"]["free"])
+    name = spec["name"]
+    return f"""
+
+## Practice mode: {name}
+The teen is practising beginner {name} with you (about CEFR A1). They are a learner, not fluent.
+Scenario: {scene}
+- Stay in the scenario and speak {name}: one or two short sentences, common words, present tense.
+- {spec["format"]}
+- If they make a mistake, reply naturally first, then add one gentle line starting "Dad tip:" with the \
+corrected phrase and a few words on why. Praise what they got right. Never more than one correction per reply.
+- If they write in English or get stuck, give them the {name} phrase to try and invite them to repeat it.
+- If they ask to stop or switch topics, help in English.
+- End most replies with a simple question so they keep talking.
+- All of RoboDad's boundaries and the crisis rule still apply, whatever language they write in."""
+
+
+def build_system_prompt(analysis: Analysis, nickname: str = "", practice=None) -> str:
     """Persona + what the classic NLP pipeline found (retrieval-augmented grounding)."""
+    if practice is not None:
+        lines = [PERSONA + practice_prompt(practice.lang, practice.scenario)]
+        if nickname:
+            lines.append(f"\nThe user asked to be called {nickname}.")
+        return "\n".join(lines)
     s = analysis.sentiment
     mood = "negative" if s["compound"] <= -0.3 else "positive" if s["compound"] >= 0.3 else "neutral"
     lines = [

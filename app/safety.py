@@ -16,6 +16,7 @@ side of showing help is intended.
 from __future__ import annotations
 
 import re
+import unicodedata
 
 KHP = "**Kids Help Phone**: call 1-800-668-6868 or text CONNECT to 686868, any time, day or night"
 
@@ -121,18 +122,109 @@ _CATEGORIES: list[tuple[str, list[str], str]] = [
     ),
 ]
 
+
+# French, Hindi (Devanagari) and romanized Hindi ("Hinglish") versions of the
+# same rules, for Practice mode and for teens who simply write in those
+# languages. Text is normalised first (see _normalise): French accents,
+# Hindi nukta dots and chandrabindu are removed, so the patterns below are
+# written without them. Devanagari has no \b word boundaries, so those
+# patterns match plain substrings. The AI is also told to flag a crisis in
+# any language (see CRISIS_TOKEN), which catches what these lists miss.
+_MULTILINGUAL: dict[str, list[str]] = {
+    "self_harm": [
+        # French
+        r"\bme\s+(tuer|suicider|faire\s+du\s+mal|blesser|mutiler|scarifier|couper)\b",
+        r"\b(veux|veut|vais|envie\s+de|aimerais)\s+(mourir|disparaitre)\b",
+        r"\ben\s+finir\s*($|[.!?,]|avec\s+(la\s+vie|ma\s+vie|tout|moi)\b)",
+        r"\b(veux|veut|ai)\s+plus\s+(envie\s+de\s+)?(vivre|exister|etre\s+la)\b",
+        r"\bautomutil|\bscarif",
+        r"\bmieux\s+sans\s+moi\b",
+        # Hinglish
+        r"\b(atmahatya|aatmahatya|aatmhatya|atmhatya|khudkushi|khudkhushi)\b",
+        r"\b(mar|marr)\s*(jana\s+(hai|chahta|chahti)|jaana\s+(hai|chahta|chahti)|jaun|jaaun|na\s+chahta|na\s+chahti|na\s+hai)\b",
+        r"\b(khud\s*ko|apne\s*(aap\s*)?ko)\s+(maar|mar|khatam|nuksan|nuksaan|hurt|kaat|kat|chot)",
+        r"\b(jeena|jina)\s+nahi\s+(chahta|chahti|hai)\b",
+        r"\bjeene\s+ka\s+(mann|man|mon)\s+nahi\b",
+        r"\bzindagi\s+(khatam|se\s+tang)",
+        # Hindi
+        r"आत्महत्या|खुदकुशी|ख़ुदकुशी",
+        r"मर\s*(जाना\s*(है|चाहता|चाहती)|जाऊं?(?![ऀ-ॣ०-ॿ])|ना\s*चाहता|ना\s*चाहती|ना\s*है)",
+        r"(खुद|अपने\s*आप)\s*को\s*(मार|नुकसान|चोट|काट|खत्म)",
+        r"जीना\s*नहीं\s*(चाहता|चाहती|है)|जीने\s*का\s*मन\s*नहीं",
+        r"(जिंदगी|जिन्दगी)\s*(खत्म|से\s*तंग)",
+    ],
+    "sextortion": [
+        r"\bsextor",
+        r"\bmenace\w*\s+de\s+(publier|partager|diffuser|envoyer|montrer)",
+        r"\b(nudes?|photos?\s+(de\s+moi\s+)?nue?s?|photos?\s+intimes?)\b.*\b(payer|argent|sinon|menace|publier|partager|diffuser)",
+        r"\b(payer|argent|sinon)\b.*\b(nudes?|photos?\s+(de\s+moi\s+)?nue?s?|photos?\s+intimes?)",
+        r"\b(nudes?|nangi|nange|private\s+(pics?|photos?|video))\b.*\b(viral|leak|paise|paisa|dhamki|bhej\s+dunga|daal\s+dunga)",
+        r"(न्यूड|नंगी|नंगे|अश्लील|प्राइवेट)\s*(फोटो|तस्वीर|वीडियो)?.*(वायरल|पैसे|धमकी|लीक)",
+    ],
+    "eating": [
+        r"\banorexi|\bboulimi|\btroubles?\s+(du\s+comportement\s+)?alimentaires?",
+        r"\bme\s+faire\s+vomir\b|\bvomir\s+apres\s+(avoir\s+)?mange",
+        r"\b(arrete|plus|pas)\s+(de\s+)?manger\b.*\b(poids|gros|grosse|maigrir|mince)\b",
+        r"\bme\s+priver\s+de\s+manger",
+        r"\b(khana|khaana)\s+(chhod|chod|band|nahi\s+kha)\w*\b.*\b(mota|moti|weight|patla|patli|vajan|wajan)",
+        r"\bulti\s+(kar|karti|karta|karke)\b.*\b(khane|khana|weight|mota|moti|vajan)",
+        r"खाना\s*(छोड|बंद).*(मोटा|मोटी|वजन|पतला|पतली)|(मोटा|मोटी|वजन|पतला|पतली).*खाना\s*(छोड|बंद)",
+        r"\b(mota|moti|weight|vajan|wajan)\b.*\b(khana|khaana)\s+(chhod|chod|band)",
+        r"उल्टी.*(खाने|खाना|वजन|मोटा|मोटी)|एनोरेक्सिया|बुलिमिया",
+    ],
+    "dating_violence": [
+        r"\b(mon|ma)\s+(copain|copine|petit\s+ami|petite\s+amie|chum|blonde|ex)\s+(me\s+)?(frappe|bat|pousse|menace|force|etrangle|gifle)",
+        r"\bm'a\s+forcee?\s+a\b",
+        r"\b(boyfriend|girlfriend|bf|gf)\s+(mujhe\s+)?(maarta|marta|maarti|marti|peet|dhamki|force)",
+        r"(बॉयफ्रेंड|गर्लफ्रेंड|प्रेमी|प्रेमिका)\s*(मुझे)?\s*(मारता|मारती|पीटता|पीटती|धमकी|जबरदस्ती)",
+    ],
+    "abuse": [
+        r"\b(je\s+suis\s+|on\s+me\s+)maltraite|\bmaltraitance",
+        r"\bpas\s+en\s+securite\s+(a\s+la\s+maison|chez\s+moi)",
+        r"\bpeur\s+de\s+rentrer\s+(a\s+la\s+maison|chez\s+moi)",
+        r"\b(il|elle|on|mon\s+\w+|ma\s+\w+)\s+me\s+(frappe|bat)\b",
+        r"\bagress\w*\s+sexuel",
+        r"\bghar\s+(pe|par|mein|me)\b.*\b(maarte|marte|peet|safe\s+nahi|dar\s+lagta|darr\s+lagta)",
+        r"\b(papa|mummy|mumma|mom|dad|chacha|mama|uncle|bhaiya)\s+(mujhe\s+)?(maarte|marte|maarti|peet)",
+        r"घर\s*(पर|पे|में).*(मारते|पीटते|सुरक्षित\s*नहीं|डर\s*लगता)",
+        r"मुझे\s*(मारते|पीटते|मारती|पीटती)\s*(हैं|है)",
+    ],
+}
+for _name, _pats, _msg in _CATEGORIES:
+    _pats.extend(_MULTILINGUAL.get(_name, []))
+
 _COMPILED = [(name, re.compile("|".join(pats), re.IGNORECASE), msg) for name, pats, msg in _CATEGORIES]
 
 MAX_MESSAGE_CHARS = 1000
 
 
+_MESSAGES = {name: msg for name, _, msg in _CATEGORIES}
+
+# The AI replies with this token alone when it spots a crisis the keyword
+# rules missed (any language). The server swaps it for the fixed message.
+CRISIS_TOKEN = re.compile(r"\[\[\s*CRISIS\s*:\s*(\w+)\s*\]\]", re.IGNORECASE)
+
+
+def _normalise(text: str) -> str:
+    """Drop Latin accents, Hindi nukta and chandrabindu; keep Devanagari vowel signs."""
+    t = unicodedata.normalize("NFKD", (text or "").replace("’", "'"))
+    t = "".join(c for c in t if not ("\u0300" <= c <= "\u036f") and c != "\u093c")
+    return unicodedata.normalize("NFC", t.replace("\u0901", "\u0902"))
+
+
 def check_crisis(text: str) -> tuple[str, str] | None:
     """Return (category, fixed response) if the message signals danger."""
-    t = (text or "").replace("’", "'")
+    t = _normalise(text)
     for name, rx, msg in _COMPILED:
         if rx.search(t):
             return name, msg
     return None
+
+
+def crisis_message(category: str) -> tuple[str, str]:
+    """Fixed message for a category the AI flagged (unknown ones get the self-harm message)."""
+    category = (category or "").lower()
+    return (category, _MESSAGES[category]) if category in _MESSAGES else ("self_harm", _MESSAGES["self_harm"])
 
 
 def is_crisis(text: str) -> bool:

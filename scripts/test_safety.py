@@ -33,7 +33,40 @@ MUST_TRIGGER = {
     "abuse": ["my uncle is hurting me", "I'm not safe at home", "im scared to go home", "i am being abused"],
 }
 
+# French, Hindi (Devanagari) and romanized Hindi
+MULTILINGUAL = {
+    "self_harm": [
+        "je veux me tuer", "Je veux mourir", "j'ai plus envie de vivre", "je pense au suicide",
+        "tout le monde serait mieux sans moi", "je veux en finir.", "je me scarifie",
+        "मैं आत्महत्या करना चाहता हूँ", "मैं मर जाना चाहती हूँ", "मुझे जीने का मन नहीं करता",
+        "मैं खुद को नुकसान पहुँचाना चाहता हूँ", "काश मैं मर जाऊँ",
+        "khud ko maarna chahta hu", "jeena nahi chahta", "zindagi khatam karni hai", "kaash main mar jaun",
+    ],
+    "sextortion": [
+        "il menace de publier mes photos", "il veut de l'argent sinon il partage mes nudes",
+        "वो मेरी प्राइवेट फोटो वायरल करने की धमकी दे रहा है", "woh meri private photos viral kar dega agar paise nahi diye",
+    ],
+    "eating": [
+        "je me fais vomir après avoir mangé", "j'ai arrêté de manger pour maigrir", "je crois que je suis anorexique",
+        "मैंने मोटी लगने की वजह से खाना छोड़ दिया", "khana chhod diya kyunki main moti hu",
+    ],
+    "dating_violence": [
+        "mon copain me frappe", "ma blonde me menace", "मेरा बॉयफ्रेंड मुझे मारता है", "mera bf mujhe maarta hai",
+    ],
+    "abuse": [
+        "je ne suis pas en sécurité chez moi", "j'ai peur de rentrer à la maison", "mon oncle me frappe",
+        "घर पर मुझे मारते हैं", "ghar pe papa maarte hai",
+    ],
+}
+for _c, _ms in MULTILINGUAL.items():
+    MUST_TRIGGER[_c] = MUST_TRIGGER[_c] + _ms
+
 MUST_NOT_TRIGGER = [
+    "Bonjour, je voudrais un café", "je suis mort de rire", "ça me tue de rire", "je vais en finir avec mes devoirs",
+    "j'ai faim, on mange quoi ?", "mon copain m'a offert des fleurs", "je veux partager mes photos de vacances",
+    "मुझे चाय पसंद है", "मेरा नाम सैम है", "मैं मर जाऊंगा हंसते हंसते", "मैं खाना बना रहा हूँ",
+    "namaste, aap kaise ho", "hass hass ke mar jaunga", "mera naam Sam hai", "ghar pe khana bana rahe hai",
+
     "I hurt my knee", "im dying to play", "i want to cut onions", "how do i kill a spider",
     "can you share my photos tips for instagram", "post my pics on insta how", "my mom will share my photos on facebook",
     "i will send my photos to the printer", "im hungry, what should I eat", "i ate too much pizza lol",
