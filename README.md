@@ -385,3 +385,8 @@ See [SECURITY.md](SECURITY.md) for how to report a problem. In short:
 - FastAPI's `/docs`, `/redoc` and `/openapi.json` are switched off.
 - `.github/workflows/security.yml` runs pip-audit, gitleaks and the safety tests on every push and weekly; Dependabot proposes dependency updates.
 
+## Licence and trademarks
+
+The code is published so people can see how RoboDad works, not for reuse: see [LICENSE](LICENSE).
+"RoboDad"™, the logo, the avatar characters and the app icons are trademarks of Saikat Sunil Ganguly.
+

@@ -1,0 +1,26 @@
+Copyright (c) 2026 Saikat Sunil Ganguly. All rights reserved.
+
+RoboDad's source code is published so people can see how it works and check
+how it keeps teens safe. Publishing it does not give anyone a licence to use it.
+
+You MAY:
+  - read the code and learn from it;
+  - run a copy on your own computer for personal learning or to report a
+    security or safety issue (see SECURITY.md).
+
+You may NOT, without written permission from the copyright holder:
+  - copy, publish, distribute or sell this code, or any substantial part of it;
+  - run a public copy of RoboDad or a service based on it;
+  - publish an app on Google Play, the App Store or any other store that is
+    based on this code.
+
+TRADEMARKS. "RoboDad", the RoboDad logo, the RoboDad avatar characters and the
+app icons are trademarks of Saikat Sunil Ganguly. Nothing here grants any right
+to use them. Don't use the name or artwork in a way that suggests your project
+is RoboDad or is endorsed by it.
+
+Third-party libraries used by this project keep their own licences.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+Permission requests: saikatsunilganguly@gmail.com
