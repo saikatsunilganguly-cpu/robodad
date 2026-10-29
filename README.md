@@ -336,3 +336,17 @@ Groq's free tier allows about 3,600 characters of speech a day for the Orpheus v
 - **Bollywood '75** (permanent look): 1970s hand-painted poster style, Filmi Hero Dad (wind-machine hair flip, shoulder shimmy, "Dhishoom!" punch), film-reel player and the original **Filmi Nights '75** station (dholak-style drums, harmonium, sitar-like melody, strings). No real films, actors, dialogue or songs are referenced.
 - **Diwali Lights** (seasonal, Nov 5 to 12; Diwali 2026 is Nov 8, so update `SEASONS` each year): lights, rangoli, diyas, Festive Dad (diya, sparkler, namaste "Happy Diwali!"), diya player and the original **Diya Glow** station. Preview with `/?season=diwali`.
 - Seasons are listed in `SEASONS` in `static/index.html`; each switches on once per year, remembers the previous look and restores it afterwards.
+
+## Holiday looks and spinning centrepieces (v1.18)
+
+| Look | Dates | Dad and moves | Station | Player |
+|---|---|---|---|---|
+| Halloween | Oct 15 to Nov 2 (every year) | Count Dadcula: cape, bat, "Bleh!" | Haunted Hayride | jack-o'-lantern |
+| Diwali Lights | 2026-11-05 to 11-12 | Festive Dad: diya, sparkler, namaste | Diya Glow | diya |
+| Winter Holidays | Dec 15 to Jan 2 (every year) | Cozy Dad: cocoa, snowball, pompom | Snow Day | snow globe |
+| Lunar New Year | 2027-02-02 to 02-14 | Lucky Dad: lantern, red envelope, firecrackers | Lantern Festival | lantern |
+| Eid | 2027-03-07 to 03-13 and 2027-05-14 to 05-19 | Eid Dad: "Eid Mubarak!" wave, lantern, sweets | Crescent Night | lantern |
+
+Diwali, Lunar New Year and Eid move every year: update their `YYYY-MM-DD` ranges in `SEASONS` (`static/index.html`). Each holiday switches on once per run (remembering the previous look) and restores it afterwards. Preview any of them with `/?season=<name>`.
+
+Every look also has a slowly rotating centrepiece (`.spinner`), drawn as an inline SVG per look; it stops for anyone using reduced motion.

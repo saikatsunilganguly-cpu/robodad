@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Creepster&family=Rozha+One&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Bungee&family=Creepster&family=Rozha+One&family=Sniglet:wght@800&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -102,6 +102,24 @@
   --denim:#FFB000; --denim-ink:#2A1600; --mustard:#C2185B; --mustard-ink:#FFFFFF;
   --metal:#7D79A8; --alert:#FF6B6B; --ok:#8BE04E; --glow:color-mix(in srgb, #FFB000 50%, transparent);
   --display:"Rozha One", "Nunito", serif; color-scheme:dark;
+}
+:root[data-look="winter"]{
+  --sky:#0E1F3A; --surface:#16294A; --ink:#F1F7FF; --muted:#A9BDD6; --line:#2A436B;
+  --denim:#E84855; --denim-ink:#FFFFFF; --mustard:#2BB673; --mustard-ink:#03190D;
+  --metal:#6A7FA3; --alert:#FF6B6B; --ok:#2BB673; --glow:color-mix(in srgb, #BFE3FF 45%, transparent);
+  --display:"Sniglet", "Nunito", sans-serif; color-scheme:dark;
+}
+:root[data-look="lunar"]{
+  --sky:#7A0E14; --surface:#94151D; --ink:#FFF4E0; --muted:#F3C9A8; --line:#B8333A;
+  --denim:#F5C04A; --denim-ink:#3A0A06; --mustard:#F5C04A; --mustard-ink:#3A0A06;
+  --metal:#7E6670; --alert:#FFD27A; --ok:#F5C04A; --glow:color-mix(in srgb, #F5C04A 45%, transparent);
+  --display:"Rozha One", "Nunito", serif; color-scheme:dark;
+}
+:root[data-look="eid"]{
+  --sky:#0B2A33; --surface:#11404C; --ink:#F4FBF8; --muted:#A8CFC6; --line:#1E5B68;
+  --denim:#F2C14E; --denim-ink:#2A1E00; --mustard:#2EC4B6; --mustard-ink:#03201D;
+  --metal:#557883; --alert:#FF8A80; --ok:#2EC4B6; --glow:color-mix(in srgb, #F2C14E 45%, transparent);
+  --display:"Amiri", "Nunito", serif; color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -194,6 +212,80 @@ button,textarea{font:inherit;color:inherit}
 :root[data-look="y2k"] .cassette .buffer{display:block; width:24px; height:24px; animation:spin45 .9s linear infinite}
 :root[data-look="y2k"] .cassette .t-y2k{display:inline}
 
+/* ---------- spinning centerpieces (one per look) ---------- */
+.spinner{display:none; position:absolute; z-index:-1; top:4px; right:-8px; width:130px; height:130px; background:no-repeat center / contain; pointer-events:none; animation:radar 48s linear infinite}
+:root:not([data-look]) .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cpolygon points='128.0%2C70.0 127.3%2C79.1 115.7%2C84.8 112.8%2C91.8 116.9%2C104.1 111.0%2C111.0 98.2%2C108.8 91.8%2C112.8 87.9%2C125.2 79.1%2C127.3 70.0%2C118.0 62.5%2C117.4 52.1%2C125.2 43.7%2C121.7 41.8%2C108.8 36.1%2C103.9 23.1%2C104.1 18.3%2C96.3 24.3%2C84.8 22.6%2C77.5 12.0%2C70.0 12.7%2C60.9 24.3%2C55.2 27.2%2C48.2 23.1%2C35.9 29.0%2C29.0 41.8%2C31.2 48.2%2C27.2 52.1%2C14.8 60.9%2C12.7 70.0%2C22.0 77.5%2C22.6 87.9%2C14.8 96.3%2C18.3 98.2%2C31.2 103.9%2C36.1 116.9%2C35.9 121.7%2C43.7 115.7%2C55.2 117.4%2C62.5' fill='%232E5C8A' fill-opacity='.14' stroke='%232E5C8A' stroke-opacity='.35' stroke-width='2'/%3E%3Ccircle cx='70' cy='70' r='22' fill='none' stroke='%232E5C8A' stroke-opacity='.35' stroke-width='3'/%3E%3Ccircle cx='70' cy='70' r='8' fill='%232E5C8A' fill-opacity='.3'/%3E%3C/svg%3E"); opacity:.9}
+:root[data-look="arcade"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cpolygon points='132.0%2C70.0 97.7%2C81.5 113.8%2C113.8 81.5%2C97.7 70.0%2C132.0 58.5%2C97.7 26.2%2C113.8 42.3%2C81.5 8.0%2C70.0 42.3%2C58.5 26.2%2C26.2 58.5%2C42.3 70.0%2C8.0 81.5%2C42.3 113.8%2C26.2 97.7%2C58.5' fill='none' stroke='%23FF3EA5' stroke-width='3'/%3E%3Cpolygon points='110.7%2C86.8 85.6%2C85.6 86.8%2C110.7 70.0%2C92.0 53.2%2C110.7 54.4%2C85.6 29.3%2C86.8 48.0%2C70.0 29.3%2C53.2 54.4%2C54.4 53.2%2C29.3 70.0%2C48.0 86.8%2C29.3 85.6%2C54.4 110.7%2C53.2 92.0%2C70.0' fill='none' stroke='%232DE2E6' stroke-width='3'/%3E%3Ccircle cx='70' cy='70' r='10' fill='%23FF3EA5' fill-opacity='.7'/%3E%3C/svg%3E"); filter:drop-shadow(0 0 6px #FF3EA5); opacity:.85}
+:root[data-look="vhs"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='70' r='60' fill='%23FF7A59' fill-opacity='.25' stroke='%23FFB547' stroke-width='4'/%3E%3Cpath d='M88.0 70.0 L122.0 70.0' stroke='%23FFB547' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M79.0 85.6 L96.0 115.0' stroke='%23FFB547' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M61.0 85.6 L44.0 115.0' stroke='%23FFB547' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M52.0 70.0 L18.0 70.0' stroke='%23FFB547' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M61.0 54.4 L44.0 25.0' stroke='%23FFB547' stroke-width='9' stroke-linecap='round'/%3E%3Cpath d='M79.0 54.4 L96.0 25.0' stroke='%23FFB547' stroke-width='9' stroke-linecap='round'/%3E%3Ccircle cx='70' cy='70' r='16' fill='%232B1634' stroke='%23FFB547' stroke-width='4'/%3E%3C/svg%3E"); opacity:.75}
+:root[data-look="y2k"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cellipse cx='104.0' cy='70.0' rx='24' ry='14' transform='rotate%280 104.0 70.0%29' fill='%237FC8FF' fill-opacity='.55' stroke='%23fff' stroke-width='2'/%3E%3Cellipse cx='87.0' cy='99.4' rx='24' ry='14' transform='rotate%2860 87.0 99.4%29' fill='%237FC8FF' fill-opacity='.55' stroke='%23fff' stroke-width='2'/%3E%3Cellipse cx='53.0' cy='99.4' rx='24' ry='14' transform='rotate%28120 53.0 99.4%29' fill='%237FC8FF' fill-opacity='.55' stroke='%23fff' stroke-width='2'/%3E%3Cellipse cx='36.0' cy='70.0' rx='24' ry='14' transform='rotate%28180 36.0 70.0%29' fill='%237FC8FF' fill-opacity='.55' stroke='%23fff' stroke-width='2'/%3E%3Cellipse cx='53.0' cy='40.6' rx='24' ry='14' transform='rotate%28240 53.0 40.6%29' fill='%237FC8FF' fill-opacity='.55' stroke='%23fff' stroke-width='2'/%3E%3Cellipse cx='87.0' cy='40.6' rx='24' ry='14' transform='rotate%28300 87.0 40.6%29' fill='%237FC8FF' fill-opacity='.55' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='70' cy='70' r='16' fill='%23B6F28E' stroke='%23fff' stroke-width='3'/%3E%3Ccircle cx='64' cy='64' r='5' fill='%23fff' fill-opacity='.8'/%3E%3C/svg%3E"); opacity:.9}
+:root[data-look="diner"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='70' r='62' fill='%231E1E24'/%3E%3Ccircle cx='70' cy='70' r='52' fill='%23E3E8EB' stroke='%239AA6AE' stroke-width='3'/%3E%3Cpath d='M84.0 70.0 L116.0 70.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M82.1 77.0 L109.8 93.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M77.0 82.1 L93.0 109.8' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M70.0 84.0 L70.0 116.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M63.0 82.1 L47.0 109.8' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M57.9 77.0 L30.2 93.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M56.0 70.0 L24.0 70.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M57.9 63.0 L30.2 47.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M63.0 57.9 L47.0 30.2' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M70.0 56.0 L70.0 24.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M77.0 57.9 L93.0 30.2' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M82.1 63.0 L109.8 47.0' stroke='%239AA6AE' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='70' cy='70' r='14' fill='%23D7263D' stroke='%239AA6AE' stroke-width='3'/%3E%3C/svg%3E"); width:110px; height:110px; top:110px; right:-30px; opacity:.9}
+:root[data-look="skate"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='70' r='62' fill='%23F6E7A8' stroke='%231C1C1C' stroke-width='5'/%3E%3Ccircle cx='70' cy='70' r='40' fill='none' stroke='%23E9D27A' stroke-width='6'/%3E%3Ccircle cx='70' cy='70' r='20' fill='%239AA5AE' stroke='%231C1C1C' stroke-width='4'/%3E%3Ccircle cx='70' cy='70' r='7' fill='%231C1C1C'/%3E%3Ccircle cx='83.5' cy='70.0' r='2.6' fill='%231C1C1C'/%3E%3Ccircle cx='78.4' cy='80.6' r='2.6' fill='%231C1C1C'/%3E%3Ccircle cx='67.0' cy='83.2' r='2.6' fill='%231C1C1C'/%3E%3Ccircle cx='57.8' cy='75.9' r='2.6' fill='%231C1C1C'/%3E%3Ccircle cx='57.8' cy='64.1' r='2.6' fill='%231C1C1C'/%3E%3Ccircle cx='67.0' cy='56.8' r='2.6' fill='%231C1C1C'/%3E%3Ccircle cx='78.4' cy='59.4' r='2.6' fill='%231C1C1C'/%3E%3C/svg%3E"); z-index:-2; width:150px; height:150px; top:-6px; right:-40px}
+:root[data-look="summer"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cpath d='M70 70 L130.0 70.0 A60 60 0 0 1 100.0 122.0Z' fill='%23E2541F'/%3E%3Cpath d='M70 70 L100.0 122.0 A60 60 0 0 1 40.0 122.0Z' fill='%23FFFFFF'/%3E%3Cpath d='M70 70 L40.0 122.0 A60 60 0 0 1 10.0 70.0Z' fill='%231FA2D8'/%3E%3Cpath d='M70 70 L10.0 70.0 A60 60 0 0 1 40.0 18.0Z' fill='%23FFFFFF'/%3E%3Cpath d='M70 70 L40.0 18.0 A60 60 0 0 1 100.0 18.0Z' fill='%23FFC93C'/%3E%3Cpath d='M70 70 L100.0 18.0 A60 60 0 0 1 130.0 70.0Z' fill='%23FFFFFF'/%3E%3Ccircle cx='70' cy='70' r='60' fill='none' stroke='%232B1A0E' stroke-width='3'/%3E%3Ccircle cx='70' cy='70' r='10' fill='%23fff' stroke='%232B1A0E' stroke-width='3'/%3E%3Cellipse cx='50' cy='42' rx='14' ry='7' fill='%23fff' fill-opacity='.5' transform='rotate%28-30 50 42%29'/%3E%3C/svg%3E"); width:96px; height:96px; top:14px; right:6px; animation-duration:14s}
+:root[data-look="bolly"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cellipse cx='122.0' cy='70.0' rx='11' ry='6' transform='rotate%280 122.0 70.0%29' fill='%23FF9A1F'/%3E%3Cellipse cx='118.9' cy='87.8' rx='11' ry='6' transform='rotate%2820 118.9 87.8%29' fill='%23FF9A1F'/%3E%3Cellipse cx='109.8' cy='103.4' rx='11' ry='6' transform='rotate%2840 109.8 103.4%29' fill='%23FF9A1F'/%3E%3Cellipse cx='96.0' cy='115.0' rx='11' ry='6' transform='rotate%2860 96.0 115.0%29' fill='%23FF9A1F'/%3E%3Cellipse cx='79.0' cy='121.2' rx='11' ry='6' transform='rotate%2880 79.0 121.2%29' fill='%23FF9A1F'/%3E%3Cellipse cx='61.0' cy='121.2' rx='11' ry='6' transform='rotate%28100 61.0 121.2%29' fill='%23FF9A1F'/%3E%3Cellipse cx='44.0' cy='115.0' rx='11' ry='6' transform='rotate%28120 44.0 115.0%29' fill='%23FF9A1F'/%3E%3Cellipse cx='30.2' cy='103.4' rx='11' ry='6' transform='rotate%28140 30.2 103.4%29' fill='%23FF9A1F'/%3E%3Cellipse cx='21.1' cy='87.8' rx='11' ry='6' transform='rotate%28160 21.1 87.8%29' fill='%23FF9A1F'/%3E%3Cellipse cx='18.0' cy='70.0' rx='11' ry='6' transform='rotate%28180 18.0 70.0%29' fill='%23FF9A1F'/%3E%3Cellipse cx='21.1' cy='52.2' rx='11' ry='6' transform='rotate%28200 21.1 52.2%29' fill='%23FF9A1F'/%3E%3Cellipse cx='30.2' cy='36.6' rx='11' ry='6' transform='rotate%28220 30.2 36.6%29' fill='%23FF9A1F'/%3E%3Cellipse cx='44.0' cy='25.0' rx='11' ry='6' transform='rotate%28240 44.0 25.0%29' fill='%23FF9A1F'/%3E%3Cellipse cx='61.0' cy='18.8' rx='11' ry='6' transform='rotate%28260 61.0 18.8%29' fill='%23FF9A1F'/%3E%3Cellipse cx='79.0' cy='18.8' rx='11' ry='6' transform='rotate%28280 79.0 18.8%29' fill='%23FF9A1F'/%3E%3Cellipse cx='96.0' cy='25.0' rx='11' ry='6' transform='rotate%28300 96.0 25.0%29' fill='%23FF9A1F'/%3E%3Cellipse cx='109.8' cy='36.6' rx='11' ry='6' transform='rotate%28320 109.8 36.6%29' fill='%23FF9A1F'/%3E%3Cellipse cx='118.9' cy='52.2' rx='11' ry='6' transform='rotate%28340 118.9 52.2%29' fill='%23FF9A1F'/%3E%3Cellipse cx='107.2' cy='77.5' rx='9' ry='5' transform='rotate%2811 107.2 77.5%29' fill='%23FFC93C'/%3E%3Cellipse cx='100.3' cy='93.0' rx='9' ry='5' transform='rotate%2837 100.3 93.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='87.3' cy='103.8' rx='9' ry='5' transform='rotate%2863 87.3 103.8%29' fill='%23FFC93C'/%3E%3Cellipse cx='70.9' cy='108.0' rx='9' ry='5' transform='rotate%2889 70.9 108.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='54.4' cy='104.6' rx='9' ry='5' transform='rotate%28114 54.4 104.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='40.9' cy='94.4' rx='9' ry='5' transform='rotate%28140 40.9 94.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='33.2' cy='79.4' rx='9' ry='5' transform='rotate%28166 33.2 79.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='32.8' cy='62.5' rx='9' ry='5' transform='rotate%28191 32.8 62.5%29' fill='%23FFC93C'/%3E%3Cellipse cx='39.7' cy='47.0' rx='9' ry='5' transform='rotate%28217 39.7 47.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='52.7' cy='36.2' rx='9' ry='5' transform='rotate%28243 52.7 36.2%29' fill='%23FFC93C'/%3E%3Cellipse cx='69.1' cy='32.0' rx='9' ry='5' transform='rotate%28269 69.1 32.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='85.6' cy='35.4' rx='9' ry='5' transform='rotate%28294 85.6 35.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='99.1' cy='45.6' rx='9' ry='5' transform='rotate%28320 99.1 45.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='106.8' cy='60.6' rx='9' ry='5' transform='rotate%28346 106.8 60.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='92.1' cy='79.3' rx='7' ry='4' transform='rotate%2823 92.1 79.3%29' fill='%23C2185B'/%3E%3Cellipse cx='82.4' cy='90.6' rx='7' ry='4' transform='rotate%2859 82.4 90.6%29' fill='%23C2185B'/%3E%3Cellipse cx='67.9' cy='93.9' rx='7' ry='4' transform='rotate%2895 67.9 93.9%29' fill='%23C2185B'/%3E%3Cellipse cx='54.3' cy='88.1' rx='7' ry='4' transform='rotate%28131 54.3 88.1%29' fill='%23C2185B'/%3E%3Cellipse cx='46.6' cy='75.4' rx='7' ry='4' transform='rotate%28167 46.6 75.4%29' fill='%23C2185B'/%3E%3Cellipse cx='47.9' cy='60.7' rx='7' ry='4' transform='rotate%28203 47.9 60.7%29' fill='%23C2185B'/%3E%3Cellipse cx='57.6' cy='49.4' rx='7' ry='4' transform='rotate%28239 57.6 49.4%29' fill='%23C2185B'/%3E%3Cellipse cx='72.1' cy='46.1' rx='7' ry='4' transform='rotate%28275 72.1 46.1%29' fill='%23C2185B'/%3E%3Cellipse cx='85.7' cy='51.9' rx='7' ry='4' transform='rotate%28311 85.7 51.9%29' fill='%23C2185B'/%3E%3Cellipse cx='93.4' cy='64.6' rx='7' ry='4' transform='rotate%28347 93.4 64.6%29' fill='%23C2185B'/%3E%3Ccircle cx='70' cy='70' r='12' fill='%230F8B8D'/%3E%3Ccircle cx='70' cy='70' r='5' fill='%23FFF1D9'/%3E%3C/svg%3E"); opacity:.95}
+:root[data-look="halloween"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cpath transform='translate%28116.0 70.0%29 rotate%2890 10 0%29 scale%281.45%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z' fill='%23120A1E' stroke='%233B2758' stroke-width='.4'/%3E%3Cpath transform='translate%2877.3 123.3%29 rotate%28162 10 0%29 scale%281.45%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z' fill='%23120A1E' stroke='%233B2758' stroke-width='.4'/%3E%3Cpath transform='translate%2814.7 102.9%29 rotate%28234 10 0%29 scale%281.45%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z' fill='%23120A1E' stroke='%233B2758' stroke-width='.4'/%3E%3Cpath transform='translate%2814.7 37.1%29 rotate%28306 10 0%29 scale%281.45%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z' fill='%23120A1E' stroke='%233B2758' stroke-width='.4'/%3E%3Cpath transform='translate%2877.3 16.7%29 rotate%28378 10 0%29 scale%281.45%29' d='M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z' fill='%23120A1E' stroke='%233B2758' stroke-width='.4'/%3E%3C/svg%3E"); width:112px; height:112px; top:-10px; right:-4px; animation-duration:16s}
+:root[data-look="winter"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cg opacity='.85'%3E%3Cpath d='M70 70 L130.0 70.0' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M96.0 70.0 L105.9 60.1' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M96.0 70.0 L105.9 79.9' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M112.0 70.0 L119.8 62.2' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M112.0 70.0 L119.8 77.8' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M70 70 L100.0 122.0' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M83.0 92.5 L96.5 96.1' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M83.0 92.5 L79.4 106.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M91.0 106.4 L101.6 109.2' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M91.0 106.4 L88.2 117.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M70 70 L40.0 122.0' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M57.0 92.5 L60.6 106.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M57.0 92.5 L43.5 96.1' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M49.0 106.4 L51.8 117.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M49.0 106.4 L38.4 109.2' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M70 70 L10.0 70.0' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M44.0 70.0 L34.1 79.9' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M44.0 70.0 L34.1 60.1' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M28.0 70.0 L20.2 77.8' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M28.0 70.0 L20.2 62.2' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M70 70 L40.0 18.0' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M57.0 47.5 L43.5 43.9' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M57.0 47.5 L60.6 34.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M49.0 33.6 L38.4 30.8' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M49.0 33.6 L51.8 23.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M70 70 L100.0 18.0' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M83.0 47.5 L79.4 34.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M83.0 47.5 L96.5 43.9' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M91.0 33.6 L88.2 23.0' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M91.0 33.6 L101.6 30.8' stroke='%23fff' stroke-width='4' stroke-linecap='round'/%3E%3C/g%3E%3Ccircle cx='70' cy='70' r='9' fill='%23fff'/%3E%3C/svg%3E"); opacity:.8; animation-duration:60s}
+:root[data-look="lunar"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='70' r='64' fill='%23E8262E' stroke='%23F5C04A' stroke-width='4'/%3E%3Cpath d='M70 70 Q107.6 56.3 130.0 70.0 Q107.6 83.7 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q106.3 86.9 112.4 112.4 Q86.9 106.3 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q83.7 107.6 70.0 130.0 Q56.3 107.6 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q53.1 106.3 27.6 112.4 Q33.7 86.9 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q32.4 83.7 10.0 70.0 Q32.4 56.3 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q33.7 53.1 27.6 27.6 Q53.1 33.7 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q56.3 32.4 70.0 10.0 Q83.7 32.4 70 70Z' fill='%23F5C04A'/%3E%3Cpath d='M70 70 Q86.9 33.7 112.4 27.6 Q106.3 53.1 70 70Z' fill='%23F5C04A'/%3E%3Ccircle cx='70' cy='70' r='20' fill='%23E8262E' stroke='%23F5C04A' stroke-width='3'/%3E%3Ccircle cx='70' cy='70' r='12' fill='none' stroke='%23F5C04A' stroke-width='2' stroke-dasharray='4 3'/%3E%3C/svg%3E"); width:116px; height:116px}
+:root[data-look="eid"] .spinner{display:block; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Cpolygon points='130.0%2C70.0 70.0%2C130.0 10.0%2C70.0 70.0%2C10.0' fill='none' stroke='%23F2C14E' stroke-width='3'/%3E%3Cpolygon points='112.4%2C112.4 27.6%2C112.4 27.6%2C27.6 112.4%2C27.6' fill='none' stroke='%23F2C14E' stroke-width='3'/%3E%3Cpolygon points='112.0%2C70.0 97.7%2C81.5 99.7%2C99.7 81.5%2C97.7 70.0%2C112.0 58.5%2C97.7 40.3%2C99.7 42.3%2C81.5 28.0%2C70.0 42.3%2C58.5 40.3%2C40.3 58.5%2C42.3 70.0%2C28.0 81.5%2C42.3 99.7%2C40.3 97.7%2C58.5' fill='%23F2C14E' fill-opacity='.25' stroke='%23F2C14E' stroke-width='2'/%3E%3Ccircle cx='70' cy='70' r='14' fill='none' stroke='%232EC4B6' stroke-width='3'/%3E%3Ccircle cx='70' cy='70' r='5' fill='%23F2C14E'/%3E%3C/svg%3E"); opacity:.95; animation-duration:70s}
+/* ---------- Winter Holidays (seasonal) ---------- */
+:root[data-look="winter"] body{background:linear-gradient(#0E1F3A, #142B52) fixed}
+:root[data-look="winter"] body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:30;
+  background:radial-gradient(circle, rgba(255,255,255,.9) 0 1.6px, transparent 2.2px) 0 0 / 70px 70px, radial-gradient(circle, rgba(255,255,255,.6) 0 1.2px, transparent 1.8px) 35px 20px / 50px 50px;
+  animation:snowfall 14s linear infinite; opacity:.7}
+@keyframes snowfall{to{background-position:20px 700px, 55px 520px}}
+:root[data-look="winter"] .top{background:rgba(14,31,58,.92); border-bottom:1px solid #2A436B}
+:root[data-look="winter"] .hello h2{color:#fff; text-shadow:0 2px 0 #E84855, 0 0 16px rgba(191,227,255,.4); line-height:1.12}
+:root[data-look="winter"] .hello::after{content:""; position:absolute; z-index:-1; left:-24px; right:-24px; bottom:-30px; height:40px;
+  background:radial-gradient(ellipse 60px 22px at 50% 100%, #F1F7FF 98%, transparent) 0 0 / 120px 40px repeat-x; opacity:.9}
+:root[data-look="winter"] :is(.send,.primary){box-shadow:0 0 14px rgba(232,72,85,.4)}
+.pv.winter{background:linear-gradient(#0E1F3A, #1F3A68)}
+.pv.winter::after{content:""; position:absolute; inset:0; background:radial-gradient(circle, #fff 0 1.4px, transparent 2px) 0 0 / 14px 14px; opacity:.6}
+/* ---------- Lunar New Year (seasonal) ---------- */
+:root[data-look="lunar"] body{background:radial-gradient(circle at 50% -20%, #B3122E 0, transparent 60%), radial-gradient(circle, rgba(245,192,74,.12) 1.5px, transparent 2px) 0 0 / 24px 24px, #7A0E14 fixed}
+:root[data-look="lunar"] .top{background:rgba(122,14,20,.94); border-bottom:2px solid #F5C04A}
+:root[data-look="lunar"] .hello h2{color:#F5C04A; text-shadow:2px 2px 0 #3A0A06; line-height:1.12}
+:root[data-look="lunar"] .hello::before{content:""; position:absolute; z-index:-1; top:-24px; left:46%; width:70px; height:110px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 110'%3E%3Cpath d='M18 0 V22 M52 0 V44' stroke='%23F5C04A' stroke-width='1.5'/%3E%3Cg%3E%3Cellipse cx='18' cy='36' rx='14' ry='15' fill='%23E8262E' stroke='%233A0A06' stroke-width='1.5'/%3E%3Cpath d='M11 21 h14 M11 51 h14' stroke='%23F5C04A' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M18 52 v10' stroke='%23F5C04A' stroke-width='1.5'/%3E%3C/g%3E%3Cg%3E%3Cellipse cx='52' cy='58' rx='12' ry='13' fill='%23E8262E' stroke='%233A0A06' stroke-width='1.5'/%3E%3Cpath d='M46 45 h12 M46 71 h12' stroke='%23F5C04A' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M52 72 v9' stroke='%23F5C04A' stroke-width='1.5'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+  transform-origin:50% 0; animation:sway 4s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-3deg)} to{transform:rotate(3deg)}}
+:root[data-look="lunar"] :is(.chip,.send,.primary){border:1.5px solid #F5C04A}
+.pv.lunar{background:radial-gradient(circle at 50% 0, #B3122E, #7A0E14 70%)}
+.pv.lunar::after{content:""; position:absolute; right:10px; top:4px; width:16px; height:18px; border-radius:50%; background:#E8262E; border:2px solid #F5C04A}
+/* ---------- Eid (seasonal) ---------- */
+:root[data-look="eid"] body{background:radial-gradient(ellipse at 50% -10%, #1A5664 0, transparent 60%), radial-gradient(circle, rgba(242,193,78,.18) 1px, transparent 1.6px) 0 0 / 26px 26px, #0B2A33 fixed}
+:root[data-look="eid"] .top{background:rgba(11,42,51,.94); border-bottom:1px solid #1E5B68; box-shadow:0 1px 0 rgba(242,193,78,.3)}
+:root[data-look="eid"] .hello h2{color:#F2C14E; text-shadow:0 0 16px var(--glow); line-height:1.15}
+:root[data-look="eid"] .hello::before{content:""; position:absolute; z-index:-1; top:-14px; left:44%; width:66px; height:66px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 66 66'%3E%3Cpath d='M40 8 A24 24 0 1 0 40 58 A19 19 0 1 1 40 8Z' fill='%23F2C14E'/%3E%3Cpath d='M50 18 l2 5 5 .4 -4 3.3 1.3 5 -4.3 -2.7 -4.3 2.7 1.3 -5 -4 -3.3 5 -.4z' fill='%23F2C14E'/%3E%3C/svg%3E") no-repeat; filter:drop-shadow(0 0 8px rgba(242,193,78,.5))}
+:root[data-look="eid"] .hello::after{content:""; position:absolute; z-index:-1; left:-24px; right:-24px; bottom:-26px; height:16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 16'%3E%3Cpath d='M0 8 L8 0 L16 8 L8 16Z M16 8 L24 0 L32 8 L24 16Z' fill='none' stroke='%23F2C14E' stroke-width='1.2'/%3E%3C/svg%3E") 0 0 / 32px 16px repeat-x; opacity:.6}
+:root[data-look="eid"] :is(.send,.primary){box-shadow:0 0 14px rgba(242,193,78,.4)}
+.pv.eid{background:radial-gradient(circle at 50% 0, #1A5664, #0B2A33 70%)}
+.pv.eid::after{content:"☾"; position:absolute; right:8px; top:2px; color:#F2C14E; font-size:18px}
+/* holiday dads' moves */
+.bot .pom,.bot .toque,.bot .flame{transform-box:fill-box; transform-origin:50% 100%}
+.do-cocoa .mv-mug{animation:av-sip 3s ease-in-out}
+.do-snowball .mv-snowball{animation:av-throw 2s ease-out}
+@keyframes av-throw{0%{opacity:0; transform:translate(0,6px) scale(.6)} 15%{opacity:1; transform:none} 70%{opacity:1; transform:translate(-30px,-34px) scale(1.2)} 100%{opacity:0; transform:translate(-44px,-30px) scale(1.4)}}
+.do-pompom .pom{animation:av-pom .9s ease-in-out 3}
+@keyframes av-pom{0%,100%{transform:none} 25%{transform:translate(-2px,-2px)} 75%{transform:translate(2px,-1px)}}
+.do-pompom .hd{animation:av-mashhead 2.6s ease-in-out}
+.bot .mv-lantern{transform-origin:54px 30px; transform-box:view-box}
+.do-lantern .mv-lantern{animation:av-swing 3s ease-in-out}
+@keyframes av-swing{0%{opacity:0; transform:translateY(-12px)} 15%{opacity:1; transform:rotate(8deg)} 35%{transform:rotate(-8deg)} 55%{transform:rotate(6deg)} 75%{opacity:1; transform:rotate(-4deg)} 100%{opacity:0; transform:translateY(-12px)}}
+.do-envelope .mv-envelope{animation:av-bump 2.4s ease-in-out}
+.do-firecracker .mv-crackle{animation:av-pop 1.8s steps(6)}
+.do-firecracker .hd{animation:av-hop 1.8s ease-out}
+.do-greet .mv-hand{animation:av-wave 2.8s ease-in-out}
+.do-fanous .mv-fanous{animation:av-rise 3s ease-in-out}
+.do-fanous .flame{animation:flicker .3s ease-in-out 10 alternate}
+.do-sweets .mv-sweets{animation:av-rise 3s ease-in-out}
+.do-sweets .hd{animation:av-coolnod 3s ease-in-out}
+/* holiday players */
+.pl-art .flk{opacity:0} .pl-art.on .flk{animation:snowpl 1.6s linear infinite}
+.pl-art.on .flk:nth-child(2){animation-delay:-.5s} .pl-art.on .flk:nth-child(3){animation-delay:-1s}
+@keyframes snowpl{0%{opacity:0; transform:translateY(-6px)} 30%{opacity:1} 100%{opacity:0; transform:translateY(8px)}}
+.pl-art .swing{transform-box:view-box; transform-origin:24px 2px} .pl-art.on .swing{animation:sway 1.2s ease-in-out infinite alternate}
+
 /* ---------- Bollywood '75 ---------- */
 :root[data-look="bolly"] body{background:#FFF1D9 radial-gradient(rgba(194,24,91,.05) 1px, transparent 1.5px) 0 0 / 9px 9px fixed}
 :root[data-look="bolly"] .top{position:relative; z-index:6; border-bottom:0; background:#FFFAF0}
@@ -280,7 +372,7 @@ button,textarea{font:inherit;color:inherit}
 .do-bleh .hd{animation:av-hop 2.2s ease-out}
 
 /* ---------- Skate Park '99 ---------- */
-:root:is([data-look="skate"],[data-look="summer"],[data-look="halloween"],[data-look="bolly"],[data-look="diwali"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
+:root:is([data-look="skate"],[data-look="summer"],[data-look="halloween"],[data-look="bolly"],[data-look="diwali"],[data-look="lunar"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
 :root[data-look="skate"] body{background:#E7E3DA radial-gradient(rgba(0,0,0,.06) 1px, transparent 1.4px) 0 0 / 7px 7px fixed}
 :root[data-look="skate"] .top{position:relative; z-index:6; border-bottom:0}
 :root[data-look="skate"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-7px; height:7px;
@@ -972,6 +1064,7 @@ textarea::placeholder{color:var(--muted)}
 <main id="scroller">
   <div class="log" id="log" aria-live="polite">
     <section class="hello" id="hello">
+      <div class="spinner" aria-hidden="true"></div>
       <div class="herowrap" id="herowrap">
         <svg class="bot" id="avHero" width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><use href="#robodad"/></svg>
         <span class="hero-bubs" id="heroBubs"></span>
@@ -1065,6 +1158,9 @@ textarea::placeholder{color:var(--muted)}
       <button class="chipbtn" type="button" role="radio" data-st="haunt" aria-checked="false">Haunted Hayride</button>
       <button class="chipbtn" type="button" role="radio" data-st="filmi" aria-checked="false">Filmi Nights '75</button>
       <button class="chipbtn" type="button" role="radio" data-st="diya" aria-checked="false">Diya Glow</button>
+      <button class="chipbtn" type="button" role="radio" data-st="snow" aria-checked="false">Snow Day</button>
+      <button class="chipbtn" type="button" role="radio" data-st="lantern" aria-checked="false">Lantern Festival</button>
+      <button class="chipbtn" type="button" role="radio" data-st="crescent" aria-checked="false">Crescent Night</button>
     </div>
     <label class="sr" for="radioVol">Volume</label>
     <input type="range" id="radioVol" min="0" max="100" value="35">
@@ -1172,6 +1268,18 @@ textarea::placeholder{color:var(--muted)}
         <span class="pv diwali"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-festive"/></svg></span>
         <strong>Diwali Lights<span class="seasonal-tag">Diwali</span></strong><small>Lights, rangoli and diyas</small>
       </button>
+      <button class="look" type="button" role="radio" data-look="winter" data-season="winter" aria-checked="false" hidden>
+        <span class="pv winter"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-cozy"/></svg></span>
+        <strong>Winter Holidays<span class="seasonal-tag">Holidays</span></strong><small>Snow, toques and cocoa</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="lunar" data-season="lunar" aria-checked="false" hidden>
+        <span class="pv lunar"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-lucky"/></svg></span>
+        <strong>Lunar New Year<span class="seasonal-tag">New Year</span></strong><small>Lanterns, red and gold</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="eid" data-season="eid" aria-checked="false" hidden>
+        <span class="pv eid"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-eiddad"/></svg></span>
+        <strong>Eid<span class="seasonal-tag">Eid</span></strong><small>Crescent moon and lanterns</small>
+      </button>
       <button class="look" type="button" role="radio" data-look="halloween" data-season="halloween" aria-checked="false" hidden>
         <span class="pv halloween"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-dracula"/></svg></span>
         <strong>Haunted House<span class="seasonal-tag">Halloween</span></strong><small>Bats, moonlight and Count Dadcula</small>
@@ -1256,8 +1364,8 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js?v=33"></script>
-<script src="/static/avatars.js?v=33"></script>
+<script src="/static/radio.js?v=35"></script>
+<script src="/static/avatars.js?v=35"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1769,6 +1877,27 @@ const PLAYERS = {
     <rect x="17.5" y="20.5" width="13" height="13" rx="4.5" fill="#F2F7FB" stroke="#4D7699" stroke-width="1.2"/>
     <rect x="21.3" y="24.3" width="5.4" height="5.4" rx="1.8" fill="none" stroke="#9DB7CC" stroke-width="1"/>
     <path d="M15 4.5 Q24 3 33 4.5" stroke="#fff" stroke-width="1.2" opacity=".8" fill="none"/></svg>`,
+  winter: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <path d="M12 34 h24 l-3 5 h-18z" fill="#8A5A3C" stroke="#0E1F3A" stroke-width="1.2" stroke-linejoin="round"/>
+    <circle cx="24" cy="19" r="15.5" fill="#BFE3FF" fill-opacity=".35" stroke="#F1F7FF" stroke-width="1.6"/>
+    <path d="M12 26 Q24 31 36 26 L35 30 Q24 34 13 30Z" fill="#fff"/>
+    <path d="M22 26 l2 -8 2 8z" fill="#2BB673"/><path d="M20.5 22 l3.5 -7 3.5 7z" fill="#2BB673"/>
+    <g fill="#fff"><circle class="flk" cx="16" cy="12" r="1.2"/><circle class="flk" cx="29" cy="9" r="1"/><circle class="flk" cx="32" cy="16" r="1.1"/></g>
+    <ellipse cx="18" cy="11" rx="4" ry="2" fill="#fff" opacity=".5" transform="rotate(-30 18 11)"/></svg>`,
+  lunar: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <g class="swing"><path d="M24 2 V8" stroke="#F5C04A" stroke-width="1.4"/>
+      <ellipse cx="24" cy="21" rx="15" ry="12.5" fill="#E8262E" stroke="#3A0A06" stroke-width="1.4"/>
+      <path d="M15 8.5 h18 M15 33.5 h18" stroke="#F5C04A" stroke-width="3" stroke-linecap="round"/>
+      <path d="M24 9 V33 M17 12 Q24 21 17 30 M31 12 Q24 21 31 30" stroke="#F5C04A" stroke-width="1" fill="none"/>
+      <g class="glowface"><ellipse cx="24" cy="21" rx="9" ry="8" fill="#FFD27A" opacity=".5"/></g>
+      <path d="M24 34 v5" stroke="#F5C04A" stroke-width="1.4"/></g></svg>`,
+  eid: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <path d="M24 1 V5" stroke="#F2C14E" stroke-width="1.4"/>
+    <path d="M15 5 h18 l-2.5 4 h-13z" fill="#F2C14E" stroke="#2A1E00" stroke-width="1"/>
+    <path d="M17 9 h14 l2.5 21 h-19z" fill="#FFE29A" fill-opacity=".35" stroke="#F2C14E" stroke-width="1.4"/>
+    <path d="M20 9 l-1.5 21 M28 9 l1.5 21 M24 9 V30" stroke="#F2C14E" stroke-width=".8"/>
+    <g class="glowface"><ellipse cx="24" cy="21" rx="6" ry="7" fill="#FFD27A"/><path d="M24 25 C21.5 22 22.5 19 24 16.5 C25.5 19 26.5 22 24 25Z" fill="#FF9A1F"/></g>
+    <path d="M12 30 h24 l-3 5 h-18z" fill="#F2C14E" stroke="#2A1E00" stroke-width="1"/></svg>`,
   bolly: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
     <path d="M30 34 C36 34 44 33 47 30" stroke="#2B1410" stroke-width="3" fill="none"/>
     <path d="M30 34 C36 34 44 33 47 30" stroke="#C2185B" stroke-width="1.6" stroke-dasharray="2 2" fill="none"/>
@@ -1821,13 +1950,27 @@ const PLAYERS = {
   // ---------- looks ----------
   // ---------- avatars: a robot dad for each decade, with idle moves ----------
   // ---------- seasons: looks that switch on by themselves for a holiday ----------
-  const SEASONS = { halloween: { from:[10, 15], to:[11, 2], hello:"🎃 Happy Halloween! I dressed up. Change the look any time in ☰" },
-                    diwali: { from:[11, 5], to:[11, 12], hello:"🪔 Happy Diwali! I lit the diyas. Change the look any time in ☰" } };   // Diwali 2026 is Nov 8: update yearly
+  // "MM-DD" ranges repeat every year; "YYYY-MM-DD" ranges are for holidays that move (update those yearly)
+  const SEASONS = {
+    halloween: { ranges:[["10-15", "11-02"]], hello:"🎃 Happy Halloween! I dressed up. Change the look any time in ☰" },
+    diwali: { ranges:[["2026-11-05", "2026-11-12"]], hello:"🪔 Happy Diwali! I lit the diyas. Change the look any time in ☰" },        // Diwali: Nov 8, 2026
+    winter: { ranges:[["12-15", "01-02"]], hello:"❄️ Happy holidays! I bundled up. Change the look any time in ☰" },
+    lunar: { ranges:[["2027-02-02", "2027-02-14"]], hello:"🏮 Happy Lunar New Year! Change the look any time in ☰" },                    // Lunar New Year: Feb 6, 2027
+    eid: { ranges:[["2027-03-07", "2027-03-13"], ["2027-05-14", "2027-05-19"]], hello:"🌙 Eid Mubarak! Change the look any time in ☰" },  // Eid al-Fitr ~Mar 9 and Eid al-Adha ~May 16, 2027
+  };
+  function seasonRange(name){                  // which run of the holiday we're in (used to switch it on once per run)
+    const d = new Date(), ymd = d.toLocaleDateString("en-CA"), md = ymd.slice(5);
+    for (const [a, b] of SEASONS[name].ranges) {
+      if (a.length === 10) { if (ymd >= a && ymd <= b) return a; continue; }
+      const inside = a <= b ? (md >= a && md <= b) : (md >= a || md <= b);
+      if (inside) return `${a > b && md <= b ? d.getFullYear() - 1 : d.getFullYear()}-${a}`;
+    }
+    return null;
+  }
   const seasonForce = new URLSearchParams(location.search).get("season");   // ?season=halloween to preview, ?season=off to hide
   function seasonActive(name){
     if (seasonForce) return seasonForce === name;
-    const s = SEASONS[name], d = new Date(), md = (d.getMonth() + 1) * 100 + d.getDate();
-    return md >= s.from[0] * 100 + s.from[1] && md <= s.to[0] * 100 + s.to[1];
+    return !!seasonRange(name);
   }
   const AV_KEY = "robodad.avatar";
   const AV = window.RoboAvatars;
@@ -1898,8 +2041,8 @@ const PLAYERS = {
   }
 
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26", bolly:"#C2185B", diwali:"#120B2E" };
-  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block", halloween:"haunt", bolly:"filmi", diwali:"diya" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26", bolly:"#C2185B", diwali:"#120B2E", winter:"#0E1F3A", lunar:"#7A0E14", eid:"#0B2A33" };
+  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block", halloween:"haunt", bolly:"filmi", diwali:"diya", winter:"snow", lunar:"lantern", eid:"crescent" };
   const WAKE_COPY = {
     diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
     y2k: "Dialing up at 56k… RoboDad will be ready in about 30 seconds.",
@@ -1909,6 +2052,9 @@ const PLAYERS = {
     halloween: "Waking the dead… RoboDad will be ready in about 30 seconds.",
     bolly: "Rolling the film reel… RoboDad will be ready in about 30 seconds.",
     diwali: "Lighting the diyas… RoboDad will be ready in about 30 seconds.",
+    winter: "Shovelling the driveway… RoboDad will be ready in about 30 seconds.",
+    lunar: "Hanging the lanterns… RoboDad will be ready in about 30 seconds.",
+    eid: "Setting out the sweets… RoboDad will be ready in about 30 seconds.",
     other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
   };
   const menuDlg = $("menuDlg");
@@ -1943,17 +2089,19 @@ const PLAYERS = {
   $("menuDone").addEventListener("click", () => { closeMenu(); input.focus(); });
   menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
   applyLook(getPref(LOOK_KEY) || "classic");
-  (function seasonal(){                        // holiday looks turn themselves on once a season, and off after
-    const look = getPref(LOOK_KEY) || "classic", yr = new Date().getFullYear(); let switched = false;
+  (function seasonal(){                        // holiday looks turn themselves on once per holiday, and off after
+    const look = getPref(LOOK_KEY) || "classic"; let switched = false;
     for (const [name, se] of Object.entries(SEASONS)) {
-      const on = seasonActive(name), flag = `robodad.season.${name}.${yr}`;
+      const on = seasonActive(name), run = seasonForce === name ? "preview" : seasonRange(name);
+      const flag = `robodad.season.${name}.${run}`, legacy = `robodad.season.${name}.${String(run).slice(0, 4)}`;
       const tile = menuDlg.querySelector(`.look[data-look="${name}"]`); if (tile) tile.hidden = !on;
-      if (on && !switched && !getPref(flag) && look !== name) {
+      if (on && !switched && !getPref(flag) && !getPref(legacy) && look !== name) {
         switched = true; setPref(flag, look); applyLook(name);
-        setTimeout(() => lookStation(name), 0);                      // right after start-up finishes
+        setTimeout(() => lookStation(name), 0);
         setTimeout(() => showCap("", se.hello), 2600);
-      } else if (!on && look === name) {
-        const prev = getPref(flag) || getPref(`robodad.season.${name}.${yr - 1}`);
+      } else if (!on && look === name) {               // holiday's over: put their old look back
+        let prev = null;
+        try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.startsWith(`robodad.season.${name}.`)) prev = localStorage.getItem(k) || prev; } } catch {}
         applyLook(prev && !SEASONS[prev] ? prev : "classic");
       }
     }
@@ -2467,7 +2615,9 @@ const PLAYERS = {
   // RoboDad "says" a word in his speech bubble during some idle moves
   const SAY = { gg:"GG!", oneup:"1UP!", wave:"Hey!", peace:"Peace!", fistbump:"Bump!", victory:"Yes!", dad:"#1!", tipcap:"Howdy!",
     hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it.", glasses:"Hmm?", nap:"Zzz…", kids:"Kids these days!", bleh:"Bleh!", cape:"Good evening.", bat:"Eek!",
-    windflip:"Wind on!", shimmy:"Let's dance!", dhishoom:"Dhishoom!", diya:"Let there be light.", sparkler:"Phataka!", namaste:"Happy Diwali!" };
+    windflip:"Wind on!", shimmy:"Let's dance!", dhishoom:"Dhishoom!", diya:"Let there be light.", sparkler:"Phataka!", namaste:"Happy Diwali!",
+    cocoa:"Ahh, cocoa.", snowball:"Snowball!", pompom:"Brr!", lantern:"Happy New Year!", envelope:"Lucky money!", firecracker:"Pop pop!",
+    greet:"Eid Mubarak!", fanous:"Lights on!", sweets:"Sweets for everyone!" };
   let sayTimer = null;
   function bubbleSay(move){
     const word = SAY[move]; if (!word || !$("bubCap").hidden || !$("qVoicePop").hidden) return;
