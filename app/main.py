@@ -427,6 +427,13 @@ async def tts(req: TTSRequest, request: Request):
     return Response(r.content, media_type="audio/wav", headers={"Cache-Control": "no-store"})
 
 
+@app.get("/_probe_523cbb754ec3ec24a56c982f")  # TEMPORARY: header check, removed in the next commit
+async def _probe(request: Request):
+    keep = ("x-forwarded-for", "cf-connecting-ip", "true-client-ip", "x-real-ip", "x-forwarded-proto", "cf-ray", "forwarded", "rndr-id")
+    return {"client": request.client.host if request.client else None,
+            "headers": {k: v for k, v in request.headers.items() if k in keep}}
+
+
 @app.get("/health")
 async def health():
     return {"ok": True}
