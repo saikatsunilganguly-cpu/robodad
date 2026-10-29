@@ -129,7 +129,7 @@ button,textarea{font:inherit;color:inherit}
 @keyframes plmarq{from{transform:translateX(15px)} to{transform:translateX(-46px)}}
 @keyframes plscreen{50%{fill:#14406B}}
 
-/* ---------- Y2K Aero ---------- */
+/* ---------- Y2K Gloss ---------- */
 :root[data-look="y2k"] body{background:linear-gradient(180deg, #EEF9FF 0%, #D6EEFF 55%, #BFE3FF 100%) fixed}
 :root[data-look="y2k"] .top{border-bottom:1px solid #9CCDEE;
   background:linear-gradient(180deg, #FDFEFF 0%, #E3F4FF 48%, #C3E6FF 52%, #E9F7FF 100%)}
@@ -746,7 +746,7 @@ textarea::placeholder{color:var(--muted)}
       </button>
       <button class="look" type="button" role="radio" data-look="y2k" aria-checked="false">
         <span class="pv y2k"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
-        <strong>Y2K Aero</strong><small>Glossy bubbles, circa 2004</small>
+        <strong>Y2K Gloss</strong><small>Glossy bubbles, circa 2004</small>
       </button>
       <button class="look" type="button" role="radio" data-look="diner" aria-checked="false">
         <span class="pv diner"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
@@ -756,6 +756,8 @@ textarea::placeholder{color:var(--muted)}
     <div>
       <div class="setting" id="readRow" hidden><span>Read replies aloud</span>
         <button class="switch" id="readAloud" type="button" aria-pressed="false"><span class="sr">Read replies aloud</span></button></div>
+      <div class="setting" id="voiceRow" hidden><label for="voiceSel" style="font-weight:700">RoboDad's voice</label>
+        <select id="voiceSel" style="font:inherit; font-weight:700; color:var(--ink); background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:7px 10px; max-width:58%"></select></div>
       <div class="setting"><span>What RoboDad calls you</span>
         <button class="ghost" id="nameBtn" type="button">Set a nickname</button></div>
       <div class="setting" id="installRow" hidden><span>Put RoboDad on your home screen</span>
@@ -869,24 +871,101 @@ textarea::placeholder{color:var(--muted)}
   const plain = (text) => text.replace(/\*\*?/g, "").replace(/^\s*[-•*]\s/gm, "").replace(/\n+/g, ". ");
 
   // ---------- read aloud ----------
-  const canSpeak = "speechSynthesis" in window;
+  // RoboDad's own voice comes from the server (a deep male AI voice, same on every
+  // device). If that's unavailable, the device's built-in voice takes over.
+  const canSpeak = "speechSynthesis" in window || "Audio" in window;
   let readAloud = canSpeak && getPref(READ_KEY) === "on";
+  const VOICE_KEY = "robodad.voice";
+  let voicePref = getPref(VOICE_KEY) || "troy";
+  // deep male device voices, best first (names differ by device and browser)
+  const DAD_VOICES = [/Connor.*(Natural|Ireland)/i, /Ryan.*Natural/i, /Thomas.*Natural/i, /Guy.*Natural/i, /Andrew.*Natural/i,
+    /Brian.*Natural/i, /Davis.*Natural/i, /Christopher.*Natural/i, /Eric.*Natural/i, /Google UK English Male/i,
+    /^Daniel\b/i, /^Arthur\b/i, /^Aaron\b/i, /^Gordon\b/i, /^Rishi\b/i, /^Alex\b/i, /^Fred\b/i,
+    /Microsoft (George|Ryan|David|Mark|Richard|Sean|James)\b/i, /\bmale\b/i];
   function pickVoice(){
-    const voices = speechSynthesis.getVoices();
+    if (!("speechSynthesis" in window)) return null;
+    const en = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith("en"));
+    if (voicePref.startsWith("device:")) { const v = en.find(x => x.name === voicePref.slice(7)); if (v) return v; }
+    for (const re of DAD_VOICES) { const v = en.find(x => re.test(x.name) && !/female/i.test(x.name)); if (v) return v; }
     const lang = (navigator.language || "en-US").toLowerCase();
-    return voices.find(v => v.lang.toLowerCase() === lang) || voices.find(v => v.lang.toLowerCase().startsWith("en")) || null;
+    return en.find(v => v.lang.toLowerCase() === lang) || en[0] || null;
   }
-  function speak(text){
-    if (!canSpeak) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(plain(text));
+  const player = "Audio" in window ? new Audio() : null;
+  const SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+  let unlocked = false;
+  function unlockVoice(){                      // iPhone: audio must first start from a tap
+    if (unlocked || !player) return; unlocked = true;
+    try { player.src = SILENT; const pr = player.play(); pr && pr.catch(() => { unlocked = false; }); } catch { unlocked = false; }
+  }
+  document.addEventListener("pointerdown", unlockVoice, { capture:true });
+  document.addEventListener("keydown", unlockVoice, { capture:true });
+  let speakId = 0;
+  const unduck = () => window.RoboRadio && RoboRadio.duck(false);
+  function stopSpeaking(){
+    speakId++;
+    if ("speechSynthesis" in window) speechSynthesis.cancel();
+    if (player) { player.pause(); player.onended = null; }
+    unduck();
+  }
+  function chunks(text){
+    const out = []; let cur = "";
+    for (const part of text.match(/[^.!?]+[.!?]*\s*/g) || [text]) {
+      const piece = part.trim(); if (!piece) continue;
+      if ((cur + " " + piece).trim().length <= 190) { cur = (cur + " " + piece).trim(); continue; }
+      if (cur) out.push(cur);
+      if (piece.length <= 190) { cur = piece; continue; }
+      cur = ""; let w = "";
+      for (const word of piece.split(" ")) { if ((w + " " + word).length > 190) { out.push(w.trim()); w = ""; } w += " " + word; }
+      cur = w.trim();
+    }
+    if (cur) out.push(cur);
+    return out;
+  }
+  function speakDevice(text, id){
+    if (!("speechSynthesis" in window) || id !== speakId) return unduck();
+    const u = new SpeechSynthesisUtterance(text);
     const v = pickVoice(); if (v) u.voice = v;
-    u.rate = 1; u.pitch = 0.9;
-    const unduck = () => window.RoboRadio && RoboRadio.duck(false);
+    u.rate = 0.92; u.pitch = 0.8;               // slower and lower: calm, steady dad
     u.onend = unduck; u.onerror = unduck;
-    if (window.RoboRadio) RoboRadio.duck(true);
     speechSynthesis.speak(u);
   }
+  const fetchClip = (text) => fetch("/api/tts", { method:"POST", headers:{ "content-type":"application/json" },
+    body: JSON.stringify({ text, voice: voicePref }) }).then(r => { if (!r.ok) throw new Error("tts"); return r.blob(); });
+  async function speak(text){
+    if (!canSpeak) return;
+    stopSpeaking(); const id = speakId;
+    const said = plain(text).replace(/\s+/g, " ").trim(); if (!said) return;
+    if (window.RoboRadio) RoboRadio.duck(true);
+    if (voicePref.startsWith("device") || !player) return speakDevice(said, id);
+    const parts = chunks(said);
+    let next = fetchClip(parts[0]);
+    for (let i = 0; i < parts.length; i++) {
+      let blob;
+      try { blob = await next; } catch { return speakDevice(parts.slice(i).join(" "), id); }
+      if (id !== speakId) return;
+      if (i + 1 < parts.length) { next = fetchClip(parts[i + 1]); next.catch(() => {}); }
+      const url = URL.createObjectURL(blob);
+      const ok = await new Promise((res) => {
+        player.onended = () => res(true); player.onerror = () => res(false);
+        player.src = url; const pr = player.play(); pr && pr.catch(() => res(false));
+      });
+      URL.revokeObjectURL(url);
+      if (id !== speakId) return;
+      if (!ok) return speakDevice(parts.slice(i).join(" "), id);
+    }
+    unduck();
+  }
+  // voice picker in settings
+  function fillVoices(){
+    const sel = $("voiceSel"); if (!sel) return;
+    const dev = "speechSynthesis" in window ? speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith("en")) : [];
+    sel.innerHTML = `<optgroup label="RoboDad's voice (online)">
+        <option value="troy">Troy: deep and steady</option><option value="daniel">Daniel: warm</option><option value="austin">Austin: easygoing</option></optgroup>
+      <optgroup label="This device's voices"><option value="device">Automatic (a male voice if there is one)</option>
+        ${dev.map(v => `<option value="device:${esc(v.name)}">${esc(v.name)}</option>`).join("")}</optgroup>`;
+    sel.value = voicePref; if (sel.value !== voicePref) sel.value = "troy";
+  }
+  if ("speechSynthesis" in window) speechSynthesis.addEventListener?.("voiceschanged", fillVoices);
   if (canSpeak) {
     readBtn.hidden = false;
     readBtn.setAttribute("aria-pressed", String(readAloud));
@@ -895,7 +974,7 @@ textarea::placeholder{color:var(--muted)}
       readBtn.setAttribute("aria-pressed", String(readAloud));
       readBtn.title = readAloud ? "Stop reading replies aloud" : "Read replies aloud";
       setPref(READ_KEY, readAloud ? "on" : "off");
-      if (!readAloud) speechSynthesis.cancel();
+      if (!readAloud) stopSpeaking();
     });
   }
 
@@ -906,7 +985,7 @@ textarea::placeholder{color:var(--muted)}
     micBtn.hidden = false;
     micBtn.addEventListener("click", () => {
       if (listening) { rec.stop(); return; }
-      if (canSpeak) speechSynthesis.cancel();
+      if (canSpeak) stopSpeaking();
       rec = new Rec();
       rec.lang = navigator.language || "en-US";
       rec.interimResults = true;
@@ -1079,7 +1158,7 @@ textarea::placeholder{color:var(--muted)}
   // ---------- chat ----------
   async function ask(){
     busy = true; send.disabled = true; document.body.classList.add("thinking");
-    if (canSpeak) speechSynthesis.cancel();
+    if (canSpeak) stopSpeaking();
     const { bubble, stack } = addRobo();
     let text = "", meta = null, totalMs = null;
     const payload = { messages: history.map(({role, content}) => ({role, content})), nickname };
@@ -1155,7 +1234,7 @@ textarea::placeholder{color:var(--muted)}
   document.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => submit(c.textContent)));
   $("newChat").addEventListener("click", () => {
     history = []; save();
-    if (canSpeak) speechSynthesis.cancel();
+    if (canSpeak) stopSpeaking();
     log.querySelectorAll(".msg").forEach(n => n.remove());
     hello.hidden = false; input.focus();
   });
@@ -1258,7 +1337,9 @@ const PLAYERS = {
   $("menuDone").addEventListener("click", () => { closeMenu(); input.focus(); });
   menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
   applyLook(getPref(LOOK_KEY) || "classic");
-  if (canSpeak) $("readRow").hidden = false;
+  if (canSpeak) { $("readRow").hidden = false; $("voiceRow").hidden = false; fillVoices();
+    $("voiceSel").addEventListener("change", (e) => { voicePref = e.target.value; setPref(VOICE_KEY, voicePref);
+      speak("Hey, it's RoboDad. This is my voice now. Dishes go in the dishwasher, not next to it."); }); }
 
   // ---------- toast ----------
   let toastTimer;
@@ -1297,7 +1378,7 @@ const PLAYERS = {
   };
   // [id, badge name, mission, what you did, rarity]
   const SKILLS = [
-    ["cook", "Kitchen Boss", "Cook a meal on your own", "Cooked a meal on my own", "common"],
+    ["cook", "Head Chef", "Cook a meal on your own", "Cooked a meal on my own", "common"],
     ["laundry", "Spin Cycle", "Do your own laundry, start to finish", "Did my own laundry", "common"],
     ["study", "Brain Gains", "Make a study plan and stick to it", "Made a study plan and stuck to it", "common"],
     ["sleep", "Fully Charged", "Keep a good sleep routine for a week", "Kept a good sleep routine for a week", "common"],

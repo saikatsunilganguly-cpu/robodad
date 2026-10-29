@@ -40,7 +40,7 @@ _load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 import httpx  # noqa: E402
 from fastapi import FastAPI, HTTPException, Request  # noqa: E402
-from fastapi.responses import FileResponse, JSONResponse, StreamingResponse  # noqa: E402
+from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
@@ -340,6 +340,63 @@ async def daily(random_pick: bool = False):
     question = (question[:1].upper() + question[1:] + "?") if question else ""
     return {"joke": joke, "tip": tip, "question": question,
             "topic": topic.replace("life_skill_", "").replace("_", " ")}
+
+
+# ---------------------------------------------------------------- read aloud
+# RoboDad's voice: Groq's text-to-speech (Orpheus) with a male voice, so the
+# voice is the same on every phone. The page falls back to the device's own
+# voice whenever this is unavailable (no key, limits reached, an error).
+TTS_MODEL = os.getenv("TTS_MODEL", "canopylabs/orpheus-v1-english")
+TTS_VOICES = ("troy", "daniel", "austin")
+TTS_VOICE = os.getenv("TTS_VOICE", "troy")
+TTS_DAILY_LIMIT = int(os.getenv("TTS_DAILY_LIMIT", "400"))  # clips per day
+_tts = {"day": date.today(), "count": 0, "off_until": 0.0}
+_tts_hits: dict[str, deque] = defaultdict(deque)
+
+
+class TTSRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=200)
+    voice: str = Field(default="", max_length=20)
+
+
+@app.post("/api/tts")
+async def tts(req: TTSRequest, request: Request):
+    key = clean_secret(os.getenv("GROQ_API_KEY"))
+    now = time.monotonic()
+    if not key or now < _tts["off_until"]:
+        return JSONResponse({"error": "Voice is resting. Using this device's voice."}, status_code=503)
+    q = _tts_hits[_client_ip(request)]
+    while q and now - q[0] > 600:
+        q.popleft()
+    if len(q) >= 60:
+        return JSONResponse({"error": "Too many voice clips. Try again soon."}, status_code=429)
+    if _tts["day"] != date.today():
+        _tts.update(day=date.today(), count=0)
+    if _tts["count"] >= TTS_DAILY_LIMIT:
+        return JSONResponse({"error": "Daily voice limit reached."}, status_code=503)
+    q.append(now)
+    _tts["count"] += 1
+    voice = req.voice if req.voice in TTS_VOICES else TTS_VOICE
+    text = re.sub(r"\s+", " ", req.text).strip()
+    try:
+        r = await state["client"].post(
+            "https://api.groq.com/openai/v1/audio/speech",
+            headers={"Authorization": f"Bearer {key}"},
+            json={"model": TTS_MODEL, "voice": voice, "input": text, "response_format": "wav"},
+        )
+    except httpx.HTTPError as exc:
+        log.warning("TTS request failed: %s", type(exc).__name__)
+        return JSONResponse({"error": "Voice unavailable."}, status_code=503)
+    if r.status_code != 200:
+        log.warning("TTS error %s: %s", r.status_code, r.text[:300])
+        wait = 60.0 if r.status_code == 429 else 900.0
+        try:
+            wait = float(r.headers.get("retry-after", wait))
+        except ValueError:
+            pass
+        _tts["off_until"] = now + min(wait, 3600)
+        return JSONResponse({"error": "Voice unavailable."}, status_code=503)
+    return Response(r.content, media_type="audio/wav", headers={"Cache-Control": "no-store"})
 
 
 @app.get("/health")
