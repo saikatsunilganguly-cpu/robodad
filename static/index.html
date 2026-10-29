@@ -914,7 +914,12 @@ textarea::placeholder{color:var(--muted)}
   // depth: playback speed for the online voice (lower = deeper and a touch slower), pitch for device voices
   const DEPTHS = { normal:{ rate:1, pitch:0.85, label:"Normal" }, deep:{ rate:0.88, pitch:0.68, label:"Deep" }, deepest:{ rate:0.8, pitch:0.5, label:"Deepest" } };
   const DEPTH_KEY = "robodad.voiceDepth";
-  let depthPref = DEPTHS[getPref(DEPTH_KEY)] ? getPref(DEPTH_KEY) : "deep";
+  // remembered per voice: Daniel starts at Deep, every other voice at Normal
+  const DEPTH_DEFAULTS = { daniel:"deep" };
+  let depths = {}; try { depths = JSON.parse(getPref(DEPTH_KEY) || "{}") || {}; } catch { depths = {}; }
+  if (typeof depths !== "object") depths = {};
+  const depthKeyFor = (v) => v.startsWith("device") ? "device" : v;
+  const curDepth = () => { const d = depths[depthKeyFor(voicePref)] || DEPTH_DEFAULTS[depthKeyFor(voicePref)] || "normal"; return DEPTHS[d] ? d : "normal"; };
   // deep male device voices, best first (names differ by device and browser)
   const DAD_VOICES = [/Connor.*(Natural|Ireland)/i, /Ryan.*Natural/i, /Thomas.*Natural/i, /Guy.*Natural/i, /Andrew.*Natural/i,
     /Brian.*Natural/i, /Davis.*Natural/i, /Christopher.*Natural/i, /Eric.*Natural/i, /Google UK English Male/i,
@@ -963,7 +968,7 @@ textarea::placeholder{color:var(--muted)}
     if (!("speechSynthesis" in window) || id !== speakId) return unduck();
     const u = new SpeechSynthesisUtterance(text);
     const v = pickVoice(); if (v) u.voice = v;
-    u.rate = 0.92; u.pitch = DEPTHS[depthPref].pitch;   // slower and lower: calm, steady dad
+    u.rate = 0.92; u.pitch = DEPTHS[curDepth()].pitch;   // slower and lower: calm, steady dad
     u.onend = unduck; u.onerror = unduck;
     speechSynthesis.speak(u);
   }
@@ -986,7 +991,7 @@ textarea::placeholder{color:var(--muted)}
       const ok = await new Promise((res) => {
         player.onended = () => res(true); player.onerror = () => res(false);
         player.src = url;
-        const rate = DEPTHS[depthPref].rate;           // slowing the clip lowers the pitch too
+        const rate = DEPTHS[curDepth()].rate;           // slowing the clip lowers the pitch too
         player.preservesPitch = player.mozPreservesPitch = player.webkitPreservesPitch = false;
         player.defaultPlaybackRate = rate; player.playbackRate = rate;
         const pr = player.play(); pr && pr.catch(() => res(false));
@@ -1373,7 +1378,7 @@ const PLAYERS = {
   $("menuDone").addEventListener("click", () => { closeMenu(); input.focus(); });
   menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
   applyLook(getPref(LOOK_KEY) || "classic");
-  if (canSpeak) { $("readRow").hidden = false; $("voiceRow").hidden = false; fillVoices(); $("depthRow").hidden = false; $("depthSel").value = depthPref;
+  if (canSpeak) { $("readRow").hidden = false; $("voiceRow").hidden = false; fillVoices(); $("depthRow").hidden = false; $("depthSel").value = curDepth();
     $("voiceSel").addEventListener("change", (e) => setVoice(e.target.value));
     $("depthSel").addEventListener("change", (e) => setDepth(e.target.value)); }
 
@@ -1752,18 +1757,19 @@ const PLAYERS = {
   }
   function setVoice(v){
     voicePref = v; setPref(VOICE_KEY, v); if ($("voiceSel")) $("voiceSel").value = v;
+    if ($("depthSel")) $("depthSel").value = curDepth();
     setReadAloud(true); speak("Hey, it's RoboDad. This is my voice now. Dishes go in the dishwasher, not next to it.");
   }
   function setDepth(d){
-    depthPref = d; setPref(DEPTH_KEY, d); if ($("depthSel")) $("depthSel").value = d;
+    depths[depthKeyFor(voicePref)] = d; setPref(DEPTH_KEY, JSON.stringify(depths)); if ($("depthSel")) $("depthSel").value = d;
     setReadAloud(true); speak("Hey, it's RoboDad. Dishes go in the dishwasher, not next to it.");
   }
   function renderVoicePop(){
     const opt = (v, label, note) => `<button class="qopt" type="button" data-voice="${v}" aria-pressed="${readAloud && (v === "device" ? voicePref.startsWith("device") : voicePref === v)}"><span class="dot"></span>${label}<small>${note}</small></button>`;
     $("qVoicePop").innerHTML = `<div class="qrow"><span>Read replies aloud</span><button class="switch" type="button" data-act="read" aria-pressed="${readAloud}"><span class="sr">Read replies aloud</span></button></div>
       ${opt("daniel", "Daniel", "deepest")}${opt("troy", "Troy", "brighter")}${opt("austin", "Austin", "easygoing")}${opt("device", "This device", "works offline")}
-      <div class="qdepth" role="radiogroup" aria-label="Voice depth"><span>Depth</span>${Object.entries(DEPTHS).map(([k, d]) =>
-        `<button type="button" role="radio" data-depth="${k}" aria-checked="${depthPref === k}">${d.label}</button>`).join("")}</div>`;
+      <div class="qdepth" role="radiogroup" aria-label="Depth for this voice"><span>Depth <small style="margin:0">for ${esc(voiceLabel())}</small></span>${Object.entries(DEPTHS).map(([k, d]) =>
+        `<button type="button" role="radio" data-depth="${k}" aria-checked="${curDepth() === k}">${d.label}</button>`).join("")}</div>`;
     $("qVoicePop").querySelectorAll(".qopt").forEach(b => b.setAttribute("aria-checked", b.getAttribute("aria-pressed")));
   }
   function renderMusicPop(){
