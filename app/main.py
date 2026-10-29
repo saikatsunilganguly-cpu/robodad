@@ -348,7 +348,7 @@ async def daily(random_pick: bool = False):
 # voice whenever this is unavailable (no key, limits reached, an error).
 TTS_MODEL = os.getenv("TTS_MODEL", "canopylabs/orpheus-v1-english")
 TTS_VOICES = ("troy", "daniel", "austin")
-TTS_VOICE = os.getenv("TTS_VOICE", "troy")
+TTS_VOICE = os.getenv("TTS_VOICE", "daniel")
 TTS_DAILY_LIMIT = int(os.getenv("TTS_DAILY_LIMIT", "400"))  # clips per day
 _tts = {"day": date.today(), "count": 0, "off_until": 0.0}
 _tts_hits: dict[str, deque] = defaultdict(deque)
