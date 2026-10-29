@@ -33,12 +33,14 @@ and safety.
 | Music button | None | Each look has its own animated player in the top bar that turns the music on and off: a smart speaker (Classic), a spinning CD (Arcade Neon), a cassette player (VHS Sunset), a generic MP3 player with a scrolling screen (Y2K Aero) and a jukebox with bubbling light tubes (Diner '55). They only animate while music plays |
 | Dashboard | None | Beside the chat on wide screens, a sheet on phones: Radio, Focus timer (25/5), Countdown, Dad joke and Tip of the day (`/api/daily`, from the dataset), belt progress, and a help card with tap-to-call numbers |
 | Real-life skills | None | **Life Skills Belt**: a championship belt that earns a plate for each skill done for real (self-reported, stored only on the device, no streaks). **Dad's Mixtape**: a classic-rock track suggestion when someone's having a rough time (titles only). **Ask your real one**: a question to take to a parent, tied to the topic |
+| Little touches | None | RoboDad nods when you send a message or earn a plate; new belt plates get a gold shine; a gold ring around his avatar counts down the focus timer (green on breaks) |
+| Play Store testers | None | **Help test RoboDad** page at `/testers` with a QR code (`static/testers-qr.png`): adults sign up with their Android Gmail, a live "x of 12" meter counts sign-ups, and emails are stored in a private Supabase `testers` table (duplicates ignored, spam honeypot) |
 | Audience | Kids, terminal only | Teens 13+: teen persona, teen topics (first jobs, life after high school, healthy relationships, peer pressure, budgeting, driving), neutral birth-year age check, optional nickname, privacy page |
 | Memory | None, every message stands alone | Remembers the last 16 messages of the conversation |
 | Out-of-scope questions ("help me cook pasta") | Fallback: "I didn't quite catch that" | Real answer, in RoboDad's voice |
 | Use of the dataset | Training data + response bank | Also a retrieval index: the 4 most similar examples are fed to the LLM as style and content guidance (retrieval-augmented generation) |
 | NLP analysis | Printed to the console | Shown under each reply in "How RoboDad read this" |
-| Safety | Confidence threshold only | Crisis guardrail that bypasses the LLM with situation-specific help (self-harm, sextortion, eating struggles, dating violence, abuse at home) and tap-to-call links; persona rules (no diet plans, no drug how-tos, nothing sexual); input limits; per-visitor rate limit; daily LLM budget; API keys redacted from logs |
+| Safety | Confidence threshold only | **Dad Mode**: trick, troll, jailbreak and "what happens if" questions get a playful dad answer instead of a bare refusal (a backstop rewrites any bare refusal and strips stock "I'm sorry, but I can't help with that" openers; test set in `scripts/test_dad_mode.py`). Crisis guardrail that bypasses the LLM with situation-specific help (self-harm, sextortion, eating struggles, dating violence, abuse at home) and tap-to-call links; persona rules (no diet plans, no drug how-tos, nothing sexual); input limits; per-visitor rate limit; daily LLM budget; API keys redacted from logs |
 | Reliability | Needed the exact scikit-learn version that made the `.joblib` files | Model trained during the build, so it always matches; switches AI model automatically if one is retired; falls back to the classic classifier if the LLM is down or no key is set; shows "waking up" while the free server starts |
 | Data | Windows-1252 file read as Latin-1, so apostrophes turned into junk ("Im") | Cleaned to UTF-8, 61 duplicate rows removed (1,042 → 981) |
 
@@ -296,3 +298,19 @@ then asks the provider for its current models and picks a chat model.
   the audio to their speech service); nothing is recorded by RoboDad.
 - Keyword guardrails can miss things. Anyone running RoboDad publicly for real
   children should add a moderation API and human review.
+
+## Collecting Play Store testers
+
+Google needs 12 testers for 14 days before a new personal developer account can publish. Share `https://robodad.onrender.com/testers` (or print `static/testers-qr.png`). Sign-ups land in Supabase:
+
+```sql
+create table if not exists testers (
+  id bigint generated always as identity primary key,
+  created_at timestamptz default now(),
+  email text unique not null,
+  first_name text
+);
+alter table testers enable row level security;
+```
+
+When testing opens, copy the emails from **Table Editor → testers** into Play Console → Testing → Closed testing → Testers (email list). Delete the rows when testing is finished, as the privacy page promises.
