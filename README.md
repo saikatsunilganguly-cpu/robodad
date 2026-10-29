@@ -134,9 +134,10 @@ app/
   main.py      web server: chat streaming, rate limits, fallbacks
   nlp.py       the CONL725 pipeline: classifier, retrieval, sentiment, NER
   llm.py       RoboDad persona prompt + Claude / Groq / OpenAI-compatible streaming
-  safety.py    crisis detection: situation-specific help messages
+  safety.py    crisis detection (English, French, Hindi): situation-specific help messages
 static/
-  index.html   the chat page (no build step): voice, feedback, report, age check, nickname
+  index.html   the chat page (no build step): voice, feedback, report, age check, nickname, Practice with Dad
+  lessons.js   hand-written French and Hindi lessons and role-play scenes
   privacy.html privacy policy (served at /privacy)
   sw.js, manifest.webmanifest, icon-*.png   phone-app (PWA) files
   favicon.svg
@@ -146,7 +147,8 @@ data/
   augmented_utterances.csv  480 extra training-only examples
 scripts/
   evaluate.py      compares classifier set-ups with cross-validation
-  test_safety.py   50 checks: messages that must / must not trigger help
+  test_safety.py   99 checks: messages that must / must not trigger help
+  test_dad_mode.py trick questions (EN, FR, HI) against a running RoboDad
 Dockerfile, requirements.txt, .env.example
 ```
 
@@ -283,7 +285,12 @@ then asks the provider for its current models and picks a chat model.
   - eating struggles: NEDIC (1-866-633-4220), Kids Help Phone
   - dating violence or abuse at home: 911, Kids Help Phone, a trusted adult
   These are Canada/US services; edit `app/safety.py` for other countries.
-  `python scripts/test_safety.py` checks 50 messages that must or must not trigger help.
+  The keyword rules cover English, French, Hindi in Devanagari and romanized Hindi (Hinglish);
+  accents, nukta dots and chandrabindu are normalised away before matching.
+  For anything they miss, in any language, the persona tells the model to answer with only a
+  token such as `[[CRISIS:self_harm]]`; the server spots it in the held-back first part of the
+  reply and swaps in the same fixed help message (`mode: safety`).
+  `python scripts/test_safety.py` checks 99 messages (English, French, Hindi) that must or must not trigger help.
 - The persona prompt in `app/llm.py` is written for teens: respectful, no
   lecturing, nothing sexual, no diet plans or weight targets, no drug or vaping
   how-tos, and it steers medical, legal and dangerous topics to trusted adults.
@@ -292,7 +299,8 @@ then asks the provider for its current models and picks a chat model.
   with harmless trolling, and for anything harmful gives a short boundary, one honest reason and a
   helpful redirect. The server holds back the first ~150 characters of each reply; if the model still
   produces a stock refusal, it is rewritten in Dad Mode before anyone sees it.
-  `python scripts/test_dad_mode.py` runs 19 trick questions from real testers against the live site.
+  `python scripts/test_dad_mode.py` runs 34 trick questions against the live site, including French
+  and Hindi versions, crises only the AI flag can catch (French, Hindi, Spanish) and Practice-mode role-plays.
 - A neutral age check asks for the birth year on first visit and stores only
   pass/fail on the device. Under-13s see a message instead of the chat.
 - Conversations aren't stored on the server. Each browser tab keeps its own
@@ -350,3 +358,20 @@ Groq's free tier allows about 3,600 characters of speech a day for the Orpheus v
 Diwali, Lunar New Year and Eid move every year: update their `YYYY-MM-DD` ranges in `SEASONS` (`static/index.html`). Each holiday switches on once per run (remembering the previous look) and restores it afterwards. Preview any of them with `/?season=<name>`.
 
 Every look also has a slowly rotating centrepiece (`.spinner`), drawn as an inline SVG per look; it stops for anyone using reduced motion.
+
+## Practice with Dad: French and Hindi (v1.19)
+
+- **Lessons** (`static/lessons.js`): 8 per language, 5 phrases each, written by hand so they can be
+  checked by a fluent speaker. Hindi has Devanagari, Roman letters and English. The speaker button
+  uses the device's own `fr-CA` / `hi-IN` voice (free; some phones need the voice installed).
+- **Quiz**: 5 questions per lesson, built from that lesson. 3 or more correct marks it done.
+- **Role-plays**: the browser sends `practice: {lang, scenario}` with each message. Scenario text
+  lives on the server (`PRACTICE_LANGS` in `app/llm.py`), so it can't be swapped from the browser.
+  RoboDad opens the scene; the server keeps that opening line behind a stand-in user turn.
+  The normal chat is set aside (per tab) and comes back on **Exit practice**.
+- **Badges**: 9 practice-milestone badges (lessons done, a 4-message role-play, both courses).
+  They unlock automatically, are stored only on the device, and are not a fluency certificate.
+  No language is locked behind another.
+- **Safety**: every rule applies in practice mode; crisis keywords exist in French and Hindi, and
+  the AI crisis flag covers other languages. Marathi is planned once a fluent speaker can review it.
+

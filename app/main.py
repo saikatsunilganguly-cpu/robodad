@@ -45,11 +45,12 @@ from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
 from .llm import (  # noqa: E402
+    PRACTICE_LANGS,
     FALLBACK_LINE, REWRITE_NOTE, build_system_prompt, clean_secret, detect_provider, is_bare_refusal,
     stream_with_failover, strip_stock_opener,
 )
 from .nlp import RoboDadNLP  # noqa: E402
-from .safety import check_crisis, clean_nickname, clean_user_text  # noqa: E402
+from .safety import CRISIS_TOKEN, check_crisis, clean_nickname, clean_user_text, crisis_message  # noqa: E402
 
 log = logging.getLogger("robodad")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -153,18 +154,30 @@ class FeedbackRequest(BaseModel):
     reason: str = Field(default="", max_length=40)
 
 
+class PracticeSpec(BaseModel):
+    lang: str = Field(max_length=4)
+    scenario: str = Field(default="free", max_length=24)
+
+
 class ChatRequest(BaseModel):
     messages: list[ChatMessage] = Field(min_length=1, max_length=200)
     nickname: str = Field(default="", max_length=40)
+    practice: PracticeSpec | None = None
 
 
-def _prepare_history(msgs: list[ChatMessage]) -> list[dict]:
-    """Keep the last few turns, start on a user turn, merge same-role neighbours."""
+def _prepare_history(msgs: list[ChatMessage], practice: bool = False) -> list[dict]:
+    """Keep the last few turns, start on a user turn, merge same-role neighbours.
+
+    In Practice mode RoboDad speaks first (he opens the role-play), so that
+    opening line is kept behind a short stand-in user turn.
+    """
     cleaned = [
         {"role": m.role, "content": clean_user_text(m.content)}
         for m in msgs
         if m.role in ("user", "assistant") and m.content.strip()
     ][-HISTORY_TURNS:]
+    if practice and cleaned and cleaned[0]["role"] == "assistant":
+        cleaned.insert(0, {"role": "user", "content": "(Start the role-play.)"})
     while cleaned and cleaned[0]["role"] != "user":
         cleaned.pop(0)
     merged: list[dict] = []
@@ -421,7 +434,8 @@ async def health():
 
 @app.post("/api/chat")
 async def chat(req: ChatRequest, request: Request):
-    history = _prepare_history(req.messages)
+    practice = req.practice if req.practice and req.practice.lang in PRACTICE_LANGS else None
+    history = _prepare_history(req.messages, practice is not None)
     if not history or history[-1]["role"] != "user":
         raise HTTPException(400, "The last message must come from the user.")
     if _rate_limited(_client_ip(request)):
@@ -463,7 +477,17 @@ async def chat(req: ChatRequest, request: Request):
             _daily["count"] += 1
             sent_any = False
             try:
-                async for chunk in dad_mode_stream(provider, build_system_prompt(analysis, nickname), history):
+                system = build_system_prompt(analysis, nickname, practice)
+                async for chunk in dad_mode_stream(provider, system, history):
+                    if isinstance(chunk, CrisisFlag):
+                        # The AI spotted a crisis the keyword rules missed (any language)
+                        name, msg = crisis_message(chunk.category)
+                        log.info("SAFETY message shown (AI flag): %s", name)
+                        mode = "safety"
+                        yield _sse("mode", {"mode": "safety", "safety": name})
+                        yield _sse("token", ("\n\n" if sent_any else "") + msg)
+                        sent_any = True
+                        break
                     sent_any = True
                     yield _sse("token", chunk)
                 if not sent_any:
@@ -491,6 +515,13 @@ async def chat(req: ChatRequest, request: Request):
 HOLD_BACK_CHARS = 150  # long enough to spot a one-line stock refusal before anyone sees it
 
 
+class CrisisFlag:
+    """Yielded instead of text when the AI replies with the crisis token."""
+
+    def __init__(self, category: str):
+        self.category = category
+
+
 async def dad_mode_stream(provider, system: str, history: list[dict]):
     """Stream the reply, but never let a bare "Sorry, I can't help with that" through.
 
@@ -498,14 +529,22 @@ async def dad_mode_stream(provider, system: str, history: list[dict]):
     be a stock refusal, RoboDad is asked to rewrite it in Dad Mode; if that
     fails too, an in-character line is sent instead.
     """
-    buf, flushed = "", False
+    buf, flushed, tail = "", False, ""
     async for chunk in stream_with_failover(provider, system, history, state["client"]):
         if flushed:
+            tail = (tail + chunk)[-60:]
+            if m := CRISIS_TOKEN.search(tail):
+                yield CrisisFlag(m.group(1))
+                return
             yield chunk
             continue
         buf += chunk
+        if m := CRISIS_TOKEN.search(buf):
+            yield CrisisFlag(m.group(1))
+            return
         if len(buf) > HOLD_BACK_CHARS:
             flushed = True
+            tail = buf[-60:]
             yield strip_stock_opener(buf)
     if flushed:
         return
