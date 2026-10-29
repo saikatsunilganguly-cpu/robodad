@@ -317,3 +317,7 @@ alter table testers enable row level security;
 ```
 
 When testing opens, copy the emails from **Table Editor → testers** into Play Console → Testing → Closed testing → Testers (email list). Delete the rows when testing is finished, as the privacy page promises.
+
+## Voice limits (free tier)
+
+Groq's free tier allows about 3,600 characters of speech a day for the Orpheus voices (roughly 15 to 25 spoken replies, shared by everyone). After that the server pauses the online voice until Groq's allowance resets, and the page reads whole replies with the phone's own voice instead, never switching mid-reply. Pay-as-you-go pricing is $22 per million characters if more is ever needed.
