@@ -389,7 +389,7 @@ async def tts(req: TTSRequest, request: Request):
         return JSONResponse({"error": "Voice unavailable."}, status_code=503)
     if r.status_code != 200:
         log.warning("TTS error %s: %s", r.status_code, r.text[:300])
-        wait = 60.0 if r.status_code == 429 else 900.0
+        wait = 60.0 if r.status_code == 429 else 120.0
         try:
             wait = float(r.headers.get("retry-after", wait))
         except ValueError:
