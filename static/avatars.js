@@ -98,27 +98,30 @@
       <g class="mv mv-buzz" opacity="0"><path d="M42 57 l-2 -1 M42 60.5 l-2 1 M54.5 57 l2 -1 M54.5 60.5 l2 1" stroke="${INK}" stroke-width="1.2" stroke-linecap="round"/></g>`,
     },
     y2k: {
-      name: "Y2K Dad", era: "2000s", moves: ["call", "flip", "frost"],
-      svg: `<g class="body">${torso("#5E7187")}
-        <path d="M32 54 V64" stroke="#C9D3DC" stroke-width="1.4"/>
-        <path d="M28 53.5 v6.5 M36 53.5 v6.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+      name: "Surfer Dad", era: "2000s", moves: ["shaka", "shades", "hairflip"],
+      svg: `<path class="hair-b" d="M9 50 C6 40 7.5 30 9.5 22 C12 10 21 4.5 32 4.5 C43 4.5 52 10 54.5 22 C56.5 30 58 40 55 50 C52 51.5 49.5 50.5 48.5 47.5 L15.5 47.5 C14.5 50.5 12 51.5 9 50Z" fill="#E2B85C" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+      <g class="body">${torso("#1FA59A")}
+        <g fill="#FFE27A"><circle cx="11" cy="58" r="2"/><circle cx="20" cy="61" r="1.6"/><circle cx="47" cy="57" r="2"/><circle cx="54" cy="61.5" r="1.6"/></g>
+        <g fill="#fff" opacity=".85"><circle cx="13.2" cy="56.8" r="1"/><circle cx="9.2" cy="59.6" r="1"/><circle cx="49.2" cy="55.8" r="1"/><circle cx="45.2" cy="58.6" r="1"/></g>
+        <path d="M23 49.5 L41 49.5 L34.5 60 L29.5 60Z" fill="var(--metal)" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M23 49.5 L29.5 55 L26 58.5 L20.5 51Z M41 49.5 L34.5 55 L38 58.5 L43.5 51Z" fill="#46C2B6" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
       </g>${neck}
-      <path d="M18.5 50.5 C22 55.5 42 55.5 45.5 50.5 L43.5 48 C40 52 24 52 20.5 48Z" fill="#4A5A6D" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+      <g fill="#FFF8EA" stroke="${INK}" stroke-width=".6"><circle cx="25.5" cy="51" r="1.2"/><circle cx="28" cy="52.6" r="1.2"/><circle cx="30.7" cy="53.4" r="1.2"/><circle cx="33.3" cy="53.4" r="1.2"/><circle cx="36" cy="52.6" r="1.2"/><circle cx="38.5" cy="51" r="1.2"/></g>
       <g class="hd">${head}
-        <path d="M13 26 L11.5 15 L17 18 L18 7.5 L23 13 L27 3.5 L31 11 L35 2.5 L39 11 L44 4.5 L46 14 L52 9 L51 26 C48.5 21.5 45 19.6 40 19.6 L24 19.6 C19 19.6 15 21.5 13 26Z" fill="#5A3A22" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
-        <path class="tips" d="M18 7.5 L19.6 11.2 L16.6 11.4Z M27 3.5 L28.6 7.4 L25.4 7.2Z M35 2.5 L36.4 6.4 L33.4 6.4Z M44 4.5 L44.9 8.5 L42.1 7.8Z M52 9 L51.2 12.6 L48.7 11.3Z M11.5 15 L14.3 16.6 L11.9 18.2Z" fill="#F6E7A8"/>
+        <g class="hair-f"><path d="M13 27 C12.5 17 19 11 26 10.5 C29 10.3 31 11.5 32 13.5 C33 11.5 35 10.3 38 10.5 C45 11 51.5 17 51 27 C49 21 45 18.5 40 18.5 C36.5 18.5 34 20 32 22.5 C30 20 27.5 18.5 24 18.5 C19 18.5 15 21 13 27Z" fill="#E2B85C" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M11.5 22 C7 30 6.8 38 9.8 45.5 L17 45.5 C15 37.5 15 30 16.5 22Z M52.5 22 C57 30 57.2 38 54.2 45.5 L47 45.5 C49 37.5 49 30 47.5 22Z" fill="#E2B85C" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M20 13.5 C23 12 27 12.5 29.5 14.5 M34.5 14.5 C37 12.5 41 12 44 13.5 M11 30 C10.4 35 10.8 39 12 43 M53 30 C53.6 35 53.2 39 52 43" fill="none" stroke="#F8E3A6" stroke-width="1.2" stroke-linecap="round"/></g>
         ${eyes}
-        <path d="M16 26.5 H29.5 V32 Q29.5 34 27.5 34 H18 Q16 34 16 32Z M34.5 26.5 H48 V32 Q48 34 46 34 H36.5 Q34.5 34 34.5 32Z" fill="#BFE3FF" fill-opacity=".3" stroke="#24303D" stroke-width="1.4"/>
-        <path d="M29.5 28 H34.5" stroke="#24303D" stroke-width="1.4"/>
+        <path d="M24.5 37 C27.5 35.4 30.8 35.8 32 37.2 C33.2 35.8 36.5 35.4 39.5 37 C37 38.9 34 38.7 32 38 C30 38.7 27 38.9 24.5 37Z" fill="#B8892E" stroke="${INK}" stroke-width="1" stroke-linejoin="round"/>
         ${smile}
-        <g class="earpiece"><rect x="53.5" y="26.5" width="4.5" height="9" rx="2.2" fill="#D5DEE6" stroke="${INK}" stroke-width="1.4"/>
-          <circle class="led" cx="55.75" cy="29.5" r="1.1" fill="#38B6FF"/></g>
+        <path d="M28.5 42.6 C29.5 46.6 34.5 46.6 35.5 42.6 C33.6 43.8 30.4 43.8 28.5 42.6Z" fill="#B8892E" stroke="${INK}" stroke-width="1" stroke-linejoin="round"/>
+        <g class="mv mv-shades" opacity="0"><path d="M14.5 26 C20 24.2 44 24.2 49.5 26 L48.6 31.4 C44 33.6 36 33.6 32 31 C28 33.6 20 33.6 15.4 31.4Z" fill="#FF7A1A" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+          <path d="M18 27.6 C22 26.8 26 26.8 28 27.4 M36 27.4 C38 26.8 42 26.8 46 27.6" stroke="#FFE27A" stroke-width="1.2" stroke-linecap="round"/></g>
       </g>
-      <g class="mv mv-phone" opacity="0"><rect x="2.5" y="29" width="8" height="8" rx="1.5" fill="#B9C4CF" stroke="${INK}" stroke-width="1.3"/>
-        <rect x="3.9" y="30.4" width="5.2" height="4" rx=".6" fill="#7FD1FF"/>
-        <g class="ph-bot"><rect x="2.5" y="37" width="8" height="9" rx="1.5" fill="#9AA7B4" stroke="${INK}" stroke-width="1.3"/>
-          <path d="M4.5 40h4M4.5 42.3h4M4.5 44.5h4" stroke="${INK}" stroke-width=".9"/></g></g>
-      <g class="mv mv-sparks" opacity="0">${spark(22, 4)}${spark(47, 2.5, .85)}${spark(9, 13, .7)}</g>`,
+      <g class="mv mv-shaka" opacity="0"><rect x="51.5" y="49" width="7" height="17" rx="2" fill="#1FA59A" stroke="${INK}" stroke-width="1.6"/>
+        <rect x="50" y="41.5" width="10" height="8.5" rx="3.2" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
+        <path d="M51 44 L47 40.5 M59 43.5 L61 38.5" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M51 44 L47 40.5 M59 43.5 L61 38.5" stroke="var(--metal)" stroke-width="1.6" stroke-linecap="round"/></g>`,
     },
   };
   const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties" };
