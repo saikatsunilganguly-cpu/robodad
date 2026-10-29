@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help test RoboDad</title>
+<meta name="description" content="Help RoboDad get onto the Google Play Store: join the 14-day test with your Android phone.">
+<meta name="theme-color" content="#2E5C8A">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#E8EFF5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5A6B7E; --line:#D3DEE8; --denim:#2E5C8A; --mustard:#F2B533; --mustard-ink:#2A1E00; --ok:#2F7D5B; --alert:#B3412E; color-scheme:light}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --alert:#E07A66; color-scheme:dark}
+}
+:root[data-theme="dark"]{--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --alert:#E07A66; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0; background:var(--sky); color:var(--ink); font:17px/1.55 "Nunito", ui-rounded, system-ui, sans-serif}
+main{max-width:640px; margin:0 auto; padding:28px 16px 64px; display:flex; flex-direction:column; gap:18px}
+.hero{display:flex; gap:16px; align-items:center}
+.hero img{width:76px; height:76px; border-radius:18px; flex:none}
+h1{margin:0; font-size:clamp(1.8rem, 6vw, 2.5rem); line-height:1.08; font-weight:900; letter-spacing:-.02em}
+.lede{margin:0; color:var(--muted); max-width:56ch}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:20px; display:flex; flex-direction:column; gap:12px}
+.card h2{margin:0; font-size:1.15rem; font-weight:900}
+ol{margin:0; padding-left:1.3em} ol li{margin-bottom:6px}
+.progress{display:flex; align-items:baseline; gap:10px}
+.progress .num{font-size:2.4rem; font-weight:900; line-height:1}
+.meter{height:12px; border-radius:6px; background:var(--line); overflow:hidden}
+.meter span{display:block; height:100%; width:0; background:var(--mustard); border-radius:6px; transition:width .8s ease}
+label{font-weight:800}
+input[type=text],input[type=email]{font:inherit; color:var(--ink); background:var(--sky); border:1.5px solid var(--line); border-radius:12px; padding:11px 13px; width:100%}
+input:focus-visible,button:focus-visible{outline:3px solid var(--mustard); outline-offset:2px}
+.check{display:flex; gap:10px; align-items:flex-start; font-weight:700}
+.check input{width:20px; height:20px; margin-top:3px; accent-color:var(--denim); flex:none}
+.hint{font-size:.85rem; color:var(--muted); margin:-4px 0 0}
+.hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+button.primary{border:0; border-radius:999px; background:var(--mustard); color:var(--mustard-ink); font:inherit; font-weight:900; padding:12px 24px; cursor:pointer; align-self:flex-start}
+button.primary:disabled{opacity:.5; cursor:default}
+.msg{font-weight:800; margin:0}
+.msg.err{color:var(--alert)} .msg.ok{color:var(--ok)}
+.share{display:flex; gap:16px; align-items:center; flex-wrap:wrap}
+.share img{width:132px; height:132px; border-radius:12px; background:#fff; padding:6px}
+.fine{font-size:.85rem; color:var(--muted)}
+a{color:var(--denim); font-weight:800}
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <img src="/static/icon-192.png" alt="">
+    <div>
+      <h1>Help test RoboDad</h1>
+      <p class="lede">RoboDad is getting ready for the Google Play Store, and you can help get him there.</p>
+    </div>
+  </div>
+
+  <section class="card" aria-labelledby="whyTitle">
+    <h2 id="whyTitle">Why your help matters</h2>
+    <p style="margin:0">Before a new app can go public, Google requires at least <strong>12 people</strong> to test it for <strong>14 days</strong> in a row. It takes about 10 minutes of your time in total.</p>
+    <div>
+      <div class="progress"><span class="num" id="count">…</span><span id="countText">testers signed up so far</span></div>
+      <div class="meter" aria-hidden="true"><span id="bar"></span></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="howTitle">
+    <h2 id="howTitle">What you'll do</h2>
+    <ol>
+      <li>Sign up below with the <strong>Gmail address on your Android phone</strong>.</li>
+      <li>When testing opens, you'll get an email with a link to join.</li>
+      <li>Tap the link, then install RoboDad from the Play Store like any other app.</li>
+      <li>Open it a few times over the next 14 days and try a couple of questions. Tap <strong>👍</strong>, <strong>👎</strong> or <strong>Report</strong> under replies; that's the feedback that makes RoboDad better.</li>
+      <li>Stay in the test until the 14 days are up. That's it!</li>
+    </ol>
+  </section>
+
+  <section class="card" aria-labelledby="formTitle">
+    <h2 id="formTitle">Count me in</h2>
+    <form id="form" novalidate style="display:flex; flex-direction:column; gap:12px">
+      <div>
+        <label for="first">First name <span style="font-weight:600; color:var(--muted)">(optional)</span></label>
+        <input type="text" id="first" maxlength="40" autocomplete="given-name">
+      </div>
+      <div>
+        <label for="email">Gmail address</label>
+        <input type="email" id="email" maxlength="254" autocomplete="email" required placeholder="name@gmail.com">
+      </div>
+      <p class="hint">Use the Google account that's signed in on your Android phone's Play Store.</p>
+      <label class="check"><input type="checkbox" id="android" required> I have an Android phone or tablet</label>
+      <label class="check"><input type="checkbox" id="adult" required> I'm 18 or older</label>
+      <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input type="text" id="website" tabindex="-1" autocomplete="off"></div>
+      <button class="primary" id="go" type="submit">Count me in</button>
+      <p class="msg" id="msg" role="status" hidden></p>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="shareTitle">
+    <h2 id="shareTitle">Know someone with an Android phone?</h2>
+    <div class="share">
+      <img src="/static/testers-qr.png" alt="QR code linking to robodad.onrender.com/testers">
+      <p style="margin:0; max-width:34ch">Scan the code or share <a href="/testers">robodad.onrender.com/testers</a>. Every tester gets RoboDad closer to the Play Store.</p>
+    </div>
+  </section>
+
+  <p class="fine">Your email is used only to invite you to RoboDad's Google Play test. It's kept in a private database and deleted once testing is finished. Read the <a href="/privacy">privacy policy</a>, or <a href="/">try RoboDad in your browser</a> right now.</p>
+</main>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  function showCount(count, goal){
+    if (count == null) { $("count").textContent = "–"; return; }
+    $("count").textContent = Math.min(count, 999);
+    $("countText").textContent = count >= goal
+      ? `testers signed up. We've hit Google's ${goal}! Extra testers are still welcome.`
+      : `of ${goal} testers signed up so far`;
+    $("bar").style.width = Math.min(100, Math.round(count / goal * 100)) + "%";
+  }
+  fetch("/api/testers/count", { cache:"no-store" }).then(r => r.json()).then(d => showCount(d.count, d.goal)).catch(() => showCount(null));
+
+  const msg = (text, ok) => { const m = $("msg"); m.hidden = false; m.textContent = text; m.className = "msg " + (ok ? "ok" : "err"); };
+  $("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = $("email").value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$/.test(email)) { msg("That email address doesn't look right. Check it and try again."); $("email").focus(); return; }
+    if (!$("android").checked || !$("adult").checked) { msg("Please tick both boxes to sign up."); return; }
+    $("go").disabled = true; $("go").textContent = "Signing you up…";
+    try {
+      const r = await fetch("/api/testers", { method:"POST", headers:{"content-type":"application/json"},
+        body: JSON.stringify({ email, first_name: $("first").value.trim(), adult: true, android: true, website: $("website").value }) });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error || "Something went wrong. Please try again.");
+      msg(`You're in${$("first").value.trim() ? ", " + $("first").value.trim() : ""}! Watch your inbox for the invite when testing opens.`, true);
+      $("form").querySelectorAll("input, button").forEach(el => el.disabled = true);
+      $("go").textContent = "Signed up";
+      if (d.count != null) showCount(d.count, d.goal);
+    } catch (err) {
+      msg(err.message); $("go").disabled = false; $("go").textContent = "Count me in";
+    }
+  });
+})();
+</script>
+</body>
+</html>

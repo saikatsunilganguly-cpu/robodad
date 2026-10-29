@@ -106,6 +106,28 @@ def is_bare_refusal(text: str) -> bool:
     return 0 < len(t) <= 160 and bool(_BARE_REFUSAL.match(t))
 
 
+# A stock opener like "I'm sorry, but I can't help with that." followed by real
+# advice reads like a machine. Dad Mode drops the opener and keeps the advice.
+_STOCK_OPENER = re.compile(
+    r"^\s*((i\s*['\u2019]?m\s+)?(really\s+|so\s+)?sorry[,.!]?\s*(but\s+)?)?"
+    r"(i\s*['\u2019]?m\s+(not\s+able|unable)\s+to|i\s+(can['\u2019]?t|cannot|won['\u2019]?t))\s+"
+    r"(help|assist)(\s+(you\s+)?with\s+(that|this)(\s+request)?)?\s*([.!]|\s*[\u2014\u2013-]+|,\s*(but|though)?)\s*",
+    re.IGNORECASE,
+)
+
+
+def strip_stock_opener(text: str) -> str:
+    """Remove a leading stock refusal sentence if real content follows it."""
+    m = _STOCK_OPENER.match(text or "")
+    if not m:
+        return text
+    rest = text[m.end():]
+    if len(rest.strip()) < 25:
+        return text
+    rest = rest.lstrip()
+    return rest[:1].upper() + rest[1:]
+
+
 REWRITE_NOTE = """
 
 ## Rewrite needed

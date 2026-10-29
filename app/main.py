@@ -46,7 +46,7 @@ from pydantic import BaseModel, Field  # noqa: E402
 
 from .llm import (  # noqa: E402
     FALLBACK_LINE, REWRITE_NOTE, build_system_prompt, clean_secret, detect_provider, is_bare_refusal,
-    stream_with_failover,
+    stream_with_failover, strip_stock_opener,
 )
 from .nlp import RoboDadNLP  # noqa: E402
 from .safety import check_crisis, clean_nickname, clean_user_text  # noqa: E402
@@ -212,6 +212,81 @@ async def status():
     }
 
 
+@app.get("/testers")
+async def testers_page():
+    return FileResponse(os.path.join(STATIC_DIR, "testers.html"), headers={"Cache-Control": "no-cache"})
+
+
+TESTER_GOAL = int(os.getenv("TESTER_GOAL", "12"))
+_EMAIL_RE = re.compile(r"^[^@\s]{1,64}@[^@\s]{1,190}\.[A-Za-z]{2,24}$")
+
+
+class TesterSignup(BaseModel):
+    email: str = Field(max_length=254)
+    first_name: str = Field(default="", max_length=40)
+    adult: bool = False
+    android: bool = False
+    website: str = Field(default="", max_length=200)  # honeypot: real people leave this empty
+
+
+def _supabase_headers(extra: dict | None = None) -> dict:
+    h = {"apikey": SUPABASE_KEY, "Content-Type": "application/json"}
+    if not SUPABASE_KEY.startswith("sb_"):
+        h["Authorization"] = f"Bearer {SUPABASE_KEY}"
+    return h | (extra or {})
+
+
+async def _tester_count() -> int | None:
+    if not (SUPABASE_URL and SUPABASE_KEY):
+        return None
+    try:
+        r = await state["client"].get(
+            f"{SUPABASE_URL}/rest/v1/testers?select=id",
+            headers=_supabase_headers({"Prefer": "count=exact", "Range": "0-0"}),
+        )
+        total = r.headers.get("content-range", "").split("/")[-1]
+        return int(total) if total.isdigit() else None
+    except (httpx.HTTPError, ValueError):
+        return None
+
+
+@app.get("/api/testers/count")
+async def tester_count():
+    return {"count": await _tester_count(), "goal": TESTER_GOAL}
+
+
+@app.post("/api/testers")
+async def tester_signup(t: TesterSignup, request: Request):
+    """Google Play closed-test sign-up. Stores only the email and an optional first name."""
+    if _rate_limited(_client_ip(request)):
+        return JSONResponse({"error": "Too many tries. Wait a minute, then try again."}, status_code=429)
+    if t.website:  # a bot filled in the hidden field
+        return {"ok": True, "count": await _tester_count(), "goal": TESTER_GOAL}
+    email = t.email.strip().lower()
+    if not _EMAIL_RE.match(email):
+        return JSONResponse({"error": "That email address doesn't look right. Check it and try again."}, status_code=400)
+    if not (t.adult and t.android):
+        return JSONResponse({"error": "Please confirm you're 18 or older and have an Android phone."}, status_code=400)
+    name = clean_nickname(t.first_name)
+    log.info("TESTER signup: %s", email.split("@")[0][:2] + "***@" + email.split("@")[-1])
+    if not (SUPABASE_URL and SUPABASE_KEY):
+        log.warning("Tester sign-up not stored (no database configured)")
+        return JSONResponse({"error": "Sign-ups aren't open yet. Please try again later."}, status_code=503)
+    try:
+        r = await state["client"].post(
+            f"{SUPABASE_URL}/rest/v1/testers?on_conflict=email",
+            headers=_supabase_headers({"Prefer": "return=minimal,resolution=ignore-duplicates"}),
+            json={"email": email, "first_name": name},
+        )
+        if r.status_code >= 300:
+            log.warning("Tester insert failed %s: %s", r.status_code, r.text[:300])
+            return JSONResponse({"error": "Something went wrong saving your sign-up. Please try again."}, status_code=502)
+    except httpx.HTTPError as exc:
+        log.warning("Supabase unreachable for tester sign-up: %s", exc)
+        return JSONResponse({"error": "Something went wrong saving your sign-up. Please try again."}, status_code=502)
+    return {"ok": True, "count": await _tester_count(), "goal": TESTER_GOAL}
+
+
 @app.get("/privacy")
 async def privacy():
     return FileResponse(os.path.join(STATIC_DIR, "privacy.html"), headers={"Cache-Control": "no-cache"})
@@ -359,12 +434,12 @@ async def dad_mode_stream(provider, system: str, history: list[dict]):
         buf += chunk
         if len(buf) > HOLD_BACK_CHARS:
             flushed = True
-            yield buf
+            yield strip_stock_opener(buf)
     if flushed:
         return
     if not is_bare_refusal(buf):
         if buf:
-            yield buf
+            yield strip_stock_opener(buf)
         return
     log.info("Bare refusal caught; asking for a Dad Mode rewrite")
     _daily["count"] += 1
@@ -374,7 +449,7 @@ async def dad_mode_stream(provider, system: str, history: list[dict]):
             retry += chunk
     except Exception as exc:
         log.warning("Dad Mode rewrite failed: %s", exc)
-    yield retry if retry.strip() and not is_bare_refusal(retry) else FALLBACK_LINE
+    yield strip_stock_opener(retry) if retry.strip() and not is_bare_refusal(retry) else FALLBACK_LINE
 
 
 @app.post("/api/feedback")
