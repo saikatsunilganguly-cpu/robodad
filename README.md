@@ -25,7 +25,7 @@ and safety.
 | Interface | Terminal `input()` loop | Web chat page, works on phone and desktop |
 | Replies | Random pick from the intent's canned list | Streamed, word-by-word replies from an LLM (Claude, Groq or any OpenAI-compatible model) |
 | Intent classifier | 57.8% accuracy; confident on only 29% of messages | 68.7% accuracy; confident on 79% of messages at the same reliability (see below) |
-| Voice | None | Talk with the mic button; RoboDad can read replies aloud |
+| Voice | None | Talk with the mic button. RoboDad reads replies aloud in his own deep, calm male voice (Groq Orpheus "Daniel"; Troy and Austin in Settings), the same on every device, and falls back to the device's best male voice if the online voice is unavailable |
 | Phone | None | Installs as a home-screen app and opens instantly |
 | Feedback | None | Thumbs up/down and "Report" on every reply, saved to a free database |
 | Look and feel | Terminal text | Five looks the user picks: **Classic**, **Arcade Neon**, **VHS Sunset**, **Y2K Gloss** (glossy bubbles, "Dialing up at 56k…") and **Diner '55** (chrome header, checkerboard trim, neon-script headline, starburst, a tail-finned cruiser, shake, burger and fries, and a spinning 45 while RoboDad thinks). RoboDad has slicked-back 80s hair, aviators and a leather jacket over a white shirt; a cassette spins while he thinks; "blowing on the cartridge" while the free server wakes up |

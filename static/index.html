@@ -876,7 +876,7 @@ textarea::placeholder{color:var(--muted)}
   const canSpeak = "speechSynthesis" in window || "Audio" in window;
   let readAloud = canSpeak && getPref(READ_KEY) === "on";
   const VOICE_KEY = "robodad.voice";
-  let voicePref = getPref(VOICE_KEY) || "troy";
+  let voicePref = getPref(VOICE_KEY) || "daniel";
   // deep male device voices, best first (names differ by device and browser)
   const DAD_VOICES = [/Connor.*(Natural|Ireland)/i, /Ryan.*Natural/i, /Thomas.*Natural/i, /Guy.*Natural/i, /Andrew.*Natural/i,
     /Brian.*Natural/i, /Davis.*Natural/i, /Christopher.*Natural/i, /Eric.*Natural/i, /Google UK English Male/i,
@@ -960,10 +960,10 @@ textarea::placeholder{color:var(--muted)}
     const sel = $("voiceSel"); if (!sel) return;
     const dev = "speechSynthesis" in window ? speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith("en")) : [];
     sel.innerHTML = `<optgroup label="RoboDad's voice (online)">
-        <option value="troy">Troy: deep and steady</option><option value="daniel">Daniel: warm</option><option value="austin">Austin: easygoing</option></optgroup>
+        <option value="daniel">Daniel: deep and steady</option><option value="troy">Troy: brighter</option><option value="austin">Austin: easygoing</option></optgroup>
       <optgroup label="This device's voices"><option value="device">Automatic (a male voice if there is one)</option>
         ${dev.map(v => `<option value="device:${esc(v.name)}">${esc(v.name)}</option>`).join("")}</optgroup>`;
-    sel.value = voicePref; if (sel.value !== voicePref) sel.value = "troy";
+    sel.value = voicePref; if (sel.value !== voicePref) sel.value = "daniel";
   }
   if ("speechSynthesis" in window) speechSynthesis.addEventListener?.("voiceschanged", fillVoices);
   if (canSpeak) {
