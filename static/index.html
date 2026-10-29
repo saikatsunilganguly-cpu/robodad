@@ -283,6 +283,77 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .look[aria-checked="true"]{border-color:var(--mustard); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 35%, transparent)}
 .look .pv{height:64px; border-radius:10px; position:relative; overflow:hidden; display:grid; place-items:center}
 .look .pv svg{width:40px; height:40px}
+.avpick{display:flex; flex-direction:column; gap:8px}
+.avs{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px}
+.avb{border:2px solid var(--line); border-radius:14px; background:transparent; color:var(--ink); padding:6px 4px; cursor:pointer; font:inherit; display:flex; flex-direction:column; align-items:center; gap:2px; text-align:center}
+.avb[aria-checked="true"]{border-color:var(--mustard); box-shadow:0 0 0 3px color-mix(in srgb, var(--mustard) 35%, transparent)}
+.avb svg{width:40px; height:40px; display:block}
+.avb b{font-size:.78rem; line-height:1.15} .avb small{font-size:.7rem; color:var(--muted); line-height:1.1}
+.avb .auto{width:40px; height:40px; display:grid; place-items:center; font-weight:900; font-size:.72rem; border:2px dashed var(--line); border-radius:50%; color:var(--muted)}
+#avatar,#avHero{cursor:pointer} #avHead,#avHero{overflow:visible}
+/* ---------- avatar idle moves ---------- */
+.bot .hd{transform-origin:32px 46px}
+.bot .mv,.bot .eye,.bot .cap,.bot .pager,.bot .mouth,.bot .tips,.bot .ph-bot,.bot .glint,.bot .led{transform-box:fill-box; transform-origin:center}
+.bot .mv-hand,.bot .mv-collar{transform-origin:50% 100%}
+.bot .ph-bot{transform-origin:50% 0}
+@keyframes av-pop{0%{opacity:0} 12%,85%{opacity:1} 100%{opacity:0}}
+/* 1950s */
+.do-collar .mv-collar{animation:av-collar 2.8s ease-out}
+@keyframes av-collar{0%{opacity:0; transform:scaleY(0)} 14%{opacity:1; transform:scaleY(1.2)} 22%,80%{opacity:1; transform:scaleY(1)} 100%{opacity:0; transform:scaleY(0)}}
+.do-collar .hd{animation:av-smug 2.8s ease-in-out}
+@keyframes av-smug{0%,100%{transform:none} 25%,75%{transform:rotate(-5deg)}}
+.do-shine .glint{animation:av-glint 1.8s ease-in-out}
+@keyframes av-glint{0%,100%{transform:none; opacity:.75} 40%{transform:translateX(5px); opacity:1} 60%{transform:translateX(-2px); opacity:1}}
+.do-shine .mv-spark{animation:av-spark 1.8s ease-out}
+@keyframes av-spark{0%,30%{opacity:0; transform:scale(0) rotate(0)} 50%{opacity:1; transform:scale(1.4) rotate(45deg)} 75%{opacity:1; transform:scale(1) rotate(90deg)} 100%{opacity:0; transform:scale(0) rotate(135deg)}}
+.do-comb .mv-comb{animation:av-comb 2.4s ease-in-out}
+@keyframes av-comb{0%{opacity:0; transform:translate(9px,7px) rotate(-8deg)} 12%{opacity:1; transform:translate(9px,7px) rotate(-8deg)} 45%{opacity:1; transform:translate(38px,3px) rotate(6deg)} 55%{opacity:1; transform:translate(14px,6px) rotate(-6deg)} 88%{opacity:1; transform:translate(40px,4px) rotate(6deg)} 100%{opacity:0; transform:translate(42px,4px)}}
+.do-comb .hair-shine{animation:av-hairshine 2.4s ease-in-out}
+@keyframes av-hairshine{50%{opacity:1}}
+/* today */
+.do-wave .mv-hand{animation:av-wave 2.8s ease-in-out}
+@keyframes av-wave{0%{opacity:0; transform:translateY(14px)} 15%{opacity:1; transform:translateY(0)} 28%{transform:rotate(-16deg)} 42%{transform:rotate(14deg)} 56%{transform:rotate(-16deg)} 70%{transform:rotate(12deg)} 84%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(14px)}}
+.do-wink .eye-r{animation:av-wink 1.4s ease-in-out}
+@keyframes av-wink{0%,25%,75%,100%{transform:none} 35%,65%{transform:scaleY(.12)}}
+.do-wink .mouth{animation:av-grin 1.4s ease-in-out}
+@keyframes av-grin{35%,65%{transform:scaleX(1.15) translateY(.5px)}}
+.do-sip .mv-mug{animation:av-sip 3s ease-in-out}
+@keyframes av-sip{0%{opacity:0; transform:translateY(16px)} 18%{opacity:1; transform:translateY(0)} 35%,62%{opacity:1; transform:translate(-2px,-1px) rotate(-20deg)} 80%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(16px)}}
+/* 1980s */
+.do-bob .hd{animation:av-bob 2.6s ease-in-out}
+@keyframes av-bob{0%,100%{transform:none} 12%,37%,62%{transform:rotate(-5deg) translateY(1px)} 25%,50%,75%{transform:rotate(4deg)} 88%{transform:rotate(-2deg)}}
+.do-bob .mv-notes{animation:av-notes 2.6s ease-out}
+@keyframes av-notes{0%{opacity:0; transform:translate(0,4px)} 20%{opacity:1} 100%{opacity:0; transform:translate(5px,-9px) rotate(12deg)}}
+.do-shades .mv-shades{animation:av-shades 3s ease-in-out}
+@keyframes av-shades{0%{opacity:0; transform:translateY(-11px)} 12%{opacity:1; transform:translateY(-11px)} 28%{transform:translateY(1px)} 34%,80%{opacity:1; transform:none} 94%{opacity:1; transform:translateY(-11px)} 100%{opacity:0; transform:translateY(-11px)}}
+.do-oneup .mv-1up{animation:av-1up 2.4s ease-out}
+@keyframes av-1up{0%{opacity:0; transform:translateY(5px) scale(.5)} 18%{opacity:1; transform:scale(1.25)} 28%{transform:scale(1)} 78%{opacity:1; transform:translateY(-3px)} 100%{opacity:0; transform:translateY(-8px)}}
+.do-oneup .hd{animation:av-hop 2.4s ease-out}
+@keyframes av-hop{0%,40%,100%{transform:none} 15%{transform:translateY(-3px)}}
+/* 1990s */
+.do-capflip .cap{animation:av-capflip 2.2s ease-in-out}
+@keyframes av-capflip{0%,100%{transform:none} 25%{transform:translateY(-9px)} 65%{transform:translateY(-9px) rotate(360deg)} 85%,99%{transform:rotate(360deg)}}
+.do-pager .pager{animation:av-buzz 1.8s linear}
+@keyframes av-buzz{0%,100%{transform:none} 5%,15%,25%,35%,45%,55%,65%{transform:translateX(-1px)} 10%,20%,30%,40%,50%,60%,70%{transform:translateX(1px)} 75%{transform:none}}
+.do-pager .pager-scr{animation:av-blink .3s steps(2) 6}
+@keyframes av-blink{50%{fill:#E8FFD8}}
+.do-pager .mv-buzz{animation:av-pop 1.4s steps(4)}
+.do-pager .hd{animation:av-look 1.8s ease-in-out}
+@keyframes av-look{30%,80%{transform:rotate(7deg) translateY(1px)}}
+/* 2000s */
+.do-call .led{animation:av-led .25s steps(2) 10}
+@keyframes av-led{50%{fill:#E9F7FF}}
+.do-call .hd{animation:av-tilt 2.6s ease-in-out}
+@keyframes av-tilt{15%,85%{transform:rotate(-7deg)}}
+.do-call .mouth{animation:av-talk .32s ease-in-out 7 alternate}
+@keyframes av-talk{to{transform:scaleY(.35)}}
+.do-flip .mv-phone{animation:av-pop 3s ease-in-out}
+.do-flip .ph-bot{animation:av-flipopen 3s ease-in-out}
+@keyframes av-flipopen{0%,18%{transform:scaleY(0)} 30%,80%{transform:scaleY(1)} 92%,100%{transform:scaleY(0)}}
+.do-flip .hd{animation:av-tilt 3s ease-in-out}
+.do-frost .tips{animation:av-frost 1.8s ease-in-out}
+@keyframes av-frost{30%,60%{fill:#FFFFFF}}
+.do-frost .mv-sparks{animation:av-spark 1.8s ease-out}
 .look strong{font-size:.9rem; line-height:1.2} .look small{color:var(--muted); font-size:.78rem; line-height:1.2}
 .pv.classic{background:#E8EFF5} .pv.arcade{background:linear-gradient(#0D0A26 55%, #2A1060)}
 .pv.vhs{background:linear-gradient(180deg, #2B1634 40%, #FF7A59 140%)}
@@ -580,7 +651,7 @@ textarea::placeholder{color:var(--muted)}
 
 <header class="top">
   <span class="avatar" id="avatar" aria-hidden="true">
-    <svg class="bot" width="44" height="44"><use href="#robodad"/></svg>
+    <svg class="bot" id="avHead" width="44" height="44" viewBox="0 0 64 64"><use href="#robodad"/></svg>
     <svg class="focus-ring" viewBox="0 0 52 52"><circle class="track" cx="26" cy="26" r="24"/><circle class="prog" id="ringProg" cx="26" cy="26" r="24"/></svg>
   </span>
   <div class="who">
@@ -609,7 +680,7 @@ textarea::placeholder{color:var(--muted)}
 <main id="scroller">
   <div class="log" id="log" aria-live="polite">
     <section class="hello" id="hello">
-      <svg class="bot" width="88" height="88" aria-hidden="true"><use href="#robodad"/></svg>
+      <svg class="bot" id="avHero" width="88" height="88" viewBox="0 0 64 64" aria-hidden="true"><use href="#robodad"/></svg>
       <h2 id="helloTitle">Hey. What's on your mind?</h2>
       <p>Real advice for real life: school stress, money, cooking, friends, first jobs, or a dad joke you'll pretend not to like.</p>
       <div class="chips">
@@ -760,25 +831,29 @@ textarea::placeholder{color:var(--muted)}
     <p id="menuHint">Pick a look. You can change it any time from the ☰ menu.</p>
     <div class="looks" role="radiogroup" aria-label="Look">
       <button class="look" type="button" role="radio" data-look="classic" aria-checked="true">
-        <span class="pv classic"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <span class="pv classic"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-modern"/></svg></span>
         <strong>Classic</strong><small>Calm and clean</small>
       </button>
       <button class="look" type="button" role="radio" data-look="arcade" aria-checked="false">
-        <span class="pv arcade"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <span class="pv arcade"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-eighties"/></svg></span>
         <strong>Arcade Neon</strong><small>Midnight arcade glow</small>
       </button>
       <button class="look" type="button" role="radio" data-look="vhs" aria-checked="false">
-        <span class="pv vhs"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <span class="pv vhs"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-nineties"/></svg></span>
         <strong>VHS Sunset</strong><small>Rewind to 1987</small>
       </button>
       <button class="look" type="button" role="radio" data-look="y2k" aria-checked="false">
-        <span class="pv y2k"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <span class="pv y2k"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-y2k"/></svg></span>
         <strong>Y2K Gloss</strong><small>Glossy bubbles, circa 2004</small>
       </button>
       <button class="look" type="button" role="radio" data-look="diner" aria-checked="false">
-        <span class="pv diner"><svg aria-hidden="true"><use href="#robodad"/></svg></span>
+        <span class="pv diner"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-fifties"/></svg></span>
         <strong>Diner '55</strong><small>Shakes, chrome and checkerboard</small>
       </button>
+    </div>
+    <div class="avpick">
+      <p class="coll-head" style="margin:0!important"><span>Avatar</span><small>Tap RoboDad any time to see a move</small></p>
+      <div class="avs" role="radiogroup" aria-label="Avatar" id="avPick"></div>
     </div>
     <div>
       <div class="setting" id="readRow" hidden><span>Read replies aloud</span>
@@ -855,6 +930,7 @@ textarea::placeholder{color:var(--muted)}
 </div>
 
 <script src="/static/radio.js"></script>
+<script src="/static/avatars.js"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1332,6 +1408,47 @@ const PLAYERS = {
   }
 
   // ---------- looks ----------
+  // ---------- avatars: a robot dad for each decade, with idle moves ----------
+  const AV_KEY = "robodad.avatar";
+  const AV = window.RoboAvatars;
+  let avPref = getPref(AV_KEY) || "auto", avKind = "fifties", avLast = "";
+  if (AV) AV.installSymbols(document.querySelector('svg[width="0"]'));
+  const avKindFor = (look) => avPref !== "auto" && AV?.AVATARS[avPref] ? avPref : (AV?.LOOK_AVATAR[look] || "fifties");
+  function mountAvatar(look){
+    if (!AV) return;
+    avKind = avKindFor(look);
+    const markup = AV.AVATARS[avKind].svg;
+    document.getElementById("robodad").innerHTML = markup;        // every small RoboDad on the page follows
+    ["avHead", "avHero"].forEach(id => { const el = $(id); if (el) el.innerHTML = markup; });
+    $("avPick") && $("avPick").querySelectorAll(".avb").forEach(b => b.setAttribute("aria-checked", String(b.dataset.av === avPref)));
+  }
+  function avPlay(move){
+    if (!AV || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const moves = AV.AVATARS[avKind].moves;
+    if (!move) { const pool = moves.filter(m => m !== avLast); move = pool[Math.floor(Math.random() * pool.length)]; }
+    avLast = move;
+    ["avHead", "avHero"].forEach(id => {
+      const el = $(id); if (!el) return;
+      [...el.classList].filter(c => c.startsWith("do-")).forEach(c => el.classList.remove(c));
+      void el.getBoundingClientRect(); el.classList.add("do-" + move);
+      clearTimeout(el._avT); el._avT = setTimeout(() => el.classList.remove("do-" + move), 3300);
+    });
+  }
+  if (AV) {
+    $("avPick").innerHTML = `<button class="avb" type="button" role="radio" data-av="auto"><span class="auto">Auto</span><b>Match my look</b><small>Changes with it</small></button>` +
+      Object.entries(AV.AVATARS).map(([k, a]) => `<button class="avb" type="button" role="radio" data-av="${k}"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-${k}"/></svg><b>${esc(a.name)}</b><small>${esc(a.era)}</small></button>`).join("");
+    $("avPick").addEventListener("click", (e) => {
+      const b = e.target.closest(".avb"); if (!b) return;
+      avPref = b.dataset.av; setPref(AV_KEY, avPref);
+      mountAvatar(document.documentElement.dataset.look || "classic"); setTimeout(() => avPlay(), 250);
+    });
+    $("avatar").addEventListener("click", () => avPlay());
+    $("avHero")?.addEventListener("click", () => avPlay());
+    // a little move every 5 minutes (first one after 40 seconds), only while the page is on screen
+    const idle = () => { if (!document.hidden && !document.querySelector(".overlay:not([hidden])")) avPlay(); };
+    setTimeout(idle, 40000); setInterval(idle, 5 * 60 * 1000);
+  }
+
   const LOOK_KEY = "robodad.look";
   const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6" };
   const WAKE_COPY = {
@@ -1345,7 +1462,7 @@ const PLAYERS = {
     if (look === "classic") delete document.documentElement.dataset.look; else document.documentElement.dataset.look = look;
     document.querySelector('meta[name="theme-color"]').content = THEME_COLORS[look];
     if (!/Signal lost/.test(wakeText.textContent)) wakeText.textContent = WAKE_COPY[look] || WAKE_COPY.other;
-    renderPlayers();
+    renderPlayers(); mountAvatar(look);
     menuDlg.querySelectorAll(".look").forEach(b => b.setAttribute("aria-checked", String(b.dataset.look === look)));
     setPref(LOOK_KEY, look);
   }
