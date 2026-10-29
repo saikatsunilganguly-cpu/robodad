@@ -668,6 +668,47 @@ textarea::placeholder{color:var(--muted)}
   font-weight:900; padding:10px 18px; cursor:pointer;
 }
 .send:disabled{opacity:.45; cursor:default}
+/* voice + music bubbles beside the header avatar */
+.avwrap{position:relative; flex:none; display:block; width:80px; height:46px}
+.avwrap .avatar{position:absolute; left:0; top:1px}
+.avwrap .bw-music{position:absolute; left:47px; top:-5px}
+.avwrap .bw-voice{position:absolute; left:48px; top:26px}
+.bub{position:relative; display:grid; place-items:center; border:1.5px solid var(--line); background:var(--surface); color:var(--muted); cursor:pointer; padding:0;
+  font:inherit; transition:transform .15s, border-color .2s, background .2s, opacity .2s; opacity:.75}
+.bub::after{content:""; position:absolute; inset:-8px}                       /* bigger tap area */
+.bub:hover,.bub:focus-visible{opacity:1; transform:scale(1.08)}
+.bub[aria-pressed="true"]{opacity:1; border-color:var(--denim); color:var(--denim)}
+.bub.thought{width:34px; height:24px; border-radius:50% 50% 46% 46% / 60% 60% 42% 42%}
+.bub.thought::before{content:""; position:absolute; left:-5px; bottom:-4px; width:6px; height:6px; border-radius:50%; border:1.5px solid; border-color:inherit; background:inherit}
+.bub.thought .glyph{font-weight:900; font-size:.95rem; line-height:1}
+.bub.thought .pl-art{display:none}
+.bub.thought[aria-pressed="true"] .glyph{display:none}
+.bub.thought[aria-pressed="true"] .pl-art{display:inline-grid}
+.bub.thought .pl-art svg{width:28px; height:22px}
+.bub.speech{min-width:30px; height:19px; border-radius:9px; padding:0 5px; white-space:nowrap}
+.bub.speech::before{content:""; position:absolute; left:-5px; bottom:3px; border:4px solid transparent; border-right:5px solid var(--line)}
+.bub.speech[aria-pressed="true"]::before{border-right-color:var(--denim)}
+.bub .dots{display:flex; gap:2.5px}
+.bub .dots i{width:3.5px; height:3.5px; border-radius:50%; background:currentColor}
+.bub.speech[aria-pressed="true"] .dots i{animation:talkdot 1.2s ease-in-out infinite}
+.bub.speech[aria-pressed="true"] .dots i:nth-child(2){animation-delay:.15s} .bub.speech[aria-pressed="true"] .dots i:nth-child(3){animation-delay:.3s}
+@keyframes talkdot{0%,60%,100%{transform:none} 30%{transform:translateY(-2.5px)}}
+.bub.speech.speaking .dots i{animation:talkwave .5s ease-in-out infinite alternate}
+@keyframes talkwave{from{transform:scaleY(1)} to{transform:scaleY(2.4)}}
+.bub .say{display:none; font-weight:900; font-size:.72rem; color:var(--ink); letter-spacing:.01em}
+.bub.speech.saying{opacity:1; z-index:7; border-color:var(--ink); animation:sayin .25s ease-out}
+.bub.speech.saying .say{display:inline} .bub.speech.saying .dots{display:none}
+@keyframes sayin{from{transform:scale(.5)}}
+.bub.hint{animation:bubhint 1s ease-in-out 3}
+@keyframes bubhint{0%,100%{transform:none} 40%{transform:translateY(-4px) scale(1.15)}}
+.bub .fnote{display:none; position:absolute; right:-7px; top:-9px; pointer-events:none}
+.bub.thought[aria-pressed="true"] .fnote{display:block; font-size:.7rem; font-weight:900; color:var(--denim); animation:notefloat 2.4s ease-out infinite}
+@keyframes notefloat{0%{opacity:0; transform:translate(0,4px)} 25%{opacity:1} 100%{opacity:0; transform:translate(5px,-10px) rotate(15deg)}}
+.qtip{margin:6px 6px 2px; font-size:.75rem; color:var(--muted); line-height:1.3}
+.bubcap{position:absolute; left:0; top:calc(100% + 12px); z-index:16; white-space:nowrap; background:var(--ink); color:var(--surface); border-radius:999px; padding:5px 6px 5px 12px;
+  font-size:.82rem; font-weight:800; display:flex; align-items:center; gap:8px; box-shadow:0 8px 20px rgba(0,0,0,.2); animation:sayin .25s ease-out}
+.bubcap button{border:0; border-radius:999px; background:var(--surface); color:var(--ink); font:inherit; font-weight:900; font-size:.78rem; padding:4px 10px; cursor:pointer}
+.avwrap .qpop{top:calc(100% + 10px); bottom:auto; left:-46px; z-index:20}
 .quick{max-width:720px; margin:0 auto 6px; display:flex; gap:8px}
 .qwrap{position:relative}
 .qchip{display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px;
@@ -754,9 +795,24 @@ textarea::placeholder{color:var(--muted)}
 </svg>
 
 <header class="top">
-  <span class="avatar" id="avatar" aria-hidden="true">
-    <svg class="bot" id="avHead" width="44" height="44" viewBox="0 0 64 64"><use href="#robodad"/></svg>
-    <svg class="focus-ring" viewBox="0 0 52 52"><circle class="track" cx="26" cy="26" r="24"/><circle class="prog" id="ringProg" cx="26" cy="26" r="24"/></svg>
+  <span class="avwrap" id="avwrap">
+    <span class="avatar" id="avatar" aria-hidden="true">
+      <svg class="bot" id="avHead" width="44" height="44" viewBox="0 0 64 64"><use href="#robodad"/></svg>
+      <svg class="focus-ring" viewBox="0 0 52 52"><circle class="track" cx="26" cy="26" r="24"/><circle class="prog" id="ringProg" cx="26" cy="26" r="24"/></svg>
+    </span>
+    <span class="qwrap bw-music" id="qMusicWrap">
+      <button class="bub thought" id="musicBtn" type="button" title="Play music" aria-pressed="false" aria-controls="qMusicPop">
+        <span class="glyph" aria-hidden="true">♪</span><span class="fnote" aria-hidden="true">♪</span><span class="pl-art" id="musicArt" aria-hidden="true"></span><span class="sr" id="musicLabel">Play music</span>
+      </button>
+      <div class="qpop" id="qMusicPop" role="group" aria-label="Music" hidden></div>
+    </span>
+    <span class="qwrap bw-voice" id="qVoiceWrap">
+      <button class="bub speech" id="voiceBtn" type="button" title="Read replies aloud" aria-pressed="false" aria-controls="qVoicePop">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="say" id="saySpan" aria-hidden="true"></span><span class="sr" id="voiceLabel">Read replies aloud</span>
+      </button>
+      <div class="qpop" id="qVoicePop" role="group" aria-label="RoboDad's voice" hidden></div>
+    </span>
+    <div class="bubcap" id="bubCap" role="status" hidden></div>
   </span>
   <div class="who">
     <h1>RoboDad</h1>
@@ -764,9 +820,6 @@ textarea::placeholder{color:var(--muted)}
   </div>
   <button class="icon-btn" id="sideBtn" type="button" title="Dashboard: radio, timer and more">
     <svg aria-hidden="true"><use href="#i-dash"/></svg><span class="sr">Dashboard: radio, timer and more</span>
-  </button>
-  <button class="player-btn" id="musicBtn" type="button" title="Play music" aria-pressed="false">
-    <span class="pl-art" id="musicArt" aria-hidden="true"></span><span class="sr" id="musicLabel">Play music</span>
   </button>
   <button class="icon-btn hide-narrow" id="beltBtn" type="button" title="Badges">
     <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Badges</span>
@@ -838,16 +891,6 @@ textarea::placeholder{color:var(--muted)}
 </main>
 
 <div class="composer">
-  <div class="quick" id="quick">
-    <div class="qwrap">
-      <button class="qchip" id="qVoice" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="qVoicePop"><svg aria-hidden="true"><use href="#i-speaker"/></svg><span id="qVoiceText">Voice off</span></button>
-      <div class="qpop" id="qVoicePop" role="group" aria-label="RoboDad's voice" hidden></div>
-    </div>
-    <div class="qwrap" id="qMusicWrap">
-      <button class="qchip" id="qMusic" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="qMusicPop"><svg aria-hidden="true"><use href="#i-note"/></svg><span id="qMusicText">Music off</span></button>
-      <div class="qpop" id="qMusicPop" role="group" aria-label="Music" hidden></div>
-    </div>
-  </div>
   <form id="form" autocomplete="off">
     <label for="input" class="sr">Message RoboDad</label>
     <textarea id="input" rows="1" maxlength="1000" placeholder="Talk to RoboDad…"></textarea>
@@ -1048,8 +1091,8 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js?v=25"></script>
-<script src="/static/avatars.js?v=25"></script>
+<script src="/static/radio.js?v=26"></script>
+<script src="/static/avatars.js?v=26"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1131,7 +1174,7 @@ textarea::placeholder{color:var(--muted)}
   document.addEventListener("pointerdown", unlockVoice, { capture:true });
   document.addEventListener("keydown", unlockVoice, { capture:true });
   let speakId = 0;
-  const unduck = () => window.RoboRadio && RoboRadio.duck(false);
+  const unduck = () => { $("voiceBtn")?.classList.remove("speaking"); window.RoboRadio && RoboRadio.duck(false); };
   function stopSpeaking(){
     speakId++;
     if ("speechSynthesis" in window) speechSynthesis.cancel();
@@ -1167,6 +1210,7 @@ textarea::placeholder{color:var(--muted)}
     stopSpeaking(); const id = speakId;
     const said = plain(text).replace(/\s+/g, " ").trim(); if (!said) return;
     if (window.RoboRadio) RoboRadio.duck(true);
+    $("voiceBtn")?.classList.add("speaking");
     if (!player) return speakDevice(said, id);
     const parts = chunks(said);
     let next = fetchClip(parts[0]);
@@ -1573,7 +1617,7 @@ const PLAYERS = {
     if (!AV || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const moves = AV.AVATARS[avKind].moves;
     if (!move) { const pool = moves.filter(m => m !== avLast); move = pool[Math.floor(Math.random() * pool.length)]; }
-    avLast = move;
+    avLast = move; bubbleSay(move);
     ["avHead", "avHero"].forEach(id => {
       const el = $(id); if (!el) return;
       [...el.classList].filter(c => c.startsWith("do-")).forEach(c => el.classList.remove(c));
@@ -2007,7 +2051,7 @@ const PLAYERS = {
   $("beltMiniOpen").addEventListener("click", () => { side.classList.remove("open"); $("beltBtn").click(); });
   updateBeltMini();
 
-  // ---------- quick controls on the main screen: voice + music ----------
+  // ---------- voice + music bubbles next to the header avatar ----------
   const voiceLabel = () => curVoice().label;
   function setReadAloud(on){
     readAloud = on; readBtn.setAttribute("aria-pressed", String(on));
@@ -2025,32 +2069,49 @@ const PLAYERS = {
   function renderMusicPop(){
     const R = window.RoboRadio; if (!R) return; const on = !!R.playing;
     $("qMusicPop").innerHTML = `<div class="qrow"><span>Music</span><button class="switch" type="button" data-act="music" aria-pressed="${on}"><span class="sr">Music on or off</span></button></div>
-      ${Object.entries(R.stations).map(([k, name]) => `<button class="qopt" type="button" data-st="${k}" aria-pressed="${radioPrefs.st === k}" aria-checked="${radioPrefs.st === k}"><span class="dot"></span>${esc(name)}</button>`).join("")}`;
+      ${Object.entries(R.stations).map(([k, name]) => `<button class="qopt" type="button" data-st="${k}" aria-checked="${radioPrefs.st === k}"><span class="dot"></span>${esc(name)}</button>`).join("")}
+      <p class="qtip">Can't hear it? Turn your volume up. On iPhone, also turn off silent mode.</p>`;
   }
   function quickUI(){
-    $("qVoiceText").textContent = readAloud ? `Voice: ${voiceLabel()}` : "Voice off";
-    $("qVoice").classList.toggle("on", readAloud);
-    const R = window.RoboRadio, on = !!(R && R.playing);
-    $("qMusicText").textContent = on ? R.stations[R.station] : "Music off";
-    $("qMusic").classList.toggle("on", on);
+    const vb = $("voiceBtn");
+    vb.setAttribute("aria-pressed", String(readAloud));
+    vb.title = readAloud ? `Voice on: ${voiceLabel()}. Tap to turn off` : "Voice off. Tap to have RoboDad read replies aloud";
+    $("voiceLabel").textContent = vb.title;
     if (!$("qVoicePop").hidden) renderVoicePop();
     if (!$("qMusicPop").hidden) renderMusicPop();
   }
+  // a little caption that pops out of the bubble: "♪ Half-Pipe '99 · Change"
+  let capTimer = null;
+  function hideCap(){ $("bubCap").hidden = true; clearTimeout(capTimer); }
+  function showCap(kind, text){
+    const cap = $("bubCap");
+    cap.innerHTML = `<span>${esc(text)}</span>` + (kind ? `<button type="button" data-open="${kind}">Change</button>` : "");
+    cap.hidden = false; clearTimeout(capTimer);
+    capTimer = setTimeout(() => { if (!cap.matches(":hover") && !cap.contains(document.activeElement)) hideCap(); else capTimer = setTimeout(hideCap, 3000); }, 4500);
+  }
+  $("bubCap").addEventListener("click", (e) => { const b = e.target.closest("[data-open]"); if (!b) return; const k = b.dataset.open; hideCap(); openPop(k); });
   function closePops(){
     ["qVoicePop", "qMusicPop"].forEach(id => $(id).hidden = true);
-    ["qVoice", "qMusic"].forEach(id => $(id).setAttribute("aria-expanded", "false"));
+    ["voiceBtn", "musicBtn"].forEach(id => $(id).setAttribute("aria-expanded", "false"));
   }
   function openPop(name){
-    const pop = $(name === "voice" ? "qVoicePop" : "qMusicPop"), btn = $(name === "voice" ? "qVoice" : "qMusic");
+    const pop = $(name === "voice" ? "qVoicePop" : "qMusicPop"), btn = $(name === "voice" ? "voiceBtn" : "musicBtn");
     const wasOpen = !pop.hidden; closePops(); if (wasOpen) return;
     (name === "voice" ? renderVoicePop : renderMusicPop)();
     pop.hidden = false; btn.setAttribute("aria-expanded", "true"); pop.querySelector("button")?.focus();
   }
   const refocus = (pop, b) => { const sel = b.dataset.act ? `[data-act="${b.dataset.act}"]` : b.dataset.voice ? `[data-voice="${b.dataset.voice}"]` : `[data-st="${b.dataset.st}"]`; pop.querySelector(sel)?.focus(); };
-  $("qVoice").addEventListener("click", () => openPop("voice"));
-  $("qMusic").addEventListener("click", () => openPop("music"));
-  document.addEventListener("click", (e) => { if (!e.composedPath().some(n => n.classList && n.classList.contains("qwrap"))) closePops(); });
-  $("quick").addEventListener("keydown", (e) => { if (e.key === "Escape" && (!$("qVoicePop").hidden || !$("qMusicPop").hidden)) { e.stopPropagation(); const v = !$("qVoicePop").hidden; closePops(); $(v ? "qVoice" : "qMusic").focus(); } });
+  // one tap toggles the voice; the caption offers "Change"
+  $("voiceBtn").addEventListener("click", () => {
+    closePops(); setReadAloud(!readAloud);
+    if (readAloud) showCap("voice", `🔊 ${voiceLabel()}`); else showCap("", "Voice off");
+  });
+  document.addEventListener("click", (e) => { if (!e.composedPath().some(n => n.classList && (n.classList.contains("qwrap") || n.classList.contains("bubcap")))) { closePops(); } });
+  $("avwrap").addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!$("qVoicePop").hidden || !$("qMusicPop").hidden) { e.stopPropagation(); const v = !$("qVoicePop").hidden; closePops(); $(v ? "voiceBtn" : "musicBtn").focus(); }
+    else if (!$("bubCap").hidden) { e.stopPropagation(); hideCap(); }
+  });
   $("qVoicePop").addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b) return;
     if (b.dataset.act === "read") setReadAloud(!readAloud); else if (b.dataset.voice) setVoice(b.dataset.voice);
@@ -2062,8 +2123,25 @@ const PLAYERS = {
     else if (b.dataset.st) { radioPrefs.st = b.dataset.st; saveRadio(); RoboRadio.play(radioPrefs.st); }
     radioUI(); renderMusicPop(); refocus($("qMusicPop"), b);
   });
-  if (!canSpeak) $("qVoice").parentElement.hidden = true;
-  if (!window.RoboRadio) $("qMusicWrap").hidden = true;
+  if (!canSpeak) $("qVoiceWrap").hidden = true;
+  // RoboDad "says" a word in his speech bubble during some idle moves
+  const SAY = { gg:"GG!", oneup:"1UP!", wave:"Hey!", peace:"Peace!", fistbump:"Bump!", victory:"Yes!", dad:"#1!", tipcap:"Howdy!",
+    hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it." };
+  let sayTimer = null;
+  function bubbleSay(move){
+    const word = SAY[move]; if (!word || !$("bubCap").hidden || !$("qVoicePop").hidden) return;
+    const vb = $("voiceBtn"); $("saySpan").textContent = word; vb.classList.add("saying");
+    clearTimeout(sayTimer); sayTimer = setTimeout(() => vb.classList.remove("saying"), 2200);
+  }
+  // first visit: the bubbles bob once and say what they do
+  function bubbleHint(){
+    if (getPref("robodad.bubHint")) return;
+    if (document.querySelector(".overlay:not([hidden])") || !$("gate")?.hidden) { setTimeout(bubbleHint, 2500); return; }
+    setPref("robodad.bubHint", "1");
+    ["musicBtn", "voiceBtn"].forEach(id => { const b = $(id); b.classList.add("hint"); setTimeout(() => b.classList.remove("hint"), 3200); });
+    showCap("", "Tap the bubbles: ♪ for music, 💬 for my voice");
+  }
+  setTimeout(bubbleHint, 2000);
 
   // RoboDad Radio
   const RADIO_KEY = "robodad.radio";
@@ -2088,20 +2166,23 @@ const PLAYERS = {
   let musicTipShown = false;
   function startMusic(){
     RoboRadio.play(radioPrefs.st);
-    if (!musicTipShown) { musicTipShown = true; toast(`Playing ${RoboRadio.stations[radioPrefs.st]}. Can't hear it? Turn your volume up; on iPhone, also turn off silent mode.`); }
   }
   if (window.RoboRadio) {
     RoboRadio.onchange = radioUI;
     RoboRadio.setVolume(radioPrefs.vol / 100);
     radioToggle.addEventListener("click", () => { RoboRadio.playing ? RoboRadio.stop() : startMusic(); });
-    $("musicBtn").addEventListener("click", () => { RoboRadio.playing ? RoboRadio.stop() : startMusic(); });
+    $("musicBtn").addEventListener("click", () => {
+      closePops();
+      if (RoboRadio.playing) { RoboRadio.stop(); showCap("", "Music off"); }
+      else { startMusic(); showCap("music", `♪ ${RoboRadio.stations[radioPrefs.st]}`); }
+    });
     $("stations").addEventListener("click", (e) => {
       const b = e.target.closest("[data-st]"); if (!b) return;
       radioPrefs.st = b.dataset.st; saveRadio(); RoboRadio.play(radioPrefs.st); radioUI();
     });
     radioVol.addEventListener("input", () => { radioPrefs.vol = Number(radioVol.value); saveRadio(); RoboRadio.setVolume(radioPrefs.vol / 100); });
     radioUI();
-  } else { radioW.hidden = true; $("musicBtn").hidden = true; }
+  } else { radioW.hidden = true; $("qMusicWrap").hidden = true; }
   quickUI();
 
   // Focus timer
