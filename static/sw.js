@@ -3,7 +3,7 @@
 // background), so even when the free server is asleep the app appears at once
 // and shows "waking up" instead of a blank screen. Chat requests always go to
 // the network.
-const CACHE = "robodad-v21";
+const CACHE = "robodad-v22";
 const SHELL = ["/", "/privacy", "/manifest.webmanifest", "/static/favicon.svg", "/static/radio.js", "/static/avatars.js", "/static/icon-192.png", "/static/icon-512.png"];
 
 self.addEventListener("install", (e) => {

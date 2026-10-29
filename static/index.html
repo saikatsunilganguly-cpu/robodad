@@ -340,20 +340,16 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .do-pager .mv-buzz{animation:av-pop 1.4s steps(4)}
 .do-pager .hd{animation:av-look 1.8s ease-in-out}
 @keyframes av-look{30%,80%{transform:rotate(7deg) translateY(1px)}}
-/* 2000s */
-.do-call .led{animation:av-led .25s steps(2) 10}
-@keyframes av-led{50%{fill:#E9F7FF}}
-.do-call .hd{animation:av-tilt 2.6s ease-in-out}
-@keyframes av-tilt{15%,85%{transform:rotate(-7deg)}}
-.do-call .mouth{animation:av-talk .32s ease-in-out 7 alternate}
-@keyframes av-talk{to{transform:scaleY(.35)}}
-.do-flip .mv-phone{animation:av-pop 3s ease-in-out}
-.do-flip .ph-bot{animation:av-flipopen 3s ease-in-out}
-@keyframes av-flipopen{0%,18%{transform:scaleY(0)} 30%,80%{transform:scaleY(1)} 92%,100%{transform:scaleY(0)}}
-.do-flip .hd{animation:av-tilt 3s ease-in-out}
-.do-frost .tips{animation:av-frost 1.8s ease-in-out}
-@keyframes av-frost{30%,60%{fill:#FFFFFF}}
-.do-frost .mv-sparks{animation:av-spark 1.8s ease-out}
+/* 2000s surfer */
+.bot .mv-shaka{transform-origin:50% 100%}
+.bot .hair-b,.bot .hair-f{transform-box:fill-box; transform-origin:50% 10%}
+.do-shaka .mv-shaka{animation:av-shaka 2.8s ease-in-out}
+@keyframes av-shaka{0%{opacity:0; transform:translateY(14px)} 15%{opacity:1; transform:none} 22%,36%,50%,64%{transform:rotate(-12deg)} 29%,43%,57%,71%{transform:rotate(10deg)} 84%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(14px)}}
+.do-shaka .hd{animation:av-smug 2.8s ease-in-out}
+.do-hairflip .hd{animation:av-flip 2.2s ease-in-out}
+@keyframes av-flip{0%,100%{transform:none} 20%{transform:rotate(-9deg)} 45%{transform:rotate(8deg)} 65%{transform:rotate(-3deg)}}
+.do-hairflip .hair-b,.do-hairflip .hair-f{animation:av-sway 2.2s ease-in-out}
+@keyframes av-sway{0%,100%{transform:none} 20%{transform:translateX(-2px) rotate(3deg)} 45%{transform:translateX(2px) rotate(-4deg)} 65%{transform:translateX(-.6px) rotate(1.5deg)}}
 .look strong{font-size:.9rem; line-height:1.2} .look small{color:var(--muted); font-size:.78rem; line-height:1.2}
 .pv.classic{background:#E8EFF5} .pv.arcade{background:linear-gradient(#0D0A26 55%, #2A1060)}
 .pv.vhs{background:linear-gradient(180deg, #2B1634 40%, #FF7A59 140%)}
