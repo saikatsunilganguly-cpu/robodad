@@ -1048,8 +1048,8 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js"></script>
-<script src="/static/avatars.js"></script>
+<script src="/static/radio.js?v=25"></script>
+<script src="/static/avatars.js?v=25"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1474,7 +1474,15 @@ textarea::placeholder{color:var(--muted)}
   });
   window.addEventListener("appinstalled", () => { $("installRow").hidden = true; });
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js", { updateViaCache: "none" }).catch(() => {}));
+    // when a new version takes over, refresh once so everything matches
+    // (straight away on a fresh screen, or with a tap if a chat is going)
+    const hadSW = !!navigator.serviceWorker.controller; let refreshed = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadSW || refreshed) return; refreshed = true;
+      if (!document.querySelector(".msg")) location.reload();
+      else toast("RoboDad just got an update. Refresh the page to see what's new.");
+    });
   }
 
   // ---------- themed music players (one per look) ----------
