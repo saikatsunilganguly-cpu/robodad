@@ -640,7 +640,7 @@ async def health():
 
 @app.post("/api/chat")
 async def chat(req: ChatRequest, request: Request):
-    practice = req.practice if req.practice and req.practice.lang in PRACTICE_LANGS else None
+    practice = req.practice if req.practice and (req.practice.lang in PRACTICE_LANGS or req.practice.lang == "math") else None
     history = _prepare_history(req.messages, practice is not None)
     if not history or history[-1]["role"] != "user":
         raise HTTPException(400, "The last message must come from the user.")

@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>Learn with RoboDad</title>
-<meta name="description" content="Free, bite-size practice for teens 13+: French, Spanish and Hindi now, maths and science next. No account, and every lesson earns badges in RoboDad.">
+<meta name="description" content="Free, bite-size practice for teens 13+: French, Spanish, Hindi and Grades 7–10 maths, with science next. No account, and every lesson earns badges in RoboDad.">
 <meta name="theme-color" content="#2E5C8A">
 <meta property="og:title" content="Learn with RoboDad">
-<meta property="og:description" content="Free, bite-size practice for teens: French, Spanish, Hindi, and maths next. No account needed.">
+<meta property="og:description" content="Free, bite-size practice for teens: French, Spanish, Hindi and Grades 7–10 maths. No account needed.">
 <meta property="og:image" content="https://robodad.app/static/icon-512.png">
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -98,10 +98,12 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
   <h2>School subjects</h2>
   <p class="why">Dad coaches, he doesn't do your homework. Hints first, then the steps, then you try the next one.</p>
   <div class="grid">
-    <div class="course soon">
-      <div class="hd"><b>Maths</b><span class="tag">Coming next</span></div>
-      <p>Grades 7–10: fractions, integers, algebra, equations, geometry and more, with a "stuck? ask Dad" coach.</p>
-      <button class="btn ghost" type="button" data-topic="math">I want this</button>
+    <div class="course" id="mathCard">
+      <div class="hd"><b>Maths</b><span class="tag">New</span></div>
+      <p>Grades 7–10: integers, fractions, percent, equations, Pythagoras, slope, factoring, trig. Quiz answers are checked by hand.</p>
+      <div class="bar" aria-hidden="true"><i id="mathBar"></i></div>
+      <span class="meta" id="mathMeta">0 of 12 topics</span>
+      <a class="btn" id="mathGo" href="/?learn=math">Start</a>
     </div>
     <div class="course soon">
       <div class="hd"><b>Science</b><span class="tag">Coming soon</span></div>
@@ -120,6 +122,7 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
     <b>What you earn</b>
     <ul>
       <li>Badges for your first lesson, four lessons, a whole course and keeping a role-play going.</li>
+      <li>Maths badges from Number Cruncher to Maths Legend, plus a maths dad joke every time you pass a quiz.</li>
       <li>Finish two whole language courses for the Legendary <b>Globe Trotter</b> badge.</li>
       <li>Everything is saved on your own device. No sign-up, no streaks to feel bad about.</li>
     </ul>
@@ -153,6 +156,10 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
   }
   document.getElementById("school").innerHTML = COURSES.school.map(card).join("");
   document.getElementById("family").innerHTML = COURSES.family.map(card).join("");
+  var mp = lp.math || { done:[] }, mn = (mp.done || []).length;
+  document.getElementById("mathBar").style.width = Math.round(mn / 12 * 100) + "%";
+  document.getElementById("mathMeta").textContent = mn + " of 12 topics" + (mp.rp ? " · best coach chat " + mp.rp + " messages" : "");
+  document.getElementById("mathGo").textContent = mn === 0 ? "Start" : mn >= 12 ? "Practise again" : "Keep going";
 
   var voted = {};
   try { voted = JSON.parse(localStorage.getItem("robodad.votes") || "{}") || {}; } catch (e) { voted = {}; }

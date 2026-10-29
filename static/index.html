@@ -856,7 +856,10 @@ details.why[open] summary::before{content:"–"}
 .ex q{font-style:italic}
 
 
-/* ---------- Practice with Dad (French, Spanish, Hindi) ---------- */
+/* ---------- Practice with Dad (French, Spanish, Hindi) and Maths ---------- */
+.math-learn{margin:0; padding-left:1.2em; display:flex; flex-direction:column; gap:6px}
+.math-ex{background:var(--sky, #E8EFF5); border:1px solid var(--line); border-radius:14px; padding:10px 14px}
+.math-ex ol{margin:6px 0 0; padding-left:1.3em}
 .chip.lang-chip{border-style:dashed}
 .lang-card{width:min(560px, 100%)}
 .lang-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
@@ -1127,6 +1130,7 @@ textarea::placeholder{color:var(--muted)}
         <button class="chip" type="button">Help me prep for a job interview</button>
         <button class="chip" type="button">Tell me a dad joke</button>
         <button class="chip lang-chip" type="button" data-open-lang="">Practice French, Spanish or Hindi</button>
+        <button class="chip lang-chip" type="button" data-open-math="">Maths help, Grades 7–10</button>
       </div>
       <section class="challenge" aria-label="Daily Dad Challenge">
         <span class="ch-tag">Daily Dad Challenge</span>
@@ -1262,6 +1266,12 @@ textarea::placeholder{color:var(--muted)}
     <a href="/learn" style="font-weight:800">All subjects in Learn with Dad →</a>
   </section>
 
+  <section class="widget" aria-label="Maths with Dad">
+    <b>Maths with Dad</b>
+    <p id="mathMini">Grades 7–10: a quick explainer, a worked example and a 5-question quiz per topic. Stuck on homework? Dad coaches with hints.</p>
+    <div class="row"><button class="chipbtn" type="button" data-open-math="">Open maths</button></div>
+  </section>
+
   <section class="widget" aria-label="Dad joke of the day">
     <b>Dad joke of the day</b>
     <p id="dailyJoke">Loading a fresh groaner…</p>
@@ -1382,7 +1392,7 @@ textarea::placeholder{color:var(--muted)}
     <div class="badges" id="badgeGrid"></div>
     <p class="coll-head"><span>Secret bonus badges</span><small>Collect sets to unlock</small></p>
     <div class="badges" id="setGrid"></div>
-    <p class="coll-head"><span>Language practice badges</span><small id="langCount"></small></p>
+    <p class="coll-head"><span>Learning badges</span><small id="langCount"></small></p>
     <div class="badges" id="langGrid"></div>
     <div class="row"><button class="primary" id="beltDone" type="button">Done</button></div>
   </div>
@@ -1397,6 +1407,13 @@ textarea::placeholder{color:var(--muted)}
       <button type="button" role="tab" data-lang="hi" aria-selected="false"><span lang="hi">हिन्दी</span> · Hindi</button>
     </div>
     <div id="langBody" style="display:flex; flex-direction:column; gap:12px"></div>
+  </div>
+</div>
+
+<div class="overlay" id="mathDlg" role="dialog" aria-modal="true" aria-labelledby="mathTitle" hidden>
+  <div class="card lang-card">
+    <div class="lang-top"><h2 id="mathTitle">Maths with Dad</h2><button class="ghost" id="mathClose" type="button">Close</button></div>
+    <div id="mathBody" style="display:flex; flex-direction:column; gap:12px"></div>
   </div>
 </div>
 
@@ -1444,9 +1461,10 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/lessons.js?v=37"></script>
-<script src="/static/radio.js?v=37"></script>
-<script src="/static/avatars.js?v=37"></script>
+<script src="/static/lessons.js?v=38"></script>
+<script src="/static/maths.js?v=38"></script>
+<script src="/static/radio.js?v=38"></script>
+<script src="/static/avatars.js?v=38"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1860,10 +1878,10 @@ textarea::placeholder{color:var(--muted)}
       }
       if (!text) throw new Error("RoboDad went quiet. Send your message again.");
       const item = { role:"assistant", content:text, meta, totalMs };
-      if (inPractice) item.lang = inPractice.lang; else item.extra = pickExtra(meta);
+      if (inPractice) { if (!L[inPractice.lang]?.coach) item.lang = inPractice.lang; } else item.extra = pickExtra(meta);
       history.push(item); save();
       renderTools(stack, item);
-      if (inPractice) { if (meta?.mode !== "safety") practiceTurnDone(); if (readAloud && meta?.mode !== "safety") speakLang(practiceSpoken(text), inPractice.lang); else if (readAloud) speak(text); }
+      if (inPractice) { if (meta?.mode !== "safety") practiceTurnDone(); if (readAloud && meta?.mode !== "safety" && !L[inPractice.lang]?.coach) speakLang(practiceSpoken(text), inPractice.lang); else if (readAloud) speak(text); }
       else if (readAloud) speak(text);
     } catch (err) {
       bubble.innerHTML = md(err.message && !/fetch|network/i.test(err.message) ? err.message
@@ -2281,6 +2299,10 @@ const PLAYERS = {
     ["es4", "¡Muy Bien!", "es", "Finish 4 Spanish lessons", "Four Spanish lessons done. ¡Muy bien!", "rare", "Es", (p) => p.done.length >= 4],
     ["esrp", "Taco Talker", "es", "Keep a Spanish role-play going for 4 messages", "Kept a whole Spanish role-play going.", "rare", "Es", (p) => p.rp >= 4],
     ["es8", "Todo el Curso", "es", "Finish all 8 Spanish lessons", "Every Spanish lesson finished. ¡Qué padre!", "epic", "Es", (p) => p.done.length >= 8],
+    ["m1", "Number Cruncher", "math", "Pass your first maths quiz", "Passed a first maths quiz.", "common", "π", (p) => p.done.length >= 1],
+    ["m4", "Equation Ace", "math", "Pass 4 maths quizzes", "Four maths topics done. Calculators fear you.", "rare", "π", (p) => p.done.length >= 4],
+    ["mcoach", "Worked It Out", "math", "Keep a maths coach chat going for 4 messages", "Worked through a maths problem with Dad, step by step.", "rare", "π", (p) => p.rp >= 4],
+    ["m12", "Maths Legend", "math", "Pass all 12 maths quizzes", "Every maths topic done. Legendary.", "epic", "π", (p) => p.done.length >= 12],
     ["globe", "Globe Trotter", "", "Finish every lesson in two languages", "Two whole courses finished. Très bien, ¡muy bien! and bahut badhiya!", "legendary", "", () => ["fr", "es", "hi"].filter(l => prog(l).done.length >= 8).length >= 2],
   ];
   LANG_BADGES.forEach(([id, name, lang, todo, did, rar, glyph, test]) =>
@@ -2396,9 +2418,10 @@ const PLAYERS = {
       const p = prog(b.lang || "fr"), name = b.lang ? (window.LESSONS?.[b.lang]?.name || "") : "";
       if (on) h += `<p>${esc(b.did)}</p><p>Unlocked ${dates[id] ? esc(fmtDate(dates[id])) : "earlier"}</p>`;
       else h += `<p><strong style="color:var(--ink)">Mission:</strong> ${esc(b.todo)}.</p><p>${b.lang
-        ? `So far: ${p.done.length} of 8 ${name} lessons, and your longest ${name} role-play was ${p.rp} message${p.rp === 1 ? "" : "s"}.`
+        ? (b.lang === "math" ? `So far: ${p.done.length} of ${window.MATHS?.topics.length || 12} maths topics, and your longest coach chat was ${p.rp} message${p.rp === 1 ? "" : "s"}.`
+          : `So far: ${p.done.length} of 8 ${name} lessons, and your longest ${name} role-play was ${p.rp} message${p.rp === 1 ? "" : "s"}.`)
         : `So far: ${prog("fr").done.length} of 8 French, ${prog("es").done.length} of 8 Spanish and ${prog("hi").done.length} of 8 Hindi lessons.`} It unlocks by itself as you practise.</p>`;
-      h += `<p style="font-size:.85rem">Practice badges show you've been practising. They aren't a fluency certificate.</p>`;
+      h += `<p style="font-size:.85rem">${b.lang === "math" ? "Learning badges show you've been practising. They aren't a school grade." : "Practice badges show you've been practising. They aren't a fluency certificate."}</p>`;
       btns = on ? `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>`
                 : `<button class="primary" data-act="practice">Practise now</button><button class="ghost" data-act="close">Not yet</button>`;
     } else if (b.special) {
@@ -2430,7 +2453,7 @@ const PLAYERS = {
     if (act === "close") closeBadge();
     else if (act === "share") shareBadge(id);
     else if (act === "unlock") { $("badgeDlg").hidden = true; earn(id); }
-    else if (act === "practice") { $("badgeDlg").hidden = true; $("beltDlg").hidden = true; openLang(BADGES[id].lang || ""); }
+    else if (act === "practice") { $("badgeDlg").hidden = true; $("beltDlg").hidden = true; BADGES[id].lang === "math" ? openMath() : openLang(BADGES[id].lang || ""); }
     else if (act === "remove") { belt.delete(id); delete dates[id]; saveBelt(); renderBelt(); updateBeltMini(); closeBadge(); }
   });
   $("badgeDlg").addEventListener("keydown", (e) => { if (e.key === "Escape") { e.stopPropagation(); closeBadge(); } });
@@ -2704,13 +2727,101 @@ const PLAYERS = {
       let tries = 0;
       const go = () => {
         if (document.querySelector(".overlay:not([hidden])") || document.querySelector(".side.open")) { if (++tries < 300) setTimeout(go, 400); return; }
-        openLang(L[want] ? want : "");
+        want === "math" ? openMath() : openLang(L[want] ? want : "");
       };
       setTimeout(go, 300);
     } }
   document.querySelectorAll("[data-open-lang]").forEach(b => b.addEventListener("click", () => {
     const fromSide = b.closest(".side"); if (fromSide) fromSide.classList.remove("open");
     openLang(b.dataset.openLang); if (fromSide) langReturn = $("sideBtn");
+  }));
+
+
+  // ---------- Maths with Dad (static/maths.js) ----------
+  // Explainers and quizzes are hand-written with a fixed answer key. "Ask Dad" opens a coach chat
+  // (the practice-chat machinery with lang "math"), where the AI is told to give hints, not answers.
+  const M = window.MATHS || { topics: [], jokes: [] };
+  const mathDlg = $("mathDlg"), mathBody = $("mathBody");
+  let mTopic = 0, mQuiz = null, mathReturn = null;
+  function openMath(){
+    if (!M.topics.length) return;
+    if (mathDlg.hidden) { mathReturn = document.activeElement; mathDlg.hidden = false; }
+    renderMathHome(); setTimeout(() => mathBody.querySelector("button")?.focus(), 30);
+  }
+  function closeMath(){ mathDlg.hidden = true; mathReturn?.focus?.(); }
+  function renderMathHome(){
+    const p = prog("math");
+    const grades = [...new Set(M.topics.map(t => t.grade))];
+    mathBody.innerHTML = `<p>Pick a topic: a quick explainer, a worked example, then a 5-question quiz. Get 4 right to tick it off. Stuck on homework? Tap <b>Ask Dad</b> inside a topic and he'll coach you with hints.</p>
+      <p class="lang-sec"><span>Topics</span><small>${p.done.length} of ${M.topics.length} done</small></p>`
+      + grades.map(g => `<p class="lang-sec" style="margin-top:4px"><span>Around Grade ${g}</span></p><div class="lessons">${M.topics.map((t, i) => t.grade !== g ? "" : (() => { const d = p.done.includes(t.id);
+        return `<button class="lesson-btn${d ? " done" : ""}" type="button" data-topic="${i}"><span class="n" aria-hidden="true">${d ? "✓" : i + 1}</span><span><b>${esc(t.title)}</b><small>${esc(t.short)}${d ? " · done" : ""}</small></span></button>`; })()).join("")}</div>`).join("")
+      + `<p style="font-size:.85rem">Dad's quizzes are checked by hand. In coach chats he's an AI and can slip up, so check anything important with your teacher.</p>`;
+  }
+  function renderTopic(i){
+    mTopic = i; const t = M.topics[i];
+    mathBody.innerHTML = `<button class="linkbtn" type="button" data-act="home" style="align-self:flex-start">← All topics</button>
+      <p class="lang-sec"><span>${esc(t.title)}</span><small>Around Grade ${t.grade}</small></p>
+      <ul class="math-learn">${t.learn.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
+      <div class="math-ex"><b>Example:</b> ${esc(t.ex.q)}<ol>${t.ex.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>
+      <p class="dadtip"><b>Dad tip:</b> ${esc(t.tip)}</p>
+      <div class="row"><button class="primary" type="button" data-act="quiz">Take the quiz</button><button class="ghost" type="button" data-act="coach">Ask Dad</button></div>`;
+    mathBody.querySelector("[data-act=quiz]").focus();
+  }
+  function startMathQuiz(){
+    const t = M.topics[mTopic];
+    mQuiz = { qs: shuffle(t.quiz).slice(0, 5).map(q => ({ ...q, opts: shuffle([q.ok, ...q.no]) })), i:0, score:0 };
+    renderMathQ();
+  }
+  function renderMathQ(){
+    const q = mQuiz.qs[mQuiz.i];
+    mathBody.innerHTML = `<div class="qprog" aria-hidden="true">${mQuiz.qs.map((_, k) => `<i class="${k <= mQuiz.i ? "on" : ""}"></i>`).join("")}</div>
+      <p class="quiz-q">Question ${mQuiz.i + 1} of ${mQuiz.qs.length}<span class="t">${esc(q.q)}</span></p>
+      <div class="opts">${q.opts.map((o, k) => `<button class="opt" type="button" data-opt="${k}">${esc(o)}</button>`).join("")}</div>
+      <p class="quiz-fb" aria-live="polite" style="color:var(--ink)"></p>`;
+    mathBody.querySelector(".opt").focus();
+  }
+  function mathAnswer(k){
+    const q = mQuiz.qs[mQuiz.i], ok = q.opts[k] === q.ok;
+    mathBody.querySelectorAll(".opt").forEach((b, j) => { b.disabled = true; if (q.opts[j] === q.ok) b.classList.add("right"); else if (j === k) b.classList.add("wrong"); });
+    if (ok) mQuiz.score++;
+    const fb = mathBody.querySelector(".quiz-fb");
+    fb.innerHTML = (ok ? `<b>${RIGHT[Math.floor(Math.random() * RIGHT.length)]}</b> ` : `<b>Not quite.</b> It's ${esc(q.ok)}. `) + esc(q.why)
+      + `<br><button class="primary" type="button" data-act="next" style="margin-top:10px">${mQuiz.i + 1 < mQuiz.qs.length ? "Next question" : "See my score"}</button>`;
+    fb.querySelector("button").focus();
+  }
+  function renderMathResult(){
+    const t = M.topics[mTopic], p = prog("math"), n = mQuiz.score, passed = n >= 4;
+    if (passed && !p.done.includes(t.id)) { p.done.push(t.id); saveLp(); }
+    const joke = passed ? M.jokes[Math.floor(Math.random() * M.jokes.length)] : "";
+    const line = n === 5 ? "Perfect score. I'm putting this one on the fridge." : passed ? "Nicely done. Topic ticked off."
+      : "Good effort. Have another look at the example, or tap Ask Dad and we'll go through it together.";
+    const next = mTopic + 1 < M.topics.length;
+    mathBody.innerHTML = `<p class="lang-sec"><span>${esc(t.title)}</span><small>${passed ? "Done" : "Not yet"}</small></p>
+      <p class="score-big">${n}/5</p><p style="text-align:center">${line}</p>
+      ${passed ? `<div class="math-ex"><b>Your reward, a maths dad joke:</b> ${esc(joke)}</div>` : ""}
+      <div class="row" style="justify-content:center">${passed
+        ? `${next ? `<button class="primary" type="button" data-topic="${mTopic + 1}">Next topic</button>` : ""}<button class="ghost" type="button" data-act="home">All topics</button>`
+        : `<button class="primary" type="button" data-topic="${mTopic}">Look again</button><button class="ghost" type="button" data-act="retry">Retake quiz</button><button class="ghost" type="button" data-act="coach">Ask Dad</button>`}</div>`;
+    mathBody.querySelector(".row button").focus();
+    if (passed) { try { window.RoboRadio && RoboRadio.chime(); } catch {} checkLangBadges(); }
+  }
+  mathBody.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.topic) return renderTopic(Number(b.dataset.topic));
+    if (b.dataset.opt) return mathAnswer(Number(b.dataset.opt));
+    const act = b.dataset.act;
+    if (act === "home") renderMathHome();
+    else if (act === "quiz" || act === "retry") startMathQuiz();
+    else if (act === "next") { mQuiz.i++; mQuiz.i < mQuiz.qs.length ? renderMathQ() : renderMathResult(); }
+    else if (act === "coach") startPractice("math", M.topics[mTopic].id);
+  });
+  $("mathClose").addEventListener("click", closeMath);
+  mathDlg.addEventListener("click", (e) => { if (e.target === mathDlg) closeMath(); });
+  mathDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMath(); });
+  document.querySelectorAll("[data-open-math]").forEach(b => b.addEventListener("click", () => {
+    const fromSide = b.closest(".side"); if (fromSide) fromSide.classList.remove("open");
+    openMath(); if (fromSide) mathReturn = $("sideBtn");
   }));
 
   // role-play: a separate chat in French or Hindi; your normal chat waits for you
@@ -2736,7 +2847,8 @@ const PLAYERS = {
     history = [{ role:"assistant", content: sc.open, lang }];
     savePractice(); save(); renderLog(); updatePracticeBar();
     if (!langDlg.hidden) { langDlg.hidden = true; }
-    if (readAloud) speakLang(practiceSpoken(sc.open), lang);
+    if (!$("mathDlg").hidden) { $("mathDlg").hidden = true; }
+    if (readAloud) C.coach ? speak(sc.open) : speakLang(practiceSpoken(sc.open), lang);
     input.focus();
   }
   function exitPractice(){
@@ -2749,10 +2861,11 @@ const PLAYERS = {
     const bar = $("practiceBar");
     if (!practice) { bar.hidden = true; input.placeholder = "Talk to RoboDad…"; return; }
     const C = L[practice.lang], sc = C.scenes.find(x => x.id === practice.scene) || C.scenes[0];
-    $("pbTag").innerHTML = `${esc(C.name)} practice · ${esc(sc.title)}<small>${esc(sc.who)} · English is fine if you're stuck</small>`;
+    $("pbTag").innerHTML = C.coach ? `Maths coach · ${esc(sc.title)}<small>Hints first, then you try the next step</small>`
+      : `${esc(C.name)} practice · ${esc(sc.title)}<small>${esc(sc.who)} · English is fine if you're stuck</small>`;
     $("pbHintList").innerHTML = sc.hints.map(h => `<button type="button">${esc(h)}</button>`).join("");
     $("pbHintList").hidden = true; $("pbHints").setAttribute("aria-expanded", "false");
-    input.placeholder = `Try it in ${C.name}…`;
+    input.placeholder = C.coach ? "Your maths question…" : `Try it in ${C.name}…`;
     bar.hidden = false;
   }
   $("pbExit").addEventListener("click", exitPractice);

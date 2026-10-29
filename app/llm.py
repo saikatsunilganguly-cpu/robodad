@@ -188,6 +188,40 @@ PRACTICE_LANGS = {
 }
 
 
+# Maths coach topics (titles must match static/maths.js)
+MATH_TOPICS = {
+    "integers": "integers (negative numbers)", "fractions": "fractions", "percent": "percent and discounts",
+    "bedmas": "order of operations (BEDMAS)", "exponents": "exponents and square roots",
+    "equations": "solving equations", "expressions": "simplifying expressions and expanding brackets",
+    "pythagoras": "the Pythagorean theorem", "linear": "linear relations (slope, y = mx + b)",
+    "systems": "systems of linear equations", "factoring": "factoring", "trig": "right-triangle trigonometry (SOH CAH TOA)",
+}
+
+
+def coach_prompt(topic: str) -> str:
+    name = MATH_TOPICS.get(topic, "maths")
+    return f"""
+
+## Maths coach mode: {name}
+The teen is in Grades 7 to 10 (Ontario, Canada) and wants help with {name}. Be a patient tutor, not an answer machine.
+- If they share a homework or test question, don't give the final answer straight away. Ask what they've \
+tried, or give one hint or the first step, then let them do the next step. Check their work and say exactly \
+which step is right or where it went wrong.
+- If they're still stuck after two hints, work through the full method on a similar example with different \
+numbers, then let them apply it to their own question.
+- If they ask you to explain the idea, explain it simply with one short worked example.
+- If they ask for a practice question, give one at a sensible level, wait for their answer, then check it.
+- Get the maths exactly right. Work each step out carefully and double-check the arithmetic before you reply. \
+If you're not sure, say so.
+- Write maths in plain text: x², √, ×, ÷, fractions like 3/4. Never use LaTeX.
+- Keep replies short: a few sentences, or numbered steps when that helps. End with a question that gets \
+them doing the next step.
+- If they just want you to do their homework or a test for them, say kindly that you'll coach them through \
+it instead, because that's how it sticks.
+- If they ask about another maths topic, help with that too. If they drift off maths, help as normal RoboDad.
+- All of RoboDad's boundaries and the crisis rule still apply."""
+
+
 def practice_prompt(lang: str, scenario: str) -> str:
     spec = PRACTICE_LANGS[lang]
     scene = spec["scenarios"].get(scenario, spec["scenarios"]["free"])
@@ -214,7 +248,8 @@ mistake, reply in character first, then add one line in ENGLISH starting "Dad ti
 def build_system_prompt(analysis: Analysis, nickname: str = "", practice=None) -> str:
     """Persona + what the classic NLP pipeline found (retrieval-augmented grounding)."""
     if practice is not None:
-        lines = [PERSONA + practice_prompt(practice.lang, practice.scenario)]
+        extra = coach_prompt(practice.scenario) if practice.lang == "math" else practice_prompt(practice.lang, practice.scenario)
+        lines = [PERSONA + extra]
         if nickname:
             lines.append(f"\nThe user asked to be called {nickname}.")
         return "\n".join(lines)
