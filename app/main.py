@@ -105,8 +105,68 @@ async def lifespan(app: FastAPI):
     await state["client"].aclose()
 
 
-app = FastAPI(title="RoboDad", lifespan=lifespan)
+# No auto-generated API docs on the public site (/docs, /redoc, /openapi.json)
+app = FastAPI(title="RoboDad", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+# ---------------------------------------------------------------- security headers
+MAX_BODY_BYTES = 64 * 1024  # a chat request is a few KB; anything bigger is junk
+
+
+def _inline_script_hashes() -> str:
+    """CSP hashes for the inline <script> blocks, so no other inline script can run."""
+    import base64
+    import hashlib
+
+    found = set()
+    for name in os.listdir(STATIC_DIR):
+        if name.endswith(".html"):
+            with open(os.path.join(STATIC_DIR, name), encoding="utf-8") as f:
+                for body in re.findall(r"<script>(.*?)</script>", f.read(), re.S):
+                    digest = base64.b64encode(hashlib.sha256(body.encode("utf-8")).digest()).decode()
+                    found.add(f"'sha256-{digest}'")
+    return " ".join(sorted(found))
+
+
+CSP = "; ".join([
+    "default-src 'self'",
+    f"script-src 'self' {_inline_script_hashes()}",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: blob:",
+    "media-src 'self' data: blob:",
+    "connect-src 'self'",
+    "worker-src 'self'",
+    "manifest-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests",
+])
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Permissions-Policy": "microphone=(self), camera=(), geolocation=(), payment=(), usb=(), interest-cohort=()",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Cross-Origin-Opener-Policy": "same-origin",
+}
+
+
+@app.middleware("http")
+async def harden(request: Request, call_next):
+    if request.method in ("POST", "PUT", "PATCH"):
+        size = request.headers.get("content-length")
+        if size is None or not size.isdigit() or int(size) > MAX_BODY_BYTES:
+            return JSONResponse({"error": "Request too large."}, status_code=413)
+    response = await call_next(request)
+    for k, v in SECURITY_HEADERS.items():
+        response.headers.setdefault(k, v)
+    if response.headers.get("content-type", "").startswith("text/html"):
+        response.headers["Content-Security-Policy"] = CSP
+    return response
 
 
 # ---------------------------------------------------------------- rate limits
@@ -116,12 +176,30 @@ _daily = {"day": date.today(), "count": 0}
 
 
 def _client_ip(request: Request) -> str:
+    """The visitor's real address, for rate limits.
+
+    Render sits behind Cloudflare, which overwrites CF-Connecting-IP with the
+    address that actually connected, so a visitor can't fake it to dodge the
+    limits. X-Forwarded-For is only a fallback for local runs.
+    """
+    for h in ("cf-connecting-ip", "true-client-ip"):
+        v = (request.headers.get(h) or "").strip()
+        if v:
+            return v[:64]
     fwd = request.headers.get("x-forwarded-for")
-    return fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "?")
+    return fwd.split(",")[0].strip()[:64] if fwd else (request.client.host if request.client else "?")
+
+
+def _prune(store: dict[str, deque], window: float, now: float) -> None:
+    """Forget visitors whose hits have all expired, so the table can't grow forever."""
+    if len(store) > 5000:
+        for k in [k for k, q in store.items() if not q or now - q[-1] > window]:
+            del store[k]
 
 
 def _rate_limited(ip: str) -> bool:
     now = time.monotonic()
+    _prune(_hits, _window, now)
     q = _hits[ip]
     while q and now - q[0] > _window:
         q.popleft()
@@ -139,8 +217,8 @@ def _llm_budget_left() -> bool:
 
 # ---------------------------------------------------------------- models
 class ChatMessage(BaseModel):
-    role: str
-    content: str
+    role: str = Field(max_length=16)
+    content: str = Field(max_length=4000)
 
 
 class FeedbackRequest(BaseModel):
@@ -249,16 +327,23 @@ def _supabase_headers(extra: dict | None = None) -> dict:
     return h | (extra or {})
 
 
-async def _tester_count() -> int | None:
+_count_cache = {"at": 0.0, "value": None}
+
+
+async def _tester_count(fresh: bool = False) -> int | None:
     if not (SUPABASE_URL and SUPABASE_KEY):
         return None
+    if not fresh and time.monotonic() - _count_cache["at"] < 60:
+        return _count_cache["value"]
     try:
         r = await state["client"].get(
             f"{SUPABASE_URL}/rest/v1/testers?select=id",
             headers=_supabase_headers({"Prefer": "count=exact", "Range": "0-0"}),
         )
         total = r.headers.get("content-range", "").split("/")[-1]
-        return int(total) if total.isdigit() else None
+        value = int(total) if total.isdigit() else None
+        _count_cache.update(at=time.monotonic(), value=value)
+        return value
     except (httpx.HTTPError, ValueError):
         return None
 
@@ -297,7 +382,7 @@ async def tester_signup(t: TesterSignup, request: Request):
     except httpx.HTTPError as exc:
         log.warning("Supabase unreachable for tester sign-up: %s", exc)
         return JSONResponse({"error": "Something went wrong saving your sign-up. Please try again."}, status_code=502)
-    return {"ok": True, "count": await _tester_count(), "goal": TESTER_GOAL}
+    return {"ok": True, "count": await _tester_count(fresh=True), "goal": TESTER_GOAL}
 
 
 @app.get("/parents")
@@ -389,6 +474,7 @@ async def tts(req: TTSRequest, request: Request):
     now = time.monotonic()
     if not key or now < _tts["off_until"]:
         return JSONResponse({"error": "Voice is resting. Using this device's voice."}, status_code=503)
+    _prune(_tts_hits, 600, now)
     q = _tts_hits[_client_ip(request)]
     while q and now - q[0] > 600:
         q.popleft()
@@ -425,13 +511,6 @@ async def tts(req: TTSRequest, request: Request):
         _tts["off_until"] = now + min(wait, 6 * 3600)
         return JSONResponse({"error": "Voice unavailable."}, status_code=503)
     return Response(r.content, media_type="audio/wav", headers={"Cache-Control": "no-store"})
-
-
-@app.get("/_probe_523cbb754ec3ec24a56c982f")  # TEMPORARY: header check, removed in the next commit
-async def _probe(request: Request):
-    keep = ("x-forwarded-for", "cf-connecting-ip", "true-client-ip", "x-real-ip", "x-forwarded-proto", "cf-ray", "forwarded", "rndr-id")
-    return {"client": request.client.host if request.client else None,
-            "headers": {k: v for k, v in request.headers.items() if k in keep}}
 
 
 @app.get("/health")

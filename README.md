@@ -375,3 +375,13 @@ Every look also has a slowly rotating centrepiece (`.spinner`), drawn as an inli
 - **Safety**: every rule applies in practice mode; crisis keywords exist in French and Hindi, and
   the AI crisis flag covers other languages. Marathi is planned once a fluent speaker can review it.
 
+## Security
+
+See [SECURITY.md](SECURITY.md) for how to report a problem. In short:
+- Keys live only in Render's environment settings; nothing secret is in this repo or sent to the browser.
+- Rate limits use Cloudflare's `CF-Connecting-IP` (Render sits behind Cloudflare), so they can't be dodged with a fake `X-Forwarded-For`.
+- Request bodies over 64 KB are refused; chat messages are capped at 4,000 characters.
+- Every page gets a strict Content-Security-Policy (inline scripts allowed only by hash), `frame-ancestors 'none'`, HSTS, `nosniff` and a locked-down Permissions-Policy.
+- FastAPI's `/docs`, `/redoc` and `/openapi.json` are switched off.
+- `.github/workflows/security.yml` runs pip-audit, gitleaks and the safety tests on every push and weekly; Dependabot proposes dependency updates.
+
