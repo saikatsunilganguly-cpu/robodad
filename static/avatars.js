@@ -98,31 +98,85 @@
       <g class="mv mv-buzz" opacity="0"><path d="M42 57 l-2 -1 M42 60.5 l-2 1 M54.5 57 l2 -1 M54.5 60.5 l2 1" stroke="${INK}" stroke-width="1.2" stroke-linecap="round"/></g>`,
     },
     y2k: {
-      name: "Surfer Dad", era: "2000s", moves: ["shaka", "shades", "hairflip"],
-      svg: `<path class="hair-b" d="M9 50 C6 40 7.5 30 9.5 22 C12 10 21 4.5 32 4.5 C43 4.5 52 10 54.5 22 C56.5 30 58 40 55 50 C52 51.5 49.5 50.5 48.5 47.5 L15.5 47.5 C14.5 50.5 12 51.5 9 50Z" fill="#E2B85C" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
-      <g class="body">${torso("#1FA59A")}
-        <g fill="#FFE27A"><circle cx="11" cy="58" r="2"/><circle cx="20" cy="61" r="1.6"/><circle cx="47" cy="57" r="2"/><circle cx="54" cy="61.5" r="1.6"/></g>
-        <g fill="#fff" opacity=".85"><circle cx="13.2" cy="56.8" r="1"/><circle cx="9.2" cy="59.6" r="1"/><circle cx="49.2" cy="55.8" r="1"/><circle cx="45.2" cy="58.6" r="1"/></g>
-        <path d="M23 49.5 L41 49.5 L34.5 60 L29.5 60Z" fill="var(--metal)" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
-        <path d="M23 49.5 L29.5 55 L26 58.5 L20.5 51Z M41 49.5 L34.5 55 L38 58.5 L43.5 51Z" fill="#46C2B6" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+      name: "Trucker Hat Dad", era: "2000s", moves: ["tipcap", "bob", "peace"],
+      svg: `<g class="body">${torso("#3B3F46")}
+        <path d="M33.5 52.5 L28.5 58.5 H32 L30.5 63.5 L36 56.8 H32.4Z" fill="#FF8C1A" stroke="${INK}" stroke-width=".8" stroke-linejoin="round"/>
       </g>${neck}
       <g class="hd">${head}
-        <g class="hair-f"><path d="M13 27 C12.5 17 19 11 26 10.5 C29 10.3 31 11.5 32 13.5 C33 11.5 35 10.3 38 10.5 C45 11 51.5 17 51 27 C49 21 45 18.5 40 18.5 C36.5 18.5 34 20 32 22.5 C30 20 27.5 18.5 24 18.5 C19 18.5 15 21 13 27Z" fill="#E2B85C" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
-          <path d="M11.5 22 C7 30 6.8 38 9.8 45.5 L17 45.5 C15 37.5 15 30 16.5 22Z M52.5 22 C57 30 57.2 38 54.2 45.5 L47 45.5 C49 37.5 49 30 47.5 22Z" fill="#E2B85C" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>
-          <path d="M20 13.5 C23 12 27 12.5 29.5 14.5 M34.5 14.5 C37 12.5 41 12 44 13.5 M11 30 C10.4 35 10.8 39 12 43 M53 30 C53.6 35 53.2 39 52 43" fill="none" stroke="#F8E3A6" stroke-width="1.2" stroke-linecap="round"/></g>
-        ${eyes}
-        ${smile}
-        <path d="M28.5 42.6 C29.5 46.6 34.5 46.6 35.5 42.6 C33.6 43.8 30.4 43.8 28.5 42.6Z" fill="#B8892E" stroke="${INK}" stroke-width="1" stroke-linejoin="round"/>
-        <g class="mv mv-shades" opacity="0"><path d="M14.5 26 C20 24.2 44 24.2 49.5 26 L48.6 31.4 C44 33.6 36 33.6 32 31 C28 33.6 20 33.6 15.4 31.4Z" fill="#FF7A1A" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
-          <path d="M18 27.6 C22 26.8 26 26.8 28 27.4 M36 27.4 C38 26.8 42 26.8 46 27.6" stroke="#FFE27A" stroke-width="1.2" stroke-linecap="round"/></g>
+        <path d="M13.5 26 L13.5 31 L16 31 L16 25Z M50.5 26 L50.5 31 L48 31 L48 25Z" fill="#6B4A32"/>
+        <g class="tcap"><path d="M13 23 C13 11 21 6 32 6 C43 6 51 11 51 23Z" fill="#2B2B30" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 13 l2 2 M16 17 l2 2 M46 13 l2 2 M46 17 l2 2 M18 10 l2 2 M44 10 l2 2" stroke="#8A8F98" stroke-width="1"/>
+          <path d="M20.5 22.5 C20.5 12.5 25.5 7.5 32 7.5 C38.5 7.5 43.5 12.5 43.5 22.5Z" fill="#fff" stroke="${INK}" stroke-width="1.6"/>
+          <circle cx="32" cy="15.5" r="3.6" fill="#FF8C1A" stroke="${INK}" stroke-width="1"/><path d="M30.2 15.5 h3.6 M32 13.7 v3.6" stroke="#fff" stroke-width="1"/>
+          <path d="M9 24 C16 19 48 19 55 24 C48 27 16 27 9 24Z" fill="#E8572A" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/></g>
+        ${eyes}${smile}
+        <circle cx="10.5" cy="32" r="1.8" fill="#fff" stroke="${INK}" stroke-width=".8"/><circle cx="53.5" cy="32" r="1.8" fill="#fff" stroke="${INK}" stroke-width=".8"/>
+        <path d="M10.5 33.8 C11 42 14 46 17 48 M53.5 33.8 C53 42 50 46 47 48" fill="none" stroke="#fff" stroke-width="1.3"/>
       </g>
-      <g class="mv mv-shaka" opacity="0"><rect x="51.5" y="49" width="7" height="17" rx="2" fill="#1FA59A" stroke="${INK}" stroke-width="1.6"/>
+      <g class="mv mv-notes" opacity="0"><path d="M50 14 v-7 l5 -1.5 v6.5" fill="none" stroke="#FF8C1A" stroke-width="1.6"/>
+        <circle cx="48.8" cy="14" r="1.8" fill="#FF8C1A"/><circle cx="53.8" cy="12.5" r="1.8" fill="#FF8C1A"/></g>
+      <g class="mv mv-peace" opacity="0"><rect x="51.5" y="49" width="7" height="17" rx="2" fill="#3B3F46" stroke="${INK}" stroke-width="1.6"/>
         <rect x="50" y="41.5" width="10" height="8.5" rx="3.2" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
-        <path d="M51 44 L47 40.5 M59 43.5 L61 38.5" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/>
-        <path d="M51 44 L47 40.5 M59 43.5 L61 38.5" stroke="var(--metal)" stroke-width="1.6" stroke-linecap="round"/></g>`,
+        <path d="M53 43 L51 35.5 M57 43 L59.5 35.5" stroke="${INK}" stroke-width="3.4" stroke-linecap="round"/><path d="M53 43 L51 35.5 M57 43 L59.5 35.5" stroke="var(--metal)" stroke-width="1.6" stroke-linecap="round"/></g>`,
+    },
+    skater: {
+      name: "Skater Dad", era: "Late '90s", moves: ["beanie", "ollie", "fistbump"],
+      svg: `<g class="body">${torso("#7D8793")}
+        <path d="M32 54 V64" stroke="#C9D3DC" stroke-width="1.4"/><path d="M28 53.5 v6.5 M36 53.5 v6.5" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>
+      </g>${neck}
+      <path d="M18.5 50.5 C22 55.5 42 55.5 45.5 50.5 L43.5 48 C40 52 24 52 20.5 48Z" fill="#646E7A" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+      <g class="hd">${head}
+        <path d="M13 24 C12 28 13 31 15 33 L17 24Z M51 24 C52 28 51 31 49 33 L47 24Z" fill="#6B4A32" stroke="${INK}" stroke-width="1.2"/>
+        ${eyes}${smile}
+        <g class="beanie"><path d="M12.5 21 C11 9 20 3.5 32 3.5 C44 3.5 53 9 51.5 21Z" fill="#C23B3B" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M22 6 C24 12 25 16 25 20 M32 4 V20 M42 6 C40 12 39 16 39 20" stroke="#9E2B2B" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="19" width="42" height="6.5" rx="3" fill="#9E2B2B" stroke="${INK}" stroke-width="1.8"/>
+          <path d="M15 20 v4.5 M19 20 v4.5 M23 20 v4.5 M27 20 v4.5 M31 20 v4.5 M35 20 v4.5 M39 20 v4.5 M43 20 v4.5 M47 20 v4.5" stroke="#7A1F1F" stroke-width="1"/></g>
+      </g>
+      <g class="mv mv-board" opacity="0"><path d="M8 53 C9 54.8 11 56 14 56 H50 C53 56 55 54.8 56 53" fill="none" stroke="#E8572A" stroke-width="3" stroke-linecap="round"/>
+        <path d="M13 54.6 H51" stroke="#1C1C1C" stroke-width="1"/><rect x="16" y="57.2" width="5" height="1.8" fill="#9AA5AE"/><rect x="43" y="57.2" width="5" height="1.8" fill="#9AA5AE"/>
+        <g class="wheel"><circle cx="18.5" cy="60.5" r="2.4" fill="#F6E7A8" stroke="${INK}" stroke-width="1.1"/><path d="M18.5 58.5 v4" stroke="${INK}" stroke-width=".8"/></g>
+        <g class="wheel"><circle cx="45.5" cy="60.5" r="2.4" fill="#F6E7A8" stroke="${INK}" stroke-width="1.1"/><path d="M45.5 58.5 v4" stroke="${INK}" stroke-width=".8"/></g></g>
+      <g class="mv mv-fist" opacity="0"><rect x="24" y="44" width="16" height="13" rx="5" fill="var(--metal)" stroke="${INK}" stroke-width="2"/>
+        <path d="M28 44.5 v5 M32 44.5 v5 M36 44.5 v5" stroke="${INK}" stroke-width="1.4"/>
+        <path d="M20 47 l-3 -1.5 M20 51 l-3 1.5 M44 47 l3 -1.5 M44 51 l3 1.5" stroke="${INK}" stroke-width="1.3" stroke-linecap="round"/></g>`,
+    },
+    gamer: {
+      name: "Gamer Dad", era: "Mid-2000s", moves: ["gg", "mash", "victory"],
+      svg: `<g class="body">${torso("#22262E")}<path d="M8 59 H56" stroke="#39FF88" stroke-width="2.2"/></g>${neck}
+      <g class="hd">${head}
+        <path d="M14 25 C12.5 16 18 10 25 9.5 C28 7 37 7 41 9.5 C47 10.5 51.5 16 50 25 C47 20.5 43 19 38 19.5 L26 19.5 C21 19 16.5 20.5 14 25Z" fill="#3A2A1E" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M8.5 27 C7 4 57 4 55.5 27" fill="none" stroke="#2A2E36" stroke-width="3"/>
+        <rect x="4.5" y="23.5" width="9" height="13" rx="4" fill="#2A2E36" stroke="${INK}" stroke-width="1.6"/><rect x="50.5" y="23.5" width="9" height="13" rx="4" fill="#2A2E36" stroke="${INK}" stroke-width="1.6"/>
+        <path class="cup-led" d="M7 30 h4 M53 30 h4" stroke="#39FF88" stroke-width="1.6" stroke-linecap="round"/>
+        ${eyes}${smile}
+        <g class="mic"><path d="M10 35.5 C11 42 17 44.5 23 43" fill="none" stroke="#2A2E36" stroke-width="2.2" stroke-linecap="round"/><circle cx="24" cy="42.8" r="2" fill="#2A2E36" stroke="#39FF88" stroke-width="1"/></g>
+      </g>
+      <text class="mv mv-gg" opacity="0" x="46" y="13" text-anchor="middle" font-family="Nunito, sans-serif" font-size="10" font-weight="900" fill="#39FF88" stroke="#111" stroke-width="1" paint-order="stroke">GG!</text>
+      <g class="mv mv-pad" opacity="0"><path d="M18 51 C14 51 11 55 12 59 C13 62.5 17 62.5 19.5 60 L22 57.5 H42 L44.5 60 C47 62.5 51 62.5 52 59 C53 55 50 51 46 51Z" fill="#3A3F4A" stroke="${INK}" stroke-width="1.6"/>
+        <path d="M20 54.5 v4 M18 56.5 h4" stroke="#C9D3DC" stroke-width="1.4"/>
+        <circle class="pad-btn" cx="44" cy="55" r="1.3" fill="#39FF88"/><circle class="pad-btn b2" cx="46.6" cy="57.2" r="1.3" fill="#FF5E7E"/><circle cx="41.6" cy="57.2" r="1.3" fill="#38B6FF"/><circle cx="44" cy="59.4" r="1.3" fill="#F2B533"/></g>
+      <g class="mv mv-vic" opacity="0"><rect x="51.5" y="47" width="7" height="19" rx="2" fill="#22262E" stroke="${INK}" stroke-width="1.6"/>
+        <rect x="49.5" y="38" width="11" height="10" rx="3.5" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
+        <path d="M52.5 38.5 v3.5 M55 38.5 v3.5 M57.5 38.5 v3.5" stroke="${INK}" stroke-width="1.2"/></g>
+      <g class="mv mv-sparks" opacity="0">${spark(47, 31)}${spark(61, 35, .8)}${spark(52, 27, .6)}</g>`,
+    },
+    bucket: {
+      name: "Bucket Hat Dad", era: "Early 2000s", moves: ["hattip", "dad", "nod"],
+      svg: `<g class="body">${torso("#F2B533")}<path d="M22 49.8 L32 56 L42 49.8" fill="none" stroke="#1B2A3A" stroke-width="2.2"/>
+        <text class="num" x="32" y="63.5" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="8" fill="#1B2A3A">04</text>
+        <text class="mv mv-dad" opacity="0" x="32" y="63" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="6.5" fill="#C2410C">#1 DAD</text>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M14 24 C13.5 28 14 31 15.5 33 L18 24Z M50 24 C50.5 28 50 31 48.5 33 L46 24Z" fill="#3A2A1E"/>
+        <g class="bucket"><path d="M15 20 C15 10 22 5.5 32 5.5 C42 5.5 49 10 49 20Z" fill="#4E7FB8" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M16 15 H48" stroke="#3B6696" stroke-width="1.2"/>
+          <path d="M8 24 C14 18.5 50 18.5 56 24 L53.5 27.5 C46 23.5 18 23.5 10.5 27.5Z" fill="#5B8EC8" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/></g>
+        ${eyes}${smile}
+      </g>`,
     },
   };
-  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties" };
+  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket" };
 
   function installSymbols(sprite){
     for (const [k, a] of Object.entries(AVATARS)) {
