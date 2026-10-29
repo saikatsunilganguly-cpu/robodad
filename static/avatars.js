@@ -235,6 +235,70 @@
       <g class="mv mv-namaste" opacity="0"><path d="M27 64 L30.5 47 Q32 44.5 33.5 47 L37 64Z" fill="var(--metal)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
         <path d="M32 46.5 V60" stroke="${INK}" stroke-width="1"/></g>`,
     },
+    cozy: {
+      name: "Cozy Dad", era: "Winter", season: "winter", moves: ["cocoa", "snowball", "pompom"],
+      svg: `<g class="body">${torso("#1F3A68")}
+        <path d="M7 58 H57" stroke="#E84855" stroke-width="4"/>
+        <g fill="#fff"><path d="M11 58 l1.5 -1.5 1.5 1.5 -1.5 1.5z"/><path d="M19 58 l1.5 -1.5 1.5 1.5 -1.5 1.5z"/><path d="M27 58 l1.5 -1.5 1.5 1.5 -1.5 1.5z"/><path d="M35 58 l1.5 -1.5 1.5 1.5 -1.5 1.5z"/><path d="M43 58 l1.5 -1.5 1.5 1.5 -1.5 1.5z"/><path d="M51 58 l1.5 -1.5 1.5 1.5 -1.5 1.5z"/></g>
+        <path d="M24 49.5 Q32 54 40 49.5" fill="none" stroke="#E84855" stroke-width="2.4"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M14 25 C13.5 28 14.5 31 16 33 L18 25Z M50 25 C50.5 28 49.5 31 48 33 L46 25Z" fill="#6B4A32"/>
+        <g class="toque"><path d="M13 22 C12 11 21 5 32 5 C43 5 52 11 51 22Z" fill="#E84855" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M18 12 h28 M15.5 16.5 h33" stroke="#fff" stroke-width="2.2" opacity=".9"/>
+          <rect x="11.5" y="19.5" width="41" height="6" rx="3" fill="#fff" stroke="${INK}" stroke-width="1.6"/>
+          <circle class="pom" cx="32" cy="4.5" r="4" fill="#fff" stroke="${INK}" stroke-width="1.6"/></g>
+        ${eyes}${smile}
+      </g>
+      <g class="mv mv-mug" opacity="0"><path d="M35 36 h10 v8 a3 3 0 0 1 -3 3 h-4 a3 3 0 0 1 -3 -3z" fill="#E84855" stroke="${INK}" stroke-width="1.6"/>
+        <path d="M45 38 h1.5 a2.2 2.2 0 0 1 0 4.4 H45" fill="none" stroke="${INK}" stroke-width="1.6"/><path d="M36.5 39.5 h7" stroke="#fff" stroke-width="1.2"/>
+        <path d="M38 33.5 c-1 -1.2 1 -2 0 -3.4 M41.5 33.5 c-1 -1.2 1 -2 0 -3.4" stroke="#C9D3DC" stroke-width="1.1" fill="none" stroke-linecap="round"/></g>
+      <circle class="mv mv-snowball" opacity="0" cx="52" cy="46" r="3.6" fill="#fff" stroke="#A9BDD6" stroke-width="1"/>`,
+    },
+    lucky: {
+      name: "Lucky Dad", era: "Lunar New Year", season: "lunar", moves: ["lantern", "envelope", "firecracker"],
+      svg: `<g class="body">${torso("#B3122E")}
+        <path d="M26 49.5 h12 v3.5 h-12z" fill="#B3122E" stroke="#F5C04A" stroke-width="1.2"/>
+        <path d="M32 53 V64" stroke="#F5C04A" stroke-width="1.2"/>
+        <g stroke="#F5C04A" stroke-width="1.3" stroke-linecap="round"><path d="M28.5 56 h7 M28.5 59.5 h7 M28.5 63 h7"/></g>
+        <g fill="#F5C04A"><circle cx="28.5" cy="56" r=".9"/><circle cx="35.5" cy="56" r=".9"/><circle cx="28.5" cy="59.5" r=".9"/><circle cx="35.5" cy="59.5" r=".9"/></g>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M14 26 C12.5 17 18 10.5 26 10 C31 7.5 40 8 45 11 C49.5 13.8 51.3 19.3 50 26 C48.5 21.5 45.5 19.6 40.5 19.6 L26 19.6 C20 19.6 15.5 21.8 14 26Z" fill="#1E1A18" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+        ${eyes}${smile}
+      </g>
+      <g class="mv mv-lantern" opacity="0"><path d="M54 30 V34" stroke="#F5C04A" stroke-width="1"/>
+        <ellipse cx="54" cy="41" rx="6" ry="7" fill="#E8262E" stroke="${INK}" stroke-width="1.4"/>
+        <path d="M51 34.5 h6 M51 47.5 h6" stroke="#F5C04A" stroke-width="2" stroke-linecap="round"/>
+        <path d="M54 34.5 V47.5 M50.5 37 Q54 41 50.5 45 M57.5 37 Q54 41 57.5 45" stroke="#F5C04A" stroke-width=".8" fill="none"/>
+        <path d="M54 48 v4 M53 52 h2" stroke="#F5C04A" stroke-width="1"/></g>
+      <g class="mv mv-envelope" opacity="0"><rect x="25" y="44" width="14" height="18" rx="1.5" fill="#E8262E" stroke="${INK}" stroke-width="1.4"/>
+        <circle cx="32" cy="51" r="3" fill="#F5C04A" stroke="${INK}" stroke-width=".8"/><path d="M25 47 L32 51 L39 47" fill="none" stroke="#9C0F1C" stroke-width="1"/></g>
+      <g class="mv mv-crackle" opacity="0">${spark(10, 14, 1.1)}${spark(54, 10, .9)}${spark(48, 22, .7)}${spark(16, 26, .7)}</g>`,
+    },
+    eiddad: {
+      name: "Eid Dad", era: "Eid", season: "eid", moves: ["greet", "fanous", "sweets"],
+      svg: `<g class="body">${torso("#127C7A")}
+        <path d="M27.5 49.5 h9 l-1 14.5 h-7z" fill="#0E5F5D" stroke="${INK}" stroke-width="1.2"/>
+        <g stroke="#F2C14E" stroke-width="1" fill="none"><path d="M29 52 q3 2 6 0 M29 55.5 q3 2 6 0 M29 59 q3 2 6 0"/></g>
+        <path d="M24 49.5 Q32 52.5 40 49.5" fill="none" stroke="#F2C14E" stroke-width="1.6"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M14 26 C12.5 17 18 10.5 26 10 C31 7.5 40 8 45 11 C49.5 13.8 51.3 19.3 50 26 C48.5 21.5 45.5 19.6 40.5 19.6 L26 19.6 C20 19.6 15.5 21.8 14 26Z" fill="#2A1A12" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+        ${eyes}${smile}
+      </g>
+      <g class="mv mv-hand" opacity="0"><rect x="51.5" y="49" width="7" height="17" rx="2" fill="#127C7A" stroke="${INK}" stroke-width="1.6"/>
+        <rect x="50.5" y="40" width="9" height="10.5" rx="3.5" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
+        <path d="M52.6 40.5 v-3 M55 40.2 v-4 M57.4 40.5 v-3" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M52.6 40.5 v-3 M55 40.2 v-4 M57.4 40.5 v-3" stroke="var(--metal)" stroke-width="1.2" stroke-linecap="round"/></g>
+      <g class="mv mv-fanous" opacity="0"><path d="M10 26 V30" stroke="#F2C14E" stroke-width="1"/>
+        <path d="M6.5 30 h7 l-1 2 h-5z" fill="#F2C14E" stroke="${INK}" stroke-width=".8"/>
+        <path d="M7 32 h6 l1 9 h-8z" fill="#FFE29A" stroke="#C99A2E" stroke-width="1"/>
+        <path class="flame" d="M10 39.5 C8.8 38 9.4 36.5 10 35.3 C10.6 36.5 11.2 38 10 39.5Z" fill="#FF9A1F"/>
+        <path d="M6 41 h8 l-1.5 2.5 h-5z" fill="#F2C14E" stroke="${INK}" stroke-width=".8"/></g>
+      <g class="mv mv-sweets" opacity="0"><ellipse cx="32" cy="58" rx="12" ry="3.2" fill="#E9EEF2" stroke="${INK}" stroke-width="1.4"/>
+        <circle cx="27" cy="55.5" r="2.2" fill="#C2185B"/><circle cx="32" cy="54.5" r="2.4" fill="#F2C14E"/><circle cx="37" cy="55.5" r="2.2" fill="#8BC34A"/><circle cx="29.5" cy="53" r="1.8" fill="#FF9A1F"/><circle cx="34.5" cy="53" r="1.8" fill="#F8F1E3" stroke="#C99A2E" stroke-width=".5"/></g>`,
+    },
     grandpa: {
       name: "Robo-Grandpa", era: "Secret", secret: true, moves: ["glasses", "nap", "kids"],
       svg: `<g class="body">${torso("#8E3B46")}
@@ -259,7 +323,7 @@
         <path d="M52.5 38.5 v3.5 M55 38.5 v3.5 M57.5 38.5 v3.5" stroke="${INK}" stroke-width="1.2"/></g>`,
     },
   };
-  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula", bolly: "filmi", diwali: "festive" };
+  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula", bolly: "filmi", diwali: "festive", winter: "cozy", lunar: "lucky", eid: "eiddad" };
 
   function installSymbols(sprite){
     for (const [k, a] of Object.entries(AVATARS)) {

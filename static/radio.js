@@ -10,7 +10,8 @@
  * the style of late-90s pop-punk, mid-2000s game-lobby electronica and
  * early-2000s boom-bap; "Haunted Hayride" is an original spooky tune for
  * Halloween; "Filmi Nights '75" is an original 1970s Bollywood-style groove and
- * "Diya Glow" a gentle festive tune for Diwali. None of them borrow melodies
+ * "Diya Glow" a gentle festive tune for Diwali; "Snow Day", "Lantern Festival"
+ * and "Crescent Night" are original holiday tunes. None of them borrow melodies
  * from real songs or films.
  *
  *   RoboRadio.play("lounge" | "canon" | "drive")
@@ -253,6 +254,23 @@
     });
   }
 
+  function gong(n, t, level = 0.06) {                                 // soft gong for Lunar New Year
+    [1, 1.48, 2.1, 2.9].forEach((r, k) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.setValueAtTime(mtof(n) * r, t);
+      o.frequency.exponentialRampToValueAtTime(mtof(n) * r * 0.985, t + 3);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level / (k + 1), t + 0.03); g.gain.exponentialRampToValueAtTime(0.0001, t + 3.5);
+      o.connect(g); out(g); o.start(t); o.stop(t + 3.6);
+    });
+  }
+  function zither(n, t, level = 0.07, bend = 0) {                     // guzheng/oud-style pluck with an optional bend
+    const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = "sawtooth"; o.frequency.setValueAtTime(mtof(n), t);
+    if (bend) { o.frequency.setValueAtTime(mtof(n), t + 0.12); o.frequency.linearRampToValueAtTime(mtof(n + bend), t + 0.32); }
+    f.type = "lowpass"; f.frequency.setValueAtTime(2600, t); f.frequency.exponentialRampToValueAtTime(700, t + 0.9);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.3);
+    o.connect(f).connect(g); out(g, true); o.start(t); o.stop(t + 1.4);
+  }
+
   // ---------- stations ----------
   const STATIONS = {
     // Lobby Lounge: smooth "elevator" jazz in F
@@ -465,6 +483,51 @@
       }
       if (i % 2 === 0) bell(86, t, 0.06); else bell(81, t + 2 * b, 0.05);
       drum(t, 120, 0.16, 0.35, 0.6); drum(t + 2.5 * b, 120, 0.11, 0.3, 0.6); na(t + 1.5 * b, 0.06); na(t + 3 * b, 0.06);
+    },
+  };
+
+  // Snow Day: original cozy winter tune in F, celesta bells, sleigh-bell shaker, warm pad
+  STATIONS.snow = {
+    name: "Snow Day", bpm: 92,
+    bars: [
+      { root: 41, chord: [65, 69, 72], arp: [77, 81, 84, 81] }, // F
+      { root: 38, chord: [62, 65, 69], arp: [74, 77, 81, 77] }, // Dm
+      { root: 46, chord: [62, 65, 70], arp: [74, 77, 82, 77] }, // Bb
+      { root: 36, chord: [64, 67, 72], arp: [76, 79, 84, 79] }, // C
+    ],
+    play(i, t, b) {
+      const { root, chord, arp } = this.bars[i % 4];
+      pad(chord.map((n) => n - 12), t, 4 * b, { type: "triangle", cutoff: 1400, level: 0.04 });
+      bass(root, t, b * 1.8, { level: 0.12, cutoff: 260 }); bass(root + 7, t + 2 * b, b * 1.8, { level: 0.09, cutoff: 260 });
+      for (let k = 0; k < 8; k++) pluck(arp[k % 4], t + k * b / 2, { type: "sine", level: 0.07, decay: 1.4, cutoff: 6000, echo: k === 7 });
+      if (i % 4 === 0) bell(89, t, 0.04);
+      for (let k = 0; k < 8; k++) hit(t + k * b / 2, { type: "highpass", freq: 8000, level: k % 2 ? 0.012 : 0.02, decay: 0.08 });
+      softKick(t, 0.1); brush(t + 2 * b, 0.04);
+    },
+  };
+  // Lantern Festival: original Lunar New Year tune on a major pentatonic scale, zither plucks, drum and gong
+  STATIONS.lantern = {
+    name: "Lantern Festival", bpm: 100,
+    lines: [[72, 74, 76, 79, 76, 74], [79, 81, 79, 76, 74, 76], [72, 76, 74, 72, 69, 72], [74, 76, 79, 81, 79, 76]],
+    play(i, t, b) {
+      const roots = [48, 45, 41, 43], r = roots[i % 4];
+      harmonium([r + 12, r + 19], t, 4 * b, 0.018);
+      bass(r - 12, t, b * 1.8, { level: 0.12, cutoff: 260 }); bass(r - 5, t + 2 * b, b * 1.8, { level: 0.09, cutoff: 260 });
+      this.lines[i % 4].forEach((n, k) => zither(n, t + k * b * 0.66, 0.12, k === 5 && i % 2 ? 2 : 0));
+      drum(t, 95, 0.2, 0.4, 0.6); drum(t + 2 * b, 95, 0.15, 0.35, 0.6); na(t + b, 0.07); na(t + 3 * b, 0.07); na(t + 3.5 * b, 0.05);
+      if (i % 8 === 0) gong(43, t, 0.07);
+    },
+  };
+  // Crescent Night: original gentle tune for Eid, oud-like plucks on a hijaz-flavoured scale, frame drum and drone
+  STATIONS.crescent = {
+    name: "Crescent Night", bpm: 84,
+    lines: [[62, 63, 66, 67, 69, 67], [69, 70, 69, 67, 66, 63], [62, 66, 67, 69, 70, 69], [67, 66, 63, 62, 63, 62]],
+    play(i, t, b) {
+      harmonium([50, 57], t, 4 * b, 0.03);
+      bass(38, t, b * 2, { level: 0.12, cutoff: 240 });
+      this.lines[i % 4].forEach((n, k) => zither(n - 12, t + k * b * 0.66, 0.13, k === 2 ? -1 : 0));
+      if (i % 4 >= 2) this.lines[(i + 1) % 4].slice(0, 3).forEach((n, k) => pluck(n + 12, t + (k + 4) * b * 0.5, { type: "sine", level: 0.04, decay: 1.2, cutoff: 5000, echo: true }));
+      drum(t, 85, 0.2, 0.45, 0.6); na(t + 1.5 * b, 0.06); drum(t + 2 * b, 85, 0.13, 0.4, 0.6); na(t + 3 * b, 0.06); na(t + 3.5 * b, 0.05);
     },
   };
 
