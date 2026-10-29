@@ -13,11 +13,12 @@ classifier, so the site still works with no key and no cost.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import os
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import AsyncIterator
 
 import httpx
@@ -212,7 +213,19 @@ class ModelUnavailable(RuntimeError):
 _MODEL_GONE = re.compile(r"model_not_found|decommission|deprecat|does not exist|not_found_error|no such model|unknown model", re.I)
 
 
+class RateLimited(RuntimeError):
+    """The provider's per-minute allowance is used up for this model."""
+
+    def __init__(self, message: str, retry_after: float | None):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
 def _api_error(provider: Provider, status: int, body: str) -> RuntimeError:
+    if status == 429:
+        m = re.search(r"try again in\s+(?:(\d+)m)?([\d.]+)\s*s", body)
+        wait = (int(m.group(1) or 0) * 60 + float(m.group(2))) if m else None
+        return RateLimited(f"{provider.name} {provider.model} rate-limited (retry in {wait}s)", wait)
     if status in (400, 404) and _MODEL_GONE.search(body):
         return ModelUnavailable(f"{provider.name} model {provider.model} unavailable: {body}")
     return RuntimeError(f"{provider.name} API {status}: {body}")
@@ -279,7 +292,7 @@ async def stream_reply(
         # Reasoning model: keep thinking short (chat replies are simple) and leave
         # room for the hidden reasoning tokens, which count towards max_tokens.
         payload["reasoning_effort"] = os.getenv("LLM_REASONING_EFFORT", "low")
-        payload["max_tokens"] = MAX_TOKENS + 1500
+        payload["max_tokens"] = MAX_TOKENS + 800
     req = client.stream(
         "POST",
         f"{provider.base_url}/chat/completions",
@@ -392,4 +405,38 @@ async def stream_with_failover(
                 raise
             log.warning("%s Switching to %s.", exc, nxt)
             provider.model = nxt
+        except RateLimited as exc:
+            async for chunk in _ride_out_rate_limit(provider, system, messages, client, exc):
+                yield chunk
+            return
     raise RuntimeError("No working model found")
+
+
+MAX_RATE_WAIT = float(os.getenv("LLM_MAX_RATE_WAIT", "6"))
+
+
+async def _ride_out_rate_limit(provider, system, messages, client, first: RateLimited) -> AsyncIterator[str]:
+    """Busy minute on the free tier: wait briefly, then overflow to a backup model.
+
+    Each model has its own per-minute allowance, so a backup (e.g. the smaller
+    gpt-oss-20b) usually has room even when the main model is saturated.
+    Nothing has been sent to the user yet when this runs, so retrying is safe.
+    """
+    attempts = []
+    if first.retry_after is not None and first.retry_after <= MAX_RATE_WAIT:
+        attempts.append(("wait", provider.model, first.retry_after))
+    attempts += [("overflow", m, 0.0) for m in provider.backups if m != provider.model and m not in provider.retired]
+    attempts.append(("wait", provider.model, MAX_RATE_WAIT))
+    last: Exception = first
+    for kind, model, wait in attempts:
+        if wait:
+            await asyncio.sleep(min(wait, MAX_RATE_WAIT) + 0.3)
+        log.info("Rate limited; %s -> %s", kind, model)
+        try:
+            async for chunk in stream_reply(replace(provider, model=model), system, messages, client):
+                yield chunk
+            return
+        except (RateLimited, ModelUnavailable) as exc:
+            last = exc
+            continue
+    raise last
