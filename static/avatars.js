@@ -106,13 +106,11 @@
         <path d="M23 49.5 L41 49.5 L34.5 60 L29.5 60Z" fill="var(--metal)" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
         <path d="M23 49.5 L29.5 55 L26 58.5 L20.5 51Z M41 49.5 L34.5 55 L38 58.5 L43.5 51Z" fill="#46C2B6" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
       </g>${neck}
-      <g fill="#FFF8EA" stroke="${INK}" stroke-width=".6"><circle cx="25.5" cy="51" r="1.2"/><circle cx="28" cy="52.6" r="1.2"/><circle cx="30.7" cy="53.4" r="1.2"/><circle cx="33.3" cy="53.4" r="1.2"/><circle cx="36" cy="52.6" r="1.2"/><circle cx="38.5" cy="51" r="1.2"/></g>
       <g class="hd">${head}
         <g class="hair-f"><path d="M13 27 C12.5 17 19 11 26 10.5 C29 10.3 31 11.5 32 13.5 C33 11.5 35 10.3 38 10.5 C45 11 51.5 17 51 27 C49 21 45 18.5 40 18.5 C36.5 18.5 34 20 32 22.5 C30 20 27.5 18.5 24 18.5 C19 18.5 15 21 13 27Z" fill="#E2B85C" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
           <path d="M11.5 22 C7 30 6.8 38 9.8 45.5 L17 45.5 C15 37.5 15 30 16.5 22Z M52.5 22 C57 30 57.2 38 54.2 45.5 L47 45.5 C49 37.5 49 30 47.5 22Z" fill="#E2B85C" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>
           <path d="M20 13.5 C23 12 27 12.5 29.5 14.5 M34.5 14.5 C37 12.5 41 12 44 13.5 M11 30 C10.4 35 10.8 39 12 43 M53 30 C53.6 35 53.2 39 52 43" fill="none" stroke="#F8E3A6" stroke-width="1.2" stroke-linecap="round"/></g>
         ${eyes}
-        <path d="M24.5 37 C27.5 35.4 30.8 35.8 32 37.2 C33.2 35.8 36.5 35.4 39.5 37 C37 38.9 34 38.7 32 38 C30 38.7 27 38.9 24.5 37Z" fill="#B8892E" stroke="${INK}" stroke-width="1" stroke-linejoin="round"/>
         ${smile}
         <path d="M28.5 42.6 C29.5 46.6 34.5 46.6 35.5 42.6 C33.6 43.8 30.4 43.8 28.5 42.6Z" fill="#B8892E" stroke="${INK}" stroke-width="1" stroke-linejoin="round"/>
         <g class="mv mv-shades" opacity="0"><path d="M14.5 26 C20 24.2 44 24.2 49.5 26 L48.6 31.4 C44 33.6 36 33.6 32 31 C28 33.6 20 33.6 15.4 31.4Z" fill="#FF7A1A" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
