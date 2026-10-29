@@ -274,7 +274,7 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .extra .mini:hover:not(:disabled){background:var(--sky)}
 .extra .mini:disabled{cursor:default; opacity:.7}
 .plate-nudge{border:1px dashed var(--line); background:transparent; border-radius:999px; padding:4px 12px; font-weight:800; font-size:.85rem; cursor:pointer; color:var(--ink); display:inline-flex; gap:6px; align-items:center}
-.plate-nudge svg{width:16px; height:16px; color:var(--mustard)}
+.plate-nudge .nb{width:20px; height:20px; display:block; flex:none} .plate-nudge .nb svg{width:100%; height:100%; display:block}
 .plate-nudge:hover{background:var(--surface)}
 
 /* settings menu */
@@ -295,18 +295,64 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .switch[aria-pressed="true"]{background:var(--ok)}
 .switch[aria-pressed="true"]::after{transform:translateX(22px)}
 
-/* Life Skills Belt */
+/* Life Skills Belt + badge collection */
 .belt-svg{width:100%; height:auto; display:block}
 .belt-rank{text-align:center; margin:-4px 0 0; font-family:var(--display); font-weight:900; font-size:1.1rem; color:var(--ink)}
 :root[data-look="arcade"] .belt-rank,:root[data-look="vhs"] .belt-rank{font-weight:400}
-.skills{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px}
-.skill{width:100%; display:flex; gap:10px; align-items:center; text-align:left; border:1.5px solid var(--line); background:transparent; border-radius:12px; padding:9px 12px; cursor:pointer; font-weight:700}
-.skill .chk{width:22px; height:22px; border-radius:50%; border:2px solid var(--line); flex:none; display:grid; place-items:center}
-.skill[aria-pressed="true"]{border-color:var(--mustard)}
-.skill[aria-pressed="true"] .chk{background:var(--mustard); border-color:var(--mustard)}
-.skill[aria-pressed="true"] .chk::after{content:""; width:9px; height:5px; border:solid var(--mustard-ink); border-width:0 0 2.5px 2.5px; transform:rotate(-45deg) translate(1px,-1px)}
 .plate-new{animation:plate .6s ease-out 1}
 @keyframes plate{0%{transform:scale(.2); opacity:0} 70%{transform:scale(1.25)} 100%{transform:scale(1); opacity:1}}
+.coll-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin:4px 0 -4px!important; color:var(--ink)!important; font-weight:900}
+.coll-head small{font-weight:700; color:var(--muted)}
+.badges{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px}
+.bcard{position:relative; display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 4px 9px; border:1.5px solid var(--line); border-radius:16px;
+  background:transparent; cursor:pointer; font:inherit; color:var(--ink); text-align:center; transition:transform .15s ease}
+.bcard:hover{transform:translateY(-3px)}
+.bcard .bw{width:62px; height:62px; display:block}
+.bw svg,.bd-art svg,.big svg{width:100%; height:100%; display:block; overflow:visible}
+.bcard .bn{font-weight:900; font-size:.8rem; line-height:1.15}
+.bcard .br{font-size:.66rem; font-weight:900; text-transform:uppercase; letter-spacing:.08em; color:var(--rc)}
+.bcard.locked .bw{filter:grayscale(1); opacity:.4}
+.bcard.locked .bn{color:var(--muted)} .bcard.locked .br{color:var(--muted)}
+.bcard.earned{border-color:var(--rc); background:color-mix(in srgb, var(--rc) 12%, transparent)}
+.bcard.earned .bw{filter:drop-shadow(0 3px 6px color-mix(in srgb, var(--rc) 45%, transparent))}
+.bcard.new{animation:plate .6s ease-out 1}
+.bsheen{animation:bsheen 3.6s ease-in-out infinite}
+@keyframes bsheen{0%,55%{transform:translateX(0)} 100%{transform:translateX(190px)}}
+.bd-art{width:150px; height:150px; margin:0 auto; filter:drop-shadow(0 8px 18px color-mix(in srgb, var(--rc) 50%, transparent))}
+.bd-art.locked{filter:grayscale(1); opacity:.45}
+.bd-rar{text-align:center; font-weight:900; text-transform:uppercase; letter-spacing:.1em; font-size:.8rem; margin:0!important}
+#badgeBody h2{text-align:center; margin-top:-8px}
+#badgeBody > p{text-align:center}
+.bd-need{list-style:none; padding:0!important; display:flex; flex-wrap:wrap; gap:6px; justify-content:center}
+.bd-need li{margin:0!important; border:1.5px dashed var(--line); border-radius:999px; padding:3px 10px; font-weight:800; font-size:.85rem; color:var(--muted)}
+.bd-need li.ok{border-style:solid; border-color:var(--ok); color:var(--ok)}
+.bd-need li.ok::before{content:"\2713  "}
+.linkbtn{border:0; background:none; color:var(--muted); font:inherit; font-size:.85rem; text-decoration:underline; cursor:pointer; align-self:center; padding:4px}
+.mini-badges{display:flex; gap:4px; min-height:0} .mini-badges span{width:26px; height:26px; display:block}
+/* unlock reveal */
+.reveal{position:fixed; inset:0; z-index:40; display:grid; place-items:center; padding:16px; overflow:hidden; text-align:center; color:#fff;
+  background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--rc) 55%, #0B0F1A) 0%, #0B0F1A 72%)}
+.reveal .rays{position:absolute; left:50%; top:40%; width:180vmax; height:180vmax; margin:-90vmax 0 0 -90vmax; pointer-events:none;
+  background:repeating-conic-gradient(from 0deg, rgba(255,255,255,.10) 0 7deg, transparent 7deg 20deg);
+  -webkit-mask:radial-gradient(circle, #000 0, transparent 45%); mask:radial-gradient(circle, #000 0, transparent 45%); animation:rays 20s linear infinite}
+@keyframes rays{to{transform:rotate(360deg)}}
+.reveal .rv{position:relative; display:flex; flex-direction:column; align-items:center; gap:8px; max-width:340px}
+.reveal .kicker{margin:0; font-weight:900; letter-spacing:.22em; font-size:.8rem; opacity:.9; animation:fadeup .5s .85s both}
+.reveal .big{width:min(210px, 55vw); height:min(210px, 55vw); margin:6px 0; animation:flipin 1.05s cubic-bezier(.2,.8,.25,1.15) both;
+  filter:drop-shadow(0 12px 34px color-mix(in srgb, var(--rc) 75%, transparent))}
+@keyframes flipin{0%{transform:perspective(700px) rotateY(-540deg) scale(.15); opacity:0} 50%{opacity:1} 100%{transform:perspective(700px) rotateY(0) scale(1)}}
+.reveal .rar{margin:0; font-weight:900; letter-spacing:.14em; text-transform:uppercase; font-size:.9rem; color:color-mix(in srgb, var(--rc) 60%, #fff); animation:fadeup .5s 1s both}
+.reveal h2{margin:0; font-family:var(--display); font-size:2.1rem; line-height:1.05; font-weight:900; animation:fadeup .5s 1.05s both}
+:root[data-look="arcade"] .reveal h2,:root[data-look="vhs"] .reveal h2,:root[data-look="diner"] .reveal h2{font-weight:400}
+.reveal .did{margin:0; opacity:.85; animation:fadeup .5s 1.15s both}
+.reveal .row{display:flex; gap:10px; margin-top:10px; animation:fadeup .5s 1.3s both}
+.reveal .ghost{color:#fff; border-color:rgba(255,255,255,.55); background:transparent}
+.reveal .ghost:hover{background:rgba(255,255,255,.12)}
+@keyframes fadeup{from{opacity:0; transform:translateY(12px)}}
+.confetti{position:absolute; inset:0; pointer-events:none}
+.confetti i{position:absolute; top:-16px; width:8px; height:14px; border-radius:2px; animation:fall linear both}
+@keyframes fall{to{transform:translateY(115vh) rotate(760deg)}}
+@media (prefers-reduced-motion:reduce){ .confetti,.reveal .rays{display:none} }
 
 /* ---------- Diner '55 ---------- */
 :root[data-look="diner"] .top{position:relative; z-index:6; border-bottom:0;
@@ -499,7 +545,7 @@ textarea::placeholder{color:var(--muted)}
     <circle cx="16" cy="16" r="1.4" fill="#FFF8EE"/>
     <path d="M5 11 A12 12 0 0 1 11 4.5" fill="none" stroke="#fff" stroke-width="1.4" opacity=".35" stroke-linecap="round"/>
   </symbol>
-  <symbol id="i-belt" viewBox="0 0 24 24"><rect x="1.5" y="8" width="21" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5.5" fill="currentColor"/><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></symbol>
+  <symbol id="i-belt" viewBox="0 0 24 24"><path d="M7.5 2.5l3.2 6.2M16.5 2.5l-3.2 6.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="15" r="6.8" fill="currentColor"/><path d="M12 11.3l1.15 2.3 2.5.35-1.8 1.75.43 2.5L12 17l-2.28 1.2.43-2.5-1.8-1.75 2.5-.35z" fill="var(--surface)"/></symbol>
   <symbol id="i-dash" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="3" width="8" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13" y="10" width="8" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13" width="8" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-note" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.8" fill="currentColor"/><circle cx="17.5" cy="16" r="2.8" fill="currentColor"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></symbol>
@@ -530,8 +576,8 @@ textarea::placeholder{color:var(--muted)}
   <button class="player-btn" id="musicBtn" type="button" title="Play music" aria-pressed="false">
     <span class="pl-art" id="musicArt" aria-hidden="true"></span><span class="sr" id="musicLabel">Play music</span>
   </button>
-  <button class="icon-btn hide-narrow" id="beltBtn" type="button" title="Life Skills Belt">
-    <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Life Skills Belt</span>
+  <button class="icon-btn hide-narrow" id="beltBtn" type="button" title="Badges">
+    <svg aria-hidden="true"><use href="#i-belt"/></svg><span class="sr">Badges</span>
   </button>
   <button class="icon-btn" id="menuBtn" type="button" title="Look and settings">
     <svg aria-hidden="true"><use href="#i-menu"/></svg><span class="sr">Look and settings</span>
@@ -666,11 +712,12 @@ textarea::placeholder{color:var(--muted)}
     <p id="dailyTip">Loading…</p>
   </section>
 
-  <section class="widget" aria-label="Life Skills Belt progress">
-    <b>Life Skills Belt</b>
+  <section class="widget" aria-label="Badge collection progress">
+    <b>Badges</b>
     <p id="beltMiniText"></p>
     <div class="meter" aria-hidden="true"><span id="beltMiniBar" style="width:0"></span></div>
-    <div class="row"><button class="chipbtn" id="beltMiniOpen" type="button">Open belt</button></div>
+    <div class="mini-badges" id="beltMiniBadges" aria-hidden="true"></div>
+    <div class="row"><button class="chipbtn" id="beltMiniOpen" type="button">Open badges</button></div>
   </section>
 
   <section class="widget help" aria-label="Help">
@@ -721,14 +768,23 @@ textarea::placeholder{color:var(--muted)}
 
 <div class="overlay" id="beltDlg" role="dialog" aria-modal="true" aria-labelledby="beltTitle" hidden>
   <div class="card">
-    <h2 id="beltTitle">Life Skills Belt</h2>
+    <h2 id="beltTitle">Badge Collection</h2>
     <div id="beltArt"></div>
     <p class="belt-rank" id="beltRank"></p>
-    <p>Earn a plate each time you do one of these for real. It's on the honour system, and it's saved only on this device.</p>
-    <ul class="skills" id="skillList"></ul>
+    <p>Do these for real to unlock badges. Tap a badge to see its mission. It's on the honour system, and your badges stay private on this device.</p>
+    <p class="coll-head"><span>Life skill badges</span><small id="collCount"></small></p>
+    <div class="badges" id="badgeGrid"></div>
+    <p class="coll-head"><span>Secret bonus badges</span><small>Collect sets to unlock</small></p>
+    <div class="badges" id="setGrid"></div>
     <div class="row"><button class="primary" id="beltDone" type="button">Done</button></div>
   </div>
 </div>
+
+<div class="overlay" id="badgeDlg" role="dialog" aria-modal="true" aria-labelledby="badgeTitle" hidden style="z-index:25">
+  <div class="card" id="badgeBody"></div>
+</div>
+
+<div class="reveal" id="reveal" role="dialog" aria-modal="true" aria-labelledby="revealTitle" hidden></div>
 
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -1211,16 +1267,59 @@ const PLAYERS = {
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, msg.length > 60 ? 6000 : 3200);
   }
 
-  // ---------- Life Skills Belt ----------
-  const BELT_KEY = "robodad.belt";
+  // ---------- Life Skills Belt: collectible badges ----------
+  const BELT_KEY = "robodad.belt", DATES_KEY = "robodad.badgeDates";
+  const RARITY = {
+    common:    { label:"Common",    c:"#10B981", g:["#6EE7B7", "#047857"] },
+    rare:      { label:"Rare",      c:"#3B82F6", g:["#93C5FD", "#1D4ED8"] },
+    epic:      { label:"Epic",      c:"#8B5CF6", g:["#C4B5FD", "#6D28D9"] },
+    legendary: { label:"Legendary", c:"#F59E0B", g:["#FDE68A", "#C2410C"] },
+  };
+  // 24x24 line icons, drawn white on the badge
+  const ICONS = {
+    cook:'<circle cx="10" cy="15" r="6"/><path d="M16 15h6M8 2.5c-1 1.5 1 2.5 0 4M12 2.5c-1 1.5 1 2.5 0 4"/>',
+    laundry:'<rect x="4" y="2.5" width="16" height="19" rx="2.5"/><circle cx="12" cy="13.5" r="5"/><path d="M7 6h2M13 6h4M8.5 14c1.2-1 2.3 1 3.5 0s2.3 1 3.5 0"/>',
+    budget:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v4c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 10v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4M5 14v4c0 1.7 3.1 3 7 3s7-1.3 7-3v-4"/>',
+    job:'<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18M11 13v2h2v-2"/>',
+    study:'<path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5ZM12 6v14"/>',
+    sleep:'<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/><path d="M15 3h4l-4 4h4"/>',
+    fix:'<path d="M14.5 3.5a5 5 0 0 0-5.8 6.6L3 15.8 6.2 19l5.7-5.7a5 5 0 0 0 6.6-5.8l-3 3-2.8-.8-.8-2.8z"/>',
+    transit:'<path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10Z"/><circle cx="12" cy="11" r="2.2"/>',
+    no:'<circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/>',
+    friend:'<circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6M10.5 20c0-3.5 2.5-6 5.5-6s5.5 2.5 5.5 6"/>',
+    plan:'<path d="M12 2.8l2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/>',
+    talk:'<path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h8A2.5 2.5 0 0 1 16 5.5v5a2.5 2.5 0 0 1-2.5 2.5H9l-4 3v-3A2.5 2.5 0 0 1 3 10.5Z"/><path d="M19 9h.5A1.5 1.5 0 0 1 21 10.5v5a1.5 1.5 0 0 1-1.5 1.5H19v3l-4-3h-3"/>',
+    solo:'<path d="M3 11 12 3.5 21 11M5.5 9v11h13V9M10 20v-6h4v6"/>',
+    bag:'<path d="M9 3h6l-1.5 3.5h-3zM10.5 6.5C6 8 4 12 4 15.5 4 19 6.5 21 12 21s8-2 8-5.5c0-3.5-2-7.5-6.5-9"/><path d="M12 10v7M14 11.5h-3a1.25 1.25 0 0 0 0 2.5h2a1.25 1.25 0 0 1 0 2.5h-3"/>',
+    squad:'<path d="M12 20.5s-8-4.6-8-10.2A4.3 4.3 0 0 1 12 8a4.3 4.3 0 0 1 8 2.3c0 5.6-8 10.2-8 10.2Z"/>',
+    glow:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/><circle cx="12" cy="12" r="2.5"/>',
+    champ:'<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5zM5 19h14"/>',
+  };
+  // [id, badge name, mission, what you did, rarity]
   const SKILLS = [
-    ["cook", "Cooked a meal on my own"], ["laundry", "Did my own laundry"], ["budget", "Made a budget"],
-    ["job", "Practised for, or applied to, a job"], ["study", "Made a study plan and stuck to it"],
-    ["sleep", "Kept a good sleep routine for a week"], ["fix", "Fixed or cleaned something at home"],
-    ["transit", "Got somewhere new on my own, safely"], ["no", "Said no to peer pressure"],
-    ["friend", "Helped a friend or sorted out a conflict"], ["plan", "Set a goal for my future"],
-    ["talk", "Had a real talk with a parent or trusted adult"],
+    ["cook", "Kitchen Boss", "Cook a meal on your own", "Cooked a meal on my own", "common"],
+    ["laundry", "Spin Cycle", "Do your own laundry, start to finish", "Did my own laundry", "common"],
+    ["study", "Brain Gains", "Make a study plan and stick to it", "Made a study plan and stuck to it", "common"],
+    ["sleep", "Fully Charged", "Keep a good sleep routine for a week", "Kept a good sleep routine for a week", "common"],
+    ["budget", "Money Moves", "Make a budget for a week or a month", "Made a budget", "rare"],
+    ["job", "Hustle Mode", "Practise for, or apply to, a job", "Practised for, or applied to, a job", "rare"],
+    ["fix", "Fix-It Legend", "Fix or clean something at home", "Fixed or cleaned something at home", "rare"],
+    ["transit", "Side Quest", "Get somewhere new on your own, safely", "Got somewhere new on my own, safely", "rare"],
+    ["no", "Hard Pass", "Say no to peer pressure", "Said no to peer pressure", "epic"],
+    ["friend", "Ride or Die", "Help a friend or sort out a conflict", "Helped a friend or sorted out a conflict", "epic"],
+    ["plan", "Main Character", "Set a goal for your future", "Set a goal for my future", "epic"],
+    ["talk", "Real Talk", "Have a real talk with a parent or trusted adult", "Had a real talk with a parent or trusted adult", "legendary"],
   ];
+  const SETS = [
+    ["solo", "Solo Mode", "Ready to run your own place: cooking, laundry and fixing things.", "epic", ["cook", "laundry", "fix"]],
+    ["bag", "Bag Secured", "Money sorted: a budget, a job and a plan.", "epic", ["budget", "job", "plan"]],
+    ["squad", "Squad Up", "People skills on point: saying no, backing a friend and real talk.", "epic", ["no", "friend", "talk"]],
+    ["glow", "Glow Up", "Looking after future you: study, sleep and getting around.", "epic", ["study", "sleep", "transit"]],
+    ["champ", "Undisputed", "Every life skill badge collected. Champion of the world.", "legendary", SKILLS.map(x => x[0])],
+  ];
+  const BADGES = {};
+  SKILLS.forEach(([id, name, todo, did, rar]) => BADGES[id] = { id, name, todo, did, rar });
+  SETS.forEach(([id, name, did, rar, set]) => BADGES[id] = { id, name, did, rar, set });
   const SKILL_BY_INTENT = {
     life_skill_cooking:"cook", life_skill_food:"cook", life_skill_laundry:"laundry", life_skill_money:"budget",
     life_skill_jobs:"job", life_skill_study:"study", life_skill_homework:"study", life_skill_sleep:"sleep",
@@ -1228,26 +1327,55 @@ const PLAYERS = {
     life_skill_peer_pressure:"no", life_skill_friendship:"friend", life_skill_conflict:"friend",
     life_skill_future:"plan", life_skill_planning:"plan",
   };
-  const loadBelt = () => { try { return new Set(JSON.parse(localStorage.getItem(BELT_KEY) || "[]")); } catch { return new Set(); } };
+  const loadBelt = () => { try { return new Set(JSON.parse(localStorage.getItem(BELT_KEY) || "[]").filter(id => BADGES[id] && !BADGES[id].set)); } catch { return new Set(); } };
   let belt = loadBelt();
-  const saveBelt = () => setPref(BELT_KEY, JSON.stringify([...belt]));
+  let dates = {}; try { dates = JSON.parse(localStorage.getItem(DATES_KEY) || "{}") || {}; } catch {}
+  const saveBelt = () => { setPref(BELT_KEY, JSON.stringify([...belt])); setPref(DATES_KEY, JSON.stringify(dates)); };
+  const isEarned = (b) => b.set ? b.set.every(x => belt.has(x)) : belt.has(b.id);
+  const fmtDate = (d) => { try { return new Date(d + "T12:00:00").toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" }); } catch { return d; } };
   function rank(n){
     if (n >= 12) return "Undisputed Life Skills Champion";
     if (n >= 8) return "Champion";
     if (n >= 4) return "Contender";
-    return n ? "Rookie" : "Rookie: your first plate is waiting";
+    return n ? "Rookie" : "Rookie: your first badge is waiting";
+  }
+  // badge shapes by rarity: coin, shield, hexagon, starburst
+  const STAR = (() => { let p = ""; for (let i = 0; i < 24; i++) { const a = Math.PI * 2 * i / 24 - Math.PI / 2, r = i % 2 ? 40 : 47; p += (i ? "L" : "M") + (50 + r * Math.cos(a)).toFixed(1) + " " + (50 + r * Math.sin(a)).toFixed(1); } return p + "Z"; })();
+  const SHAPES = {
+    common: "M50 8a42 42 0 1 1 0 84a42 42 0 1 1 0-84Z",
+    rare: "M50 7 86 19V48C86 71 71 86 50 94 29 86 14 71 14 48V19Z",
+    epic: "M50 5 89 27.5v45L50 95 11 72.5v-45Z",
+    legendary: STAR,
+  };
+  let svgUid = 0;
+  function badgeSVG(b, locked, opts = {}){
+    const u = "bg" + (++svgUid), r = RARITY[b.rar], d = SHAPES[b.rar];
+    const holo = !locked && !opts.still && (b.rar === "epic" || b.rar === "legendary");
+    const art = locked && b.set
+      ? `<text x="50" y="65" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="42" fill="#fff">?</text>`
+      : `<g transform="translate(26 26) scale(2)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[b.id]}</g>`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"${opts.w ? ` width="${opts.w}" height="${opts.w}"` : ""} aria-hidden="true">
+      <defs><linearGradient id="${u}g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${locked ? "#B8C2CC" : r.g[0]}"/><stop offset="1" stop-color="${locked ? "#6B7785" : r.g[1]}"/></linearGradient>
+        <clipPath id="${u}c"><path d="${d}"/></clipPath>
+        <linearGradient id="${u}s" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+      <path d="${d}" fill="url(#${u}g)" stroke="rgba(0,0,0,.28)" stroke-width="2.5"/>
+      <path d="${d}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2" transform="translate(50 50) scale(.84) translate(-50 -50)"/>
+      ${locked ? "" : `<ellipse cx="40" cy="25" rx="26" ry="10" fill="#fff" opacity=".2" clip-path="url(#${u}c)"/>`}
+      ${art}
+      ${holo ? `<g clip-path="url(#${u}c)"><g transform="skewX(-18)"><rect class="bsheen" x="-50" y="-10" width="30" height="120" fill="url(#${u}s)"/></g></g>` : ""}
+    </svg>`;
   }
   function beltSVG(justEarned){
-    const ids = SKILLS.map(s => s[0]); const n = belt.size;
-    const plate = (x, y, r, on, isNew) => `<circle cx="${x}" cy="${y}" r="${r}" class="${isNew ? "plate-new" : ""}" style="transform-box:fill-box; transform-origin:center"
-      fill="${on ? "url(#gold)" : "none"}" stroke="${on ? "#7A5300" : "var(--muted)"}" stroke-width="2" ${on ? "" : 'stroke-dasharray="3 3"'}/>`;
+    const n = belt.size;
+    const plate = (x, y, r, b, isNew) => { const on = belt.has(b.id);
+      return `<circle cx="${x}" cy="${y}" r="${r}" class="${isNew ? "plate-new" : ""}" style="transform-box:fill-box; transform-origin:center"
+      fill="${on ? RARITY[b.rar].c : "none"}" stroke="${on ? "#fff" : "var(--muted)"}" stroke-width="2" ${on ? "" : 'stroke-dasharray="3 3"'}/>`; };
     let side = "";
-    ids.forEach((id, i) => {
+    SKILLS.forEach(([id], i) => {
       const left = i < 6, k = left ? i : i - 6;
-      const x = left ? 108 - k * 17 : 212 + k * 17;
-      side += plate(x, 60, 7, belt.has(id), id === justEarned);
+      side += plate(left ? 108 - k * 17 : 212 + k * 17, 60, 7, BADGES[id], id === justEarned);
     });
-    return `<svg class="belt-svg" viewBox="0 0 320 120" role="img" aria-label="Life Skills Belt with ${n} of 12 plates">
+    return `<svg class="belt-svg" viewBox="0 0 320 120" role="img" aria-label="Life Skills Belt with ${n} of 12 badges">
       <defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A3"/><stop offset=".5" stop-color="#F2B533"/><stop offset="1" stop-color="#B07A10"/></linearGradient></defs>
       <rect x="4" y="40" width="312" height="40" rx="14" fill="var(--jacket)" stroke="var(--ink)" stroke-width="2.5"/>
       <rect x="4" y="47" width="312" height="26" rx="10" fill="none" stroke="color-mix(in srgb, var(--ink) 25%, transparent)" stroke-dasharray="4 4"/>
@@ -1262,32 +1390,141 @@ const PLAYERS = {
     </svg>`;
   }
   function updateBeltMini(){
-    $("beltMiniText").textContent = `${belt.size}/12 plates · ${rank(belt.size)}`;
-    $("beltMiniBar").style.width = `${Math.round(belt.size / 12 * 100)}%`;
+    const all = Object.values(BADGES), got = all.filter(isEarned);
+    $("beltMiniText").textContent = `${got.length}/${all.length} badges · ${rank(belt.size)}`;
+    $("beltMiniBar").style.width = `${Math.round(got.length / all.length * 100)}%`;
+    const recent = got.sort((a, b) => (dates[b.id] || "").localeCompare(dates[a.id] || "")).slice(0, 6);
+    $("beltMiniBadges").innerHTML = recent.map(b => `<span>${badgeSVG(b, false, { still:true })}</span>`).join("");
+  }
+  function cardHTML(b, justEarned){
+    const on = isEarned(b), secret = b.set && !on, r = RARITY[b.rar];
+    const label = `${secret ? "Secret badge" : b.name}, ${r.label}, ${on ? "unlocked" : "locked"}`;
+    return `<button class="bcard ${on ? "earned" : "locked"}${b.id === justEarned ? " new" : ""}" type="button" data-badge="${b.id}" style="--rc:${r.c}" aria-label="${esc(label)}">
+      <span class="bw">${badgeSVG(b, !on)}</span><span class="bn">${esc(secret ? "???" : b.name)}</span><span class="br">${secret ? "Secret" : r.label}</span></button>`;
   }
   function renderBelt(justEarned){
     updateBeltMini();
     $("beltArt").innerHTML = beltSVG(justEarned);
     $("beltRank").textContent = rank(belt.size);
-    $("skillList").innerHTML = SKILLS.map(([id, label]) =>
-      `<li><button class="skill" type="button" data-skill="${id}" aria-pressed="${belt.has(id)}"><span class="chk" aria-hidden="true"></span>${esc(label)}</button></li>`).join("");
+    $("collCount").textContent = `${belt.size} of ${SKILLS.length} unlocked`;
+    $("badgeGrid").innerHTML = SKILLS.map(([id]) => cardHTML(BADGES[id], justEarned)).join("");
+    $("setGrid").innerHTML = SETS.map(([id]) => cardHTML(BADGES[id], justEarned)).join("");
   }
+
+  // badge details: mission, unlock (honour system), share, remove
+  let badgeReturn = null;
+  function openBadge(id){
+    const b = BADGES[id], on = isEarned(b), r = RARITY[b.rar], secret = b.set && !on;
+    let h = `<div class="bd-art${on ? "" : " locked"}" style="--rc:${r.c}">${badgeSVG(b, !on)}</div>
+      <p class="bd-rar" style="color:${r.c}">${secret ? "Secret bonus badge" : r.label + (b.set ? " bonus badge" : " badge")}</p>
+      <h2 id="badgeTitle">${esc(secret ? "???" : b.name)}</h2>`;
+    let btns = "";
+    if (b.set) {
+      if (on) h += `<p>${esc(b.did)}</p><p>Unlocked ${esc(fmtDate(b.set.map(x => dates[x] || "").sort().pop() || ""))}</p>`;
+      else if (b.id === "champ") h += `<p>Unlock all ${SKILLS.length} life skill badges to claim this one. You have ${belt.size}.</p>`;
+      else h += `<p>Collect these three to unlock it:</p><ul class="bd-need">${b.set.map(x => `<li class="${belt.has(x) ? "ok" : ""}">${esc(BADGES[x].name)}</li>`).join("")}</ul>`;
+      btns = on ? `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>` : `<button class="primary" data-act="close">Got it</button>`;
+    } else if (on) {
+      h += `<p>&ldquo;${esc(b.did)}&rdquo;</p><p>Unlocked ${dates[id] ? esc(fmtDate(dates[id])) : "earlier"}</p>`;
+      btns = `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>`;
+    } else {
+      h += `<p><strong style="color:var(--ink)">Mission:</strong> ${esc(b.todo)}.</p><p>Honour system: only unlock it if you've really done it.</p>`;
+      btns = `<button class="primary" data-act="unlock">I did it for real!</button><button class="ghost" data-act="close">Not yet</button>`;
+    }
+    h += `<div class="row">${btns}</div>`;
+    if (on && !b.set) h += `<button class="linkbtn" data-act="remove">Remove this badge</button>`;
+    const body = $("badgeBody"); body.innerHTML = h; body.dataset.id = id;
+    badgeReturn = document.activeElement;
+    $("badgeDlg").hidden = false; body.querySelector(".row button").focus();
+  }
+  const closeBadge = () => { $("badgeDlg").hidden = true; badgeReturn?.focus?.(); };
+  $("badgeDlg").addEventListener("click", (e) => {
+    if (e.target === $("badgeDlg")) return closeBadge();
+    const act = e.target.closest("[data-act]")?.dataset.act, id = $("badgeBody").dataset.id; if (!act) return;
+    if (act === "close") closeBadge();
+    else if (act === "share") shareBadge(id);
+    else if (act === "unlock") { $("badgeDlg").hidden = true; earn(id); }
+    else if (act === "remove") { belt.delete(id); delete dates[id]; saveBelt(); renderBelt(); updateBeltMini(); closeBadge(); }
+  });
+  $("badgeDlg").addEventListener("keydown", (e) => { if (e.key === "Escape") { e.stopPropagation(); closeBadge(); } });
+  const gridClick = (e) => { const c = e.target.closest(".bcard"); if (c) openBadge(c.dataset.badge); };
+  $("badgeGrid").addEventListener("click", gridClick);
+  $("setGrid").addEventListener("click", gridClick);
+
+  // unlock reveal: rays, confetti, the badge flips in
+  const revealQ = []; let revealReturn = null;
+  function confetti(r){
+    const cols = [r.g[0], r.c, "#FFFFFF", "#F2B533", r.g[1]]; let h = "";
+    for (let i = 0; i < 40; i++) h += `<i style="left:${(Math.random() * 100).toFixed(1)}%; background:${cols[i % cols.length]}; animation-duration:${(2.2 + Math.random() * 2).toFixed(2)}s; animation-delay:${(0.5 + Math.random() * 0.9).toFixed(2)}s"></i>`;
+    return h;
+  }
+  function showReveal(){
+    const el = $("reveal"), id = revealQ.shift();
+    if (!id) { el.hidden = true; el.innerHTML = ""; revealReturn?.focus?.(); return; }
+    const b = BADGES[id], r = RARITY[b.rar];
+    el.style.setProperty("--rc", r.c); el.dataset.id = id;
+    el.innerHTML = `<div class="rays"></div><div class="confetti">${confetti(r)}</div><div class="rv">
+      <p class="kicker">${b.set ? "SECRET BADGE UNLOCKED" : "BADGE UNLOCKED"}</p>
+      <div class="big">${badgeSVG(b, false)}</div>
+      <p class="rar">${r.label}</p><h2 id="revealTitle">${esc(b.name)}</h2>
+      <p class="did">${b.set ? esc(b.did) : "&ldquo;" + esc(b.did) + "&rdquo;"}</p>
+      <div class="row"><button class="primary" data-act="next">${revealQ.length ? "Next badge" : "Let's go!"}</button><button class="ghost" data-act="share">Share</button></div></div>`;
+    el.hidden = false; el.querySelector("[data-act=next]").focus();
+    try { window.RoboRadio && RoboRadio.chime(); } catch {}
+  }
+  $("reveal").addEventListener("click", (e) => {
+    const act = e.target.closest("[data-act]")?.dataset.act;
+    if (act === "next") showReveal(); else if (act === "share") shareBadge($("reveal").dataset.id);
+  });
+  $("reveal").addEventListener("keydown", (e) => { if (e.key === "Escape") { revealQ.length = 0; showReveal(); } });
+
+  // share a badge as an image (phone share sheet, or download on desktop)
+  async function shareBadge(id){
+    const b = BADGES[id], r = RARITY[b.rar];
+    try {
+      const W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+      const bg = x.createRadialGradient(W / 2, 540, 40, W / 2, 540, 950); bg.addColorStop(0, r.g[1]); bg.addColorStop(1, "#0B0F1A");
+      x.fillStyle = bg; x.fillRect(0, 0, W, H);
+      x.save(); x.translate(W / 2, 540); x.fillStyle = "rgba(255,255,255,.07)";
+      for (let i = 0; i < 18; i++) { x.rotate(Math.PI * 2 / 18); x.beginPath(); x.moveTo(0, 0); x.lineTo(-70, -1100); x.lineTo(70, -1100); x.closePath(); x.fill(); }
+      x.restore();
+      const img = new Image(); img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(badgeSVG(b, false, { w:560, still:true }));
+      await img.decode(); x.drawImage(img, W / 2 - 280, 260, 560, 560);
+      try { await document.fonts.load("900 80px Nunito"); } catch {}
+      const F = (w, px) => `${w} ${px}px Nunito, ui-rounded, system-ui, sans-serif`;
+      x.textAlign = "center"; x.fillStyle = "#fff"; x.globalAlpha = .9; x.font = F(900, 36);
+      x.fillText(b.set ? "SECRET BADGE UNLOCKED" : "BADGE UNLOCKED", W / 2, 170);
+      x.globalAlpha = 1; x.fillStyle = r.g[0]; x.font = F(900, 40); x.fillText(r.label.toUpperCase(), W / 2, 905);
+      x.fillStyle = "#fff"; x.font = F(900, 100); x.fillText(b.name, W / 2, 1015);
+      x.globalAlpha = .85; x.font = F(700, 42);
+      const words = (b.set ? b.did : `"${b.did}"`).split(" "); let line = "", y = 1095;
+      for (const w of words) { if (x.measureText(line + w).width > 900) { x.fillText(line.trim(), W / 2, y); y += 54; line = ""; } line += w + " "; }
+      x.fillText(line.trim(), W / 2, y);
+      x.globalAlpha = .7; x.font = F(800, 32); x.fillText("RoboDad · Life Skills", W / 2, 1290);
+      const blob = await new Promise(res => c.toBlob(res, "image/png"));
+      const file = new File([blob], `robodad-${id}-badge.png`, { type:"image/png" });
+      if (navigator.canShare && navigator.canShare({ files:[file] })) {
+        await navigator.share({ files:[file], title:`${b.name} badge`, text:`I unlocked the ${b.name} badge on RoboDad! robodad.onrender.com` });
+      } else {
+        const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = file.name;
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+        toast("Badge image saved. Post it anywhere!");
+      }
+    } catch (e) { if (e?.name !== "AbortError") toast("Couldn't make the badge image. Try again."); }
+  }
+
   let pendingShine = null;
   function earn(id){
-    if (belt.has(id)) return false;
-    belt.add(id); saveBelt(); updateBeltMini(); pendingShine = id; nod();
+    if (belt.has(id) || !BADGES[id] || BADGES[id].set) return false;
+    const before = new Set(SETS.filter(([sid]) => isEarned(BADGES[sid])).map(([sid]) => sid));
+    belt.add(id); dates[id] = new Date().toLocaleDateString("en-CA"); saveBelt(); updateBeltMini(); pendingShine = id; nod();
     const meter = $("beltMiniBar").parentElement; meter.classList.remove("shine"); void meter.offsetWidth; meter.classList.add("shine");
-    const label = SKILLS.find(s => s[0] === id)?.[1] || "";
-    toast(`New plate! ${belt.size}/12 · ${rank(belt.size)}`);
+    const unlockedSets = SETS.map(([sid]) => sid).filter(sid => isEarned(BADGES[sid]) && !before.has(sid));
     if (!$("beltDlg").hidden) { renderBelt(id); pendingShine = null; }
+    if ($("reveal").hidden) revealReturn = document.activeElement;
+    revealQ.push(id, ...unlockedSets); if ($("reveal").hidden) showReveal();
     return true;
   }
-  $("skillList").addEventListener("click", (e) => {
-    const b = e.target.closest(".skill"); if (!b) return;
-    const id = b.dataset.skill;
-    if (belt.has(id)) { belt.delete(id); saveBelt(); renderBelt(); } else { earn(id); renderBelt(id); }
-    updateBeltMini();
-  });
   $("beltBtn").addEventListener("click", () => { renderBelt(pendingShine); pendingShine = null; $("beltDlg").hidden = false; $("beltDone").focus(); });
   const closeBelt = () => { $("beltDlg").hidden = true; $("beltBtn").focus(); };
   $("beltDone").addEventListener("click", closeBelt);
@@ -1356,7 +1593,7 @@ const PLAYERS = {
     if (skill && !belt.has(skill)) {
       const b = document.createElement("button");
       b.type = "button"; b.className = "plate-nudge";
-      b.innerHTML = `<svg aria-hidden="true"><use href="#i-belt"/></svg>Did it for real? Add a plate to your belt`;
+      b.innerHTML = `<span class="nb">${badgeSVG(BADGES[skill], false, { still:true })}</span>Did it for real? Unlock <b>${esc(BADGES[skill].name)}</b>`;
       b.addEventListener("click", () => { earn(skill); b.remove(); });
       tools.appendChild(b);
     }
@@ -1368,9 +1605,9 @@ const PLAYERS = {
     } else {
       card.innerHTML = `<svg aria-hidden="true"><use href="#i-chat"/></svg><div><b>Ask your real one</b>
         <p>Try asking a parent or trusted adult: <q>${esc(x.text)}</q></p>
-        <button class="mini" type="button">We talked! Add a plate</button></div>`;
+        <button class="mini" type="button">We talked! Unlock Real Talk</button></div>`;
       const btn = card.querySelector(".mini");
-      const done = () => { btn.disabled = true; btn.textContent = "Plate earned"; };
+      const done = () => { btn.disabled = true; btn.textContent = "Real Talk unlocked"; };
       if (belt.has("talk")) done();
       btn.addEventListener("click", () => { earn("talk"); done(); });
     }
