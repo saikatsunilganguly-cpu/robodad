@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comfortaa:wght@500;700&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -63,6 +63,25 @@
   --metal:#C9D3D8; --alert:#B3412E; --ok:#1F8A70; --jacket:#141416; --jacket2:#2A2A2E; --hair:#141416; --lens:#141416;
   --glow:color-mix(in srgb, #D7263D 30%, transparent);
   --display:"Lobster", "Nunito", cursive; color-scheme:light;
+}
+:root[data-look="skate"]{
+  --sky:#E7E3DA; --surface:#FFFFFF; --ink:#1C1C1C; --muted:#5F5A52; --line:#CFC8BA;
+  --denim:#E8572A; --denim-ink:#FFFFFF; --mustard:#13A3AE; --mustard-ink:#FFFFFF;
+  --metal:#C9CFD4; --alert:#C2413A; --ok:#2E8B57; --glow:color-mix(in srgb, #E8572A 25%, transparent);
+  --display:"Permanent Marker", "Nunito", cursive; color-scheme:light;
+}
+:root[data-look="gamer"]{
+  --sky:#0A0E14; --surface:#121A24; --ink:#E4F0FF; --muted:#8CA0B6; --line:#22324A;
+  --denim:#39FF88; --denim-ink:#04140A; --mustard:#A06BFF; --mustard-ink:#FFFFFF;
+  --metal:#6B7C90; --alert:#FF5E7E; --ok:#39FF88; --jacket:#1A222D; --jacket2:#243040; --hair:#0A0E14; --lens:#05080C;
+  --glow:color-mix(in srgb, #39FF88 45%, transparent);
+  --display:"Orbitron", "Nunito", sans-serif; color-scheme:dark;
+}
+:root[data-look="summer"]{
+  --sky:#FFF3DC; --surface:#FFFFFF; --ink:#2B1A0E; --muted:#7A5B3E; --line:#F1D5A6;
+  --denim:#E2541F; --denim-ink:#FFFFFF; --mustard:#1FA2D8; --mustard-ink:#FFFFFF;
+  --metal:#D3DCE3; --alert:#C2413A; --ok:#2E8B57; --glow:color-mix(in srgb, #F2B533 45%, transparent);
+  --display:"Graduate", "Nunito", serif; color-scheme:light;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -154,6 +173,63 @@ button,textarea{font:inherit;color:inherit}
 :root[data-look="y2k"] .cassette .tape-svg,:root[data-look="y2k"] .cassette .t-tape{display:none}
 :root[data-look="y2k"] .cassette .buffer{display:block; width:24px; height:24px; animation:spin45 .9s linear infinite}
 :root[data-look="y2k"] .cassette .t-y2k{display:inline}
+
+/* ---------- Skate Park '99 ---------- */
+:root:is([data-look="skate"],[data-look="summer"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
+:root[data-look="skate"] body{background:#E7E3DA radial-gradient(rgba(0,0,0,.06) 1px, transparent 1.4px) 0 0 / 7px 7px fixed}
+:root[data-look="skate"] .top{position:relative; z-index:6; border-bottom:0}
+:root[data-look="skate"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-7px; height:7px;
+  background:#1C1C1C radial-gradient(rgba(255,255,255,.22) .7px, transparent 1px) 0 0 / 3px 3px}
+:root[data-look="skate"] .hello h2{text-shadow:3px 3px 0 #13A3AE; letter-spacing:.01em; line-height:1.12}
+:root[data-look="skate"] .hello::before{content:"RAD DAD"; position:absolute; z-index:-1; top:18px; right:4px; transform:rotate(9deg);
+  font:400 1rem/1 "Permanent Marker", cursive; color:#fff; background:#13A3AE; border:2px solid #1C1C1C; border-radius:8px; padding:7px 11px; box-shadow:3px 3px 0 #1C1C1C}
+:root[data-look="skate"] .hello::after{content:""; position:absolute; z-index:-1; right:-16px; bottom:-34px; width:min(260px, 60%); height:120px;
+  background:radial-gradient(130% 150% at 0 0, transparent 61%, #1C1C1C 61.3%, #1C1C1C 63.5%, #CFC8BA 63.8%);
+  -webkit-mask-image:linear-gradient(to left, #000 55%, transparent); mask-image:linear-gradient(to left, #000 55%, transparent)}
+:root[data-look="skate"] :is(.robo .bubble,.user .bubble,.chip,.send,.primary){border:2px solid #1C1C1C; box-shadow:3px 3px 0 #1C1C1C}
+:root[data-look="skate"] :is(.send,.primary):active{transform:translate(2px,2px); box-shadow:1px 1px 0 #1C1C1C}
+.pv.skate{background:#E7E3DA radial-gradient(rgba(0,0,0,.08) 1px, transparent 1.4px) 0 0 / 6px 6px}
+.pv.skate::after{content:""; position:absolute; right:-6px; bottom:-4px; width:64px; height:36px; background:radial-gradient(130% 150% at 0 0, transparent 61%, #1C1C1C 61.5%, #1C1C1C 65%, #BDB6A8 65.5%)}
+/* ---------- Game Night '05 ---------- */
+:root[data-look="gamer"] body{background:radial-gradient(ellipse at 50% -10%, #133048 0, transparent 60%),
+  repeating-linear-gradient(0deg, rgba(57,255,136,.035) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(57,255,136,.035) 0 1px, transparent 1px 28px), #0A0E14 fixed}
+:root[data-look="gamer"] .top{background:rgba(10,14,20,.9); border-bottom:1px solid #22324A; box-shadow:0 1px 0 rgba(57,255,136,.25)}
+:root[data-look="gamer"] .hello h2{font-weight:800; letter-spacing:.02em; line-height:1.15; font-size:clamp(1.6rem, 5.2vw, 2.4rem); text-shadow:0 0 16px var(--glow)}
+:root[data-look="gamer"] .hello::before{content:""; position:absolute; z-index:-1; top:4px; left:-30px; width:150px; height:150px; border-radius:50%;
+  background:repeating-radial-gradient(circle, rgba(57,255,136,.22) 0 1px, transparent 1px 16px), conic-gradient(from 0deg, rgba(57,255,136,.25), transparent 25%);
+  animation:radar 6s linear infinite}
+@keyframes radar{to{transform:rotate(360deg)}}
+:root[data-look="gamer"] .hello::after{content:"PLAYER 1 · READY"; position:absolute; top:22px; right:0; font:600 .7rem/1 "Orbitron", sans-serif; letter-spacing:.14em;
+  color:#39FF88; border:1px solid #39FF88; border-radius:4px; padding:6px 8px; box-shadow:0 0 12px rgba(57,255,136,.35); animation:blinkready 1.6s steps(2) infinite}
+@keyframes blinkready{50%{opacity:.45}}
+:root[data-look="gamer"] :is(.robo .bubble,.widget,.extra,.card){box-shadow:0 0 0 1px #22324A, 0 0 22px rgba(57,255,136,.07)}
+:root[data-look="gamer"] :is(.send,.primary){box-shadow:0 0 14px rgba(57,255,136,.45)}
+:root[data-look="gamer"] :is(.top h1,.card h2,.side-head h2){letter-spacing:.02em}
+.pv.gamer{background:radial-gradient(circle at 50% 0, #133048, #0A0E14 70%)}
+.pv.gamer::after{content:""; position:absolute; left:10px; right:10px; bottom:8px; height:5px; border-radius:3px; background:linear-gradient(90deg, #39FF88 70%, #22324A 70%)}
+/* ---------- Block Party '03 ---------- */
+:root[data-look="summer"] body{background:linear-gradient(180deg, #FFE2A8 0%, #FFF3DC 40%, #FFF8EC 100%) fixed}
+:root[data-look="summer"] .top{background:rgba(255,248,236,.92); border-bottom:3px solid #F2B533}
+:root[data-look="summer"] .hello h2{color:#E2541F; text-shadow:2px 2px 0 #FFC93C; letter-spacing:.01em; line-height:1.1}
+:root[data-look="summer"] .hello::before{content:""; position:absolute; z-index:-1; top:-6px; left:-34px; width:160px; height:160px; border-radius:50%;
+  background:radial-gradient(circle, #FFC93C 0 30%, transparent 31%), repeating-conic-gradient(rgba(255,170,40,.5) 0 9deg, transparent 9deg 20deg);
+  -webkit-mask-image:radial-gradient(circle, #000 55%, transparent 70%); mask-image:radial-gradient(circle, #000 55%, transparent 70%); animation:radar 50s linear infinite}
+:root[data-look="summer"] .hello::after{content:""; position:absolute; z-index:-1; left:-24px; right:-24px; bottom:-30px; height:44px;
+  background:radial-gradient(circle at 12px -6px, transparent 14px, #1FA2D8 15px) 0 0 / 24px 24px repeat-x, radial-gradient(circle at 12px -6px, transparent 14px, #63C6EC 15px) 12px 14px / 24px 24px repeat-x;
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); mask-image:linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); opacity:.85}
+:root[data-look="summer"] .chip{border-color:#F2B533}
+.pv.summer{background:linear-gradient(#FFE2A8, #FFF3DC)}
+.pv.summer::before{content:""; position:absolute; width:38px; height:38px; left:8px; top:6px; border-radius:50%; background:radial-gradient(circle, #FFC93C 0 45%, rgba(255,170,40,.35) 46% 70%, transparent 71%)}
+.pv.summer::after{content:""; position:absolute; left:0; right:0; bottom:0; height:10px; background:radial-gradient(circle at 6px -3px, transparent 7px, #1FA2D8 7.5px) 0 0 / 12px 10px repeat-x}
+/* new players */
+.pl-art .eq rect,.pl-art .spk{transform-box:fill-box}
+.pl-art .eq rect{transform-origin:50% 100%} .pl-art .spk{transform-origin:center}
+.pl-art.on .eq rect{animation:pleq .7s ease-in-out infinite alternate}
+.pl-art.on .eq rect:nth-child(2){animation-delay:-.3s} .pl-art.on .eq rect:nth-child(3){animation-delay:-.5s} .pl-art.on .eq rect:nth-child(4){animation-delay:-.15s}
+@keyframes pleq{from{transform:scaleY(.3)} to{transform:scaleY(1)}}
+.pl-art.on .spk{animation:plbump .34s ease-in-out infinite alternate}
+@keyframes plbump{to{transform:scale(1.12)}}
+.pl-art.on .speed{animation:plwave .9s ease-out infinite}
 
 /* ---------- waking banner ---------- */
 .wake{
@@ -340,16 +416,48 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
 .do-pager .mv-buzz{animation:av-pop 1.4s steps(4)}
 .do-pager .hd{animation:av-look 1.8s ease-in-out}
 @keyframes av-look{30%,80%{transform:rotate(7deg) translateY(1px)}}
-/* 2000s surfer */
-.bot .mv-shaka{transform-origin:50% 100%}
-.bot .hair-b,.bot .hair-f{transform-box:fill-box; transform-origin:50% 10%}
-.do-shaka .mv-shaka{animation:av-shaka 2.8s ease-in-out}
+/* shared */
+.bot .tcap,.bot .beanie,.bot .bucket,.bot .wheel,.bot .num,.bot .pad-btn{transform-box:fill-box; transform-origin:50% 100%}
+.bot .wheel{transform-origin:center}
+.bot .mv-peace,.bot .mv-vic{transform-origin:50% 100%}
+.bot .mic{transform-origin:10px 35.5px}
+@keyframes av-rise{0%{opacity:0; transform:translateY(14px)} 15%,85%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(14px)}}
 @keyframes av-shaka{0%{opacity:0; transform:translateY(14px)} 15%{opacity:1; transform:none} 22%,36%,50%,64%{transform:rotate(-12deg)} 29%,43%,57%,71%{transform:rotate(10deg)} 84%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(14px)}}
-.do-shaka .hd{animation:av-smug 2.8s ease-in-out}
-.do-hairflip .hd{animation:av-flip 2.2s ease-in-out}
-@keyframes av-flip{0%,100%{transform:none} 20%{transform:rotate(-9deg)} 45%{transform:rotate(8deg)} 65%{transform:rotate(-3deg)}}
-.do-hairflip .hair-b,.do-hairflip .hair-f{animation:av-sway 2.2s ease-in-out}
-@keyframes av-sway{0%,100%{transform:none} 20%{transform:translateX(-2px) rotate(3deg)} 45%{transform:translateX(2px) rotate(-4deg)} 65%{transform:translateX(-.6px) rotate(1.5deg)}}
+@keyframes av-tip{0%,100%{transform:none} 25%,70%{transform:translateY(-4px) rotate(-14deg)}}
+/* 2000s trucker */
+.do-tipcap .tcap{animation:av-tip 2.4s ease-in-out}
+.do-tipcap .hd{animation:av-smug 2.4s ease-in-out}
+.do-peace .mv-peace{animation:av-shaka 2.8s ease-in-out}
+/* late-90s skater */
+.do-beanie .beanie{animation:av-beanie 2.6s ease-in-out}
+@keyframes av-beanie{0%,100%{transform:none} 25%,68%{transform:translateY(7px)} 80%{transform:translateY(-1px)}}
+.do-ollie .mv-board{animation:av-ollie 2.6s ease-in-out}
+@keyframes av-ollie{0%{opacity:0; transform:translateX(-30px)} 15%{opacity:1; transform:translateX(-8px)} 30%{transform:translate(0,-14px) rotate(-16deg)} 45%{transform:translate(6px,-15px) rotate(8deg)} 60%{transform:translateX(10px)} 85%{opacity:1; transform:translateX(28px)} 100%{opacity:0; transform:translateX(40px)}}
+.do-ollie .wheel{animation:plspin .35s linear 7}
+.do-ollie .hd{animation:av-look 2.6s ease-in-out}
+.do-fistbump .mv-fist{animation:av-bump 2s ease-in-out}
+@keyframes av-bump{0%{opacity:0; transform:scale(.3)} 25%{opacity:1; transform:scale(1)} 42%{transform:scale(1.35)} 55%,80%{opacity:1; transform:scale(1.1)} 100%{opacity:0; transform:scale(.3)}}
+/* mid-2000s gamer */
+.do-gg .mic{animation:av-mic 2.4s ease-in-out}
+@keyframes av-mic{0%,100%{transform:none} 22%{transform:rotate(60deg)} 40%{transform:rotate(-6deg)} 48%{transform:none}}
+.do-gg .mv-gg{animation:av-1up 2.4s ease-out .3s}
+.do-mash .mv-pad{animation:av-rise 2.6s ease-in-out}
+.do-mash .pad-btn{animation:av-press .22s steps(2) 9}
+@keyframes av-press{50%{transform:scale(.6); fill:#fff}}
+.do-mash .hd{animation:av-mashhead 2.6s ease-in-out}
+@keyframes av-mashhead{0%,100%{transform:none} 20%,40%,60%,80%{transform:rotate(-3deg) translateY(1px)} 30%,50%,70%{transform:rotate(3deg)}}
+.do-victory .mv-vic{animation:av-pump 2.6s ease-in-out}
+@keyframes av-pump{0%{opacity:0; transform:translateY(14px)} 15%{opacity:1; transform:none} 28%,52%{transform:translateY(-4px)} 40%,64%{transform:none} 85%{opacity:1; transform:none} 100%{opacity:0; transform:translateY(14px)}}
+.do-victory .mv-sparks{animation:av-spark 2.6s ease-out}
+/* early-2000s bucket hat */
+.do-hattip .bucket{animation:av-tip 2.4s ease-in-out}
+.do-hattip .hd{animation:av-smug 2.4s ease-in-out}
+.do-dad .num{animation:av-hide 2.8s ease-in-out}
+@keyframes av-hide{15%,85%{opacity:0}}
+.do-dad .mv-dad{animation:av-pop 2.8s ease-in-out}
+.do-nod .hd{animation:av-coolnod 2.6s ease-in-out}
+@keyframes av-coolnod{0%,100%{transform:none} 30%{transform:rotate(3deg) translateY(2px)} 55%{transform:rotate(-1deg)} 75%{transform:translateY(1.5px)}}
+.do-nod .eye-r{animation:av-wink 2.6s ease-in-out}
 .look strong{font-size:.9rem; line-height:1.2} .look small{color:var(--muted); font-size:.78rem; line-height:1.2}
 .pv.classic{background:#E8EFF5} .pv.arcade{background:linear-gradient(#0D0A26 55%, #2A1060)}
 .pv.vhs{background:linear-gradient(180deg, #2B1634 40%, #FF7A59 140%)}
@@ -765,6 +873,9 @@ textarea::placeholder{color:var(--muted)}
       <button class="chipbtn" type="button" role="radio" data-st="canon" aria-checked="false">Canon in D</button>
       <button class="chipbtn" type="button" role="radio" data-st="drive" aria-checked="false">Midnight Drive</button>
       <button class="chipbtn" type="button" role="radio" data-st="jukebox" aria-checked="false">Jukebox '55</button>
+      <button class="chipbtn" type="button" role="radio" data-st="skate" aria-checked="false">Half-Pipe '99</button>
+      <button class="chipbtn" type="button" role="radio" data-st="block" aria-checked="false">Block Party '03</button>
+      <button class="chipbtn" type="button" role="radio" data-st="lobby" aria-checked="false">Respawn Lounge</button>
     </div>
     <label class="sr" for="radioVol">Volume</label>
     <input type="range" id="radioVol" min="0" max="100" value="35">
@@ -845,6 +956,18 @@ textarea::placeholder{color:var(--muted)}
       <button class="look" type="button" role="radio" data-look="diner" aria-checked="false">
         <span class="pv diner"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-fifties"/></svg></span>
         <strong>Diner '55</strong><small>Shakes, chrome and checkerboard</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="skate" aria-checked="false">
+        <span class="pv skate"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-skater"/></svg></span>
+        <strong>Skate Park '99</strong><small>Ramps, stickers and pop-punk</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="summer" aria-checked="false">
+        <span class="pv summer"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-bucket"/></svg></span>
+        <strong>Block Party '03</strong><small>Bucket hats and summer beats</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="gamer" aria-checked="false">
+        <span class="pv gamer"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-gamer"/></svg></span>
+        <strong>Game Night '05</strong><small>Headset on, lobby loading</small>
       </button>
     </div>
     <div class="avpick">
@@ -1393,6 +1516,26 @@ const PLAYERS = {
     <rect x="17.5" y="20.5" width="13" height="13" rx="4.5" fill="#F2F7FB" stroke="#4D7699" stroke-width="1.2"/>
     <rect x="21.3" y="24.3" width="5.4" height="5.4" rx="1.8" fill="none" stroke="#9DB7CC" stroke-width="1"/>
     <path d="M15 4.5 Q24 3 33 4.5" stroke="#fff" stroke-width="1.2" opacity=".8" fill="none"/></svg>`,
+  skate: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <g class="waves" stroke="#13A3AE" stroke-width="1.8" stroke-linecap="round" fill="none"><path d="M1 27 h5"/><path d="M0 32 h7"/></g>
+    <path d="M7 21.5 C4.5 21.5 3 19.5 3.6 17.5 L5.2 18.6 C5.7 19.5 6.4 19.8 7.2 19.8 H40.8 C41.6 19.8 42.3 19.5 42.8 18.6 L44.4 17.5 C45 19.5 43.5 21.5 41 21.5Z" fill="#E8572A" stroke="#1C1C1C" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M7.5 19.8 H40.5" stroke="#1C1C1C" stroke-width="1.8"/>
+    <rect x="11" y="21.5" width="6" height="2.6" fill="#9AA5AE" stroke="#1C1C1C" stroke-width=".8"/><rect x="31" y="21.5" width="6" height="2.6" fill="#9AA5AE" stroke="#1C1C1C" stroke-width=".8"/>
+    <g class="spin"><circle cx="14" cy="28" r="4.2" fill="#F6E7A8" stroke="#1C1C1C" stroke-width="1.3"/><path d="M14 24.4v7.2M10.4 28h7.2" stroke="#C9B26A" stroke-width="1.1"/></g>
+    <g class="spin"><circle cx="34" cy="28" r="4.2" fill="#F6E7A8" stroke="#1C1C1C" stroke-width="1.3"/><path d="M34 24.4v7.2M30.4 28h7.2" stroke="#C9B26A" stroke-width="1.1"/></g></svg>`,
+  gamer: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <rect x="4" y="7" width="40" height="26" rx="9" fill="#2A3140" stroke="#05080C" stroke-width="1.4"/>
+    <rect x="15" y="10.5" width="18" height="17" rx="2.2" fill="#08170F" stroke="#39FF88" stroke-width=".9"/>
+    <g class="eq" fill="#39FF88"><rect x="17.4" y="16.5" width="2.8" height="9"/><rect x="21.2" y="13" width="2.8" height="12.5"/><rect x="25" y="18" width="2.8" height="7.5"/><rect x="28.8" y="14.5" width="2.8" height="11"/></g>
+    <path d="M8.5 20h4.6 M10.8 17.7v4.6" stroke="#C9D3DC" stroke-width="1.7" stroke-linecap="round"/>
+    <circle cx="37.5" cy="18" r="1.7" fill="#A06BFF"/><circle cx="40" cy="21.6" r="1.7" fill="#39FF88"/></svg>`,
+  summer: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <path d="M14 9.5 V5 H34 V9.5" fill="none" stroke="#2B1A0E" stroke-width="1.8" stroke-linejoin="round"/>
+    <rect x="3" y="9" width="42" height="27" rx="4" fill="#C9CFD4" stroke="#2B1A0E" stroke-width="1.4"/>
+    <g class="spk"><circle cx="12.5" cy="23.5" r="7" fill="#2B1A0E"/><circle cx="12.5" cy="23.5" r="3" fill="#6B6F75"/></g>
+    <g class="spk"><circle cx="35.5" cy="23.5" r="7" fill="#2B1A0E"/><circle cx="35.5" cy="23.5" r="3" fill="#6B6F75"/></g>
+    <rect x="20" y="15.5" width="8" height="6.5" rx="1" fill="#1FA2D8" stroke="#2B1A0E" stroke-width=".8"/>
+    <path d="M20 26.5h8M20 29.5h8" stroke="#8A8F98" stroke-width="1.2"/><rect x="6" y="11" width="9" height="2" rx="1" fill="#E2541F"/></svg>`,
 };
 
   function renderPlayers(){
@@ -1446,10 +1589,14 @@ const PLAYERS = {
   }
 
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F" };
+  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block" };
   const WAKE_COPY = {
     diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
     y2k: "Dialing up at 56k… RoboDad will be ready in about 30 seconds.",
+    skate: "Waxing the ledge… RoboDad will be ready in about 30 seconds.",
+    gamer: "Finding a match… RoboDad will be ready in about 30 seconds.",
+    summer: "Firing up the grill… RoboDad will be ready in about 30 seconds.",
     other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
   };
   const menuDlg = $("menuDlg");
@@ -1462,13 +1609,17 @@ const PLAYERS = {
     menuDlg.querySelectorAll(".look").forEach(b => b.setAttribute("aria-checked", String(b.dataset.look === look)));
     setPref(LOOK_KEY, look);
   }
-  menuDlg.querySelectorAll(".look").forEach(b => b.addEventListener("click", () => applyLook(b.dataset.look)));
+  function lookStation(look){                 // each look's own tune, if it has one
+    const st = LOOK_STATION[look]; if (!st || !window.RoboRadio || radioPrefs.st === st) return;
+    radioPrefs.st = st; saveRadio(); if (RoboRadio.playing) RoboRadio.play(st); radioUI();
+  }
+  menuDlg.querySelectorAll(".look").forEach(b => b.addEventListener("click", () => { applyLook(b.dataset.look); lookStation(b.dataset.look); }));
   menuDlg.querySelector(".looks").addEventListener("keydown", (e) => {
     if (!["ArrowRight","ArrowLeft","ArrowDown","ArrowUp"].includes(e.key)) return;
     const tiles = [...menuDlg.querySelectorAll(".look")]; const i = tiles.indexOf(document.activeElement);
     if (i < 0) return; e.preventDefault();
     const next = tiles[(i + (e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : tiles.length - 1)) % tiles.length];
-    next.focus(); applyLook(next.dataset.look);
+    next.focus(); applyLook(next.dataset.look); lookStation(next.dataset.look);
   });
   function openMenu(firstRun){
     $("menuHint").textContent = firstRun ? "Pick a look. You can change it any time from the ☰ menu." : "Change how RoboDad looks and works.";

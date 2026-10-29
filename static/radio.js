@@ -6,6 +6,9 @@
  * "Canon in D" station plays Pachelbel's chord progression and opening violin
  * line, a composition written around 1700 and long in the public domain.
  * "Jukebox '55" is an original doo-wop tune on the classic I-vi-IV-V changes.
+ * "Half-Pipe '99", "Respawn Lounge" and "Block Party '03" are original loops in
+ * the style of late-90s pop-punk, mid-2000s game-lobby electronica and
+ * early-2000s boom-bap; they borrow no melodies from real songs.
  *
  *   RoboRadio.play("lounge" | "canon" | "drive")
  *   RoboRadio.stop()
@@ -127,11 +130,15 @@
   }
 
   let noiseBuf = null;
-  function brush(t, level = 0.05) {
+  function noise() {
     if (!noiseBuf || noiseBuf.sampleRate !== ctx.sampleRate) {
       noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.3, ctx.sampleRate);
       const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
+    return noiseBuf;
+  }
+  function brush(t, level = 0.05) {
+    noise();
     const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
     n.buffer = noiseBuf; f.type = "bandpass"; f.frequency.value = 3200; f.Q.value = 0.7;
     g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.01);
@@ -155,6 +162,47 @@
     o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.22);
     g.gain.setValueAtTime(level, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
     o.connect(g).connect(dry); o.start(t); o.stop(t + 0.32);
+  }
+
+  // drums and a crunchy guitar for the newer stations
+  function hit(t, { type = "highpass", freq = 7000, q = 0.7, level = 0.03, decay = 0.05 } = {}) {
+    const n = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    n.buffer = noise(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+    n.connect(f).connect(g); out(g); n.start(t); n.stop(t + Math.min(0.29, decay + 0.02));
+  }
+  const hat = (t, level = 0.025, open = false) => hit(t, { level, decay: open ? 0.2 : 0.045 });
+  function snare(t, level = 0.08, tone = 190) {
+    hit(t, { type: "bandpass", freq: 2200, q: 0.6, level, decay: 0.17 });
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "triangle"; o.frequency.setValueAtTime(tone, t); o.frequency.exponentialRampToValueAtTime(tone * 0.7, t + 0.08);
+    g.gain.setValueAtTime(level * 0.9, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    o.connect(g); out(g); o.start(t); o.stop(t + 0.12);
+  }
+  function kick(t, level = 0.22) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+    g.gain.setValueAtTime(level, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+    o.connect(g).connect(dry); o.start(t); o.stop(t + 0.37);
+  }
+  let shaper = null;
+  function crunch() {
+    if (!shaper) { shaper = new Float32Array(1025); for (let i = 0; i < 1025; i++) shaper[i] = Math.tanh((i / 512 - 1) * 4); }   // odd length, so silence stays silent
+    const w = ctx.createWaveShaper(); w.curve = shaper; w.oversample = "2x"; return w;
+  }
+  // power chord (root, fifth, octave) through a little distortion; muted = palm-muted chug
+  function power(root, t, dur, { level = 0.03, muted = true } = {}) {
+    const pre = ctx.createGain(), ws = crunch(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    pre.gain.value = 0.9; g.gain.value = 0; f.type = "lowpass"; f.frequency.value = muted ? 1400 : 2600;
+    [0, 7, 12].forEach((iv) => [-6, 6].forEach((c) => {
+      const o = ctx.createOscillator(); o.type = "sawtooth"; o.frequency.value = mtof(root + iv); o.detune.value = c;
+      o.connect(pre); o.start(t); o.stop(t + dur + 0.1);
+    }));
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(level * (muted ? 0.12 : 0.55), t + dur);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur + 0.08);
+    pre.connect(ws).connect(f).connect(g); out(g);
   }
 
   // ---------- stations ----------
@@ -250,6 +298,67 @@
         for (let s = 0; s < 16; s++) pluck(arp[s % 4] + 12, t + s * b / 4, { type: "sawtooth", level: 0.04, decay: 0.35, cutoff: 1300, echo: true });
         softKick(t); softKick(t + 2 * b);
       },
+    },
+  };
+
+  // Half-Pipe '99: original late-90s skate pop-punk in D (I-V-vi-IV), fast and bright
+  STATIONS.skate = {
+    name: "Half-Pipe '99", bpm: 152,
+    roots: [50, 45, 47, 43], // D A Bm G power chords
+    lead: [[74, 76, 78, 76], [73, 76, 73, 69], [71, 74, 78, 76], [74, 71, 67, 69]],
+    play(i, t, b) {
+      const r = this.roots[i % 4], chorus = i % 16 >= 8;
+      for (let e = 0; e < 8; e++) {
+        power(r, t + e * b / 2, b / 2 * 0.9, { muted: !chorus || e % 4 === 3, level: chorus ? 0.085 : 0.09 });
+        bass(r - 12, t + e * b / 2, b * 0.42, { type: "sawtooth", level: 0.08, cutoff: 450 });
+        hat(t + e * b / 2, e % 2 ? 0.018 : 0.026, chorus && e === 0);
+      }
+      kick(t, 0.16); kick(t + 2.5 * b, 0.13); kick(t + 2 * b, 0.16);
+      snare(t + b, 0.055); snare(t + 3 * b, 0.055);
+      if (chorus) this.lead[i % 4].forEach((n, k) => pluck(n, t + k * b, { type: "square", level: 0.022, decay: 0.5, cutoff: 2200 }));
+    },
+  };
+  // Respawn Lounge: original mid-2000s game-lobby electronica in E minor, pumping and spacey
+  STATIONS.lobby = {
+    name: "Respawn Lounge", bpm: 124,
+    bars: [
+      { root: 40, chord: [64, 67, 71] }, // Em
+      { root: 36, chord: [60, 64, 67] }, // C
+      { root: 43, chord: [62, 67, 71] }, // G
+      { root: 38, chord: [62, 66, 69] }, // D
+    ],
+    play(i, t, b) {
+      const { root, chord } = this.bars[i % 4];
+      pad(chord.map((n) => n - 12), t, 4 * b, { type: "sawtooth", cutoff: 600, level: 0.032 });
+      for (let k = 0; k < 4; k++) {
+        softKick(t + k * b, 0.21);
+        chord.forEach((n) => pluck(n, t + k * b + 0.06, { type: "sawtooth", level: 0.03, decay: b * 0.8, cutoff: 1100 }));
+        hat(t + (k + 0.5) * b, 0.03);
+        bass(root, t + (k + 0.5) * b, b * 0.4, { type: "square", level: 0.1, cutoff: 320 });
+      }
+      snare(t + b, 0.05, 230); snare(t + 3 * b, 0.05, 230);
+      const arp = [chord[0], chord[1], chord[2], chord[1] + 12];
+      if (i % 8 >= 2) for (let s = 0; s < 16; s++) pluck(arp[(s * 3) % 4] + 12, t + s * b / 4, { type: "square", level: 0.024, decay: 0.22, cutoff: 2400, echo: true });
+    },
+  };
+  // Block Party '03: original laid-back early-2000s boom-bap with warm keys, swung
+  STATIONS.block = {
+    name: "Block Party '03", bpm: 88,
+    bars: [
+      { root: 38, chord: [53, 57, 60, 64] }, // Dm9
+      { root: 43, chord: [53, 59, 64] },     // G13
+      { root: 36, chord: [52, 55, 59, 62] }, // Cmaj9
+      { root: 33, chord: [55, 59, 60, 64] }, // Am9
+    ],
+    play(i, t, b) {
+      const { root, chord } = this.bars[i % 4], sw = b * 0.08;   // swing
+      chord.forEach((n) => epiano(n, t, b * 1.6, 0.75));
+      chord.forEach((n) => epiano(n, t + 1.5 * b + sw, b * 0.9, 0.45));
+      [0, 1.5, 2.5].forEach((p) => { kick(t + p * b + (p % 1 ? sw : 0), 0.2); bass(root, t + p * b + (p % 1 ? sw : 0), b * 0.7, { level: 0.12, cutoff: 260 }); });
+      snare(t + b, 0.07, 170); snare(t + 3 * b, 0.07, 170);
+      for (let e = 0; e < 8; e++) hat(t + e * b / 2 + (e % 2 ? sw : 0), e % 2 ? 0.013 : 0.02);
+      if (rand() < 0.6) hit(t + rand() * 4 * b, { level: 0.006, decay: 0.01, freq: 3000 });   // vinyl crackle
+      if (i % 8 >= 4) [0.5, 2, 3].forEach((p) => { if (rand() < 0.7) pluck(pickOne([69, 72, 74, 76, 79]), t + p * b + sw, { type: "sine", level: 0.05, decay: 1.2, cutoff: 3000 }); });
     },
   };
 
