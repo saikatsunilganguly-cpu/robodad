@@ -178,6 +178,7 @@ def _parents_page() -> HTMLResponse:
     # on robodad.ca the site root is this page, so app links point at robodad.app
     html = html.replace('href="/"', f'href="{APP_ORIGIN}/"').replace('href="/learn"', f'href="{APP_ORIGIN}/learn"')
     html = html.replace('href="/privacy"', f'href="{APP_ORIGIN}/privacy"')
+    html = html.replace("← Back to RoboDad", "Open the RoboDad app →")
     return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
 
 
