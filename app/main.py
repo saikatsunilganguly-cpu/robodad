@@ -287,6 +287,11 @@ async def tester_signup(t: TesterSignup, request: Request):
     return {"ok": True, "count": await _tester_count(), "goal": TESTER_GOAL}
 
 
+@app.get("/changelog")
+async def changelog():
+    return FileResponse(os.path.join(STATIC_DIR, "changelog.html"), headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/privacy")
 async def privacy():
     return FileResponse(os.path.join(STATIC_DIR, "privacy.html"), headers={"Cache-Control": "no-cache"})
