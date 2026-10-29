@@ -399,7 +399,11 @@ async def tts(req: TTSRequest, request: Request):
             wait = float(r.headers.get("retry-after", wait))
         except ValueError:
             pass
-        _tts["off_until"] = now + min(wait, 3600)
+        m = re.search(r"try again in (?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)s)?", r.text)
+        if m and any(m.groups()):   # daily allowance used up: rest until Groq says it's back
+            h, mi, se = (float(x) if x else 0.0 for x in m.groups())
+            wait = max(wait, h * 3600 + mi * 60 + se)
+        _tts["off_until"] = now + min(wait, 6 * 3600)
         return JSONResponse({"error": "Voice unavailable."}, status_code=503)
     return Response(r.content, media_type="audio/wav", headers={"Cache-Control": "no-store"})
 
