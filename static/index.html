@@ -1221,27 +1221,33 @@ textarea::placeholder{color:var(--muted)}
     if (!("speechSynthesis" in window) || id !== speakId) return unduck();
     const u = new SpeechSynthesisUtterance(text);
     const v = pickVoice(); if (v) u.voice = v;
-    u.rate = 0.92; u.pitch = curVoice().rate < 1 ? 0.68 : 0.85;   // slower and lower: calm, steady dad
+    u.rate = 0.96; u.pitch = curVoice().rate < 1 ? 0.85 : 1;   // phone voices sound odd pushed too low
     u.onend = unduck; u.onerror = unduck;
     speechSynthesis.speak(u);
   }
   const fetchClip = (text) => fetch("/api/tts", { method:"POST", headers:{ "content-type":"application/json" },
     body: JSON.stringify({ text, voice: curVoice().api }) }).then(r => { if (!r.ok) throw new Error("tts"); return r.blob(); });
+  // When RoboDad's online voice is unavailable (its free daily allowance runs out),
+  // a whole reply is read by the phone's voice instead: never half and half.
+  let onlineDownUntil = 0, toldVoiceRest = false;
+  function voiceResting(){
+    onlineDownUntil = Date.now() + 15 * 60 * 1000;
+    if (!toldVoiceRest) { toldVoiceRest = true; showCap("", `${voiceLabel()} is resting his voice, so I'm using your phone's voice for now`); }
+  }
   async function speak(text){
     if (!canSpeak) return;
     stopSpeaking(); const id = speakId;
     const said = plain(text).replace(/\s+/g, " ").trim(); if (!said) return;
     if (window.RoboRadio) RoboRadio.duck(true);
     $("voiceBtn")?.classList.add("speaking");
-    if (!player) return speakDevice(said, id);
+    if (!player || Date.now() < onlineDownUntil) return speakDevice(said, id);
     const parts = chunks(said);
-    let next = fetchClip(parts[0]);
-    for (let i = 0; i < parts.length; i++) {
-      let blob;
-      try { blob = await next; } catch { return speakDevice(parts.slice(i).join(" "), id); }
+    let blobs;
+    try { blobs = await Promise.all(parts.map(fetchClip)); }      // fetch every piece first, so it plays without gaps
+    catch { if (id === speakId) { voiceResting(); speakDevice(said, id); } return; }
+    for (let i = 0; i < blobs.length; i++) {
       if (id !== speakId) return;
-      if (i + 1 < parts.length) { next = fetchClip(parts[i + 1]); next.catch(() => {}); }
-      const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blobs[i]);
       const ok = await new Promise((res) => {
         player.onended = () => res(true); player.onerror = () => res(false);
         player.src = url;
@@ -1252,7 +1258,7 @@ textarea::placeholder{color:var(--muted)}
       });
       URL.revokeObjectURL(url);
       if (id !== speakId) return;
-      if (!ok) return speakDevice(parts.slice(i).join(" "), id);
+      if (!ok) { if (i === 0) speakDevice(said, id); else unduck(); return; }
     }
     unduck();
   }
