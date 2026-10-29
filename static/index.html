@@ -275,7 +275,7 @@ main{flex:1; overflow-y:auto; scroll-behavior:smooth}
   text-shadow:0 0 18px var(--glow), 0 0 2px var(--denim)}
 :root[data-look="vhs"] .hello h2{font-weight:400; letter-spacing:.01em;
   background:linear-gradient(180deg, #FFE6A8 10%, #FFB547 45%, #FF5E7E 95%); -webkit-background-clip:text; background-clip:text; color:transparent}
-.hello > .bot{filter:drop-shadow(0 0 14px var(--glow))}
+.herowrap > .bot{filter:drop-shadow(0 0 14px var(--glow))}
 /* Arcade: neon grid floor */
 :root[data-look="arcade"] .hello::after{content:""; position:absolute; z-index:-1; left:-24px; right:-24px; bottom:-56px; height:170px;
   background:
@@ -710,6 +710,24 @@ textarea::placeholder{color:var(--muted)}
   font-size:.82rem; font-weight:800; display:flex; align-items:center; gap:8px; box-shadow:0 8px 20px rgba(0,0,0,.2); animation:sayin .25s ease-out}
 .bubcap button{border:0; border-radius:999px; background:var(--surface); color:var(--ink); font:inherit; font-weight:900; font-size:.78rem; padding:4px 10px; cursor:pointer}
 .avwrap .qpop{top:calc(100% + 10px); bottom:auto; left:-46px; z-index:20}
+/* one RoboDad: big on the welcome screen, docked in the top bar once the chat starts */
+.avwrap{transition:width .35s ease, opacity .25s ease, margin .35s ease}
+.top.hero-mode .avwrap{width:0; opacity:0; margin-right:-10px; pointer-events:none}
+.herowrap{position:relative; width:120px; height:120px}
+.hero-bubs{position:absolute; left:0; top:0}
+.herowrap .bw-music{position:absolute; left:118px; top:2px}
+.herowrap .bw-voice{position:absolute; left:120px; top:50px}
+.herowrap .bub.thought{width:50px; height:36px}
+.herowrap .bub.thought::before{width:9px; height:9px; left:-8px; bottom:-6px}
+.herowrap .bub.thought .glyph{font-size:1.35rem}
+.herowrap .bub.thought .pl-art svg{width:40px; height:32px}
+.herowrap .bub.speech{min-width:44px; height:28px; border-radius:14px; padding:0 8px}
+.herowrap .bub.speech::before{left:-7px; bottom:5px; border-width:5px; border-right-width:7px}
+.herowrap .bub .dots{gap:4px} .herowrap .bub .dots i{width:5px; height:5px}
+.herowrap .bub .say{font-size:.95rem}
+.herowrap .bub .fnote{font-size:.95rem; right:-10px; top:-12px}
+.herowrap .bubcap{left:112px; top:92px}
+.herowrap .qpop{top:calc(100% + 10px); bottom:auto; left:-70px; z-index:20}
 .quick{max-width:720px; margin:0 auto 6px; display:flex; gap:8px}
 .qwrap{position:relative}
 .qchip{display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px;
@@ -838,7 +856,10 @@ textarea::placeholder{color:var(--muted)}
 <main id="scroller">
   <div class="log" id="log" aria-live="polite">
     <section class="hello" id="hello">
-      <svg class="bot" id="avHero" width="88" height="88" viewBox="0 0 64 64" aria-hidden="true"><use href="#robodad"/></svg>
+      <div class="herowrap" id="herowrap">
+        <svg class="bot" id="avHero" width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><use href="#robodad"/></svg>
+        <span class="hero-bubs" id="heroBubs"></span>
+      </div>
       <h2 id="helloTitle">Hey. What's on your mind?</h2>
       <p>Real advice for real life: school stress, money, cooking, friends, first jobs, or a dad joke you'll pretend not to like.</p>
       <div class="chips">
@@ -1092,8 +1113,8 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js?v=26"></script>
-<script src="/static/avatars.js?v=26"></script>
+<script src="/static/radio.js?v=28"></script>
+<script src="/static/avatars.js?v=28"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1284,8 +1305,32 @@ textarea::placeholder{color:var(--muted)}
   // ---------- rendering ----------
   const scrollDown = () => { scroller.scrollTop = scroller.scrollHeight; };
 
+  // ---------- one RoboDad: big on the welcome screen, docked in the top bar during a chat ----------
+  let dockReady = false, dockMode = null;
+  function setDock(mode, fromRect){
+    if (mode === dockMode) return; dockMode = mode;
+    const toHero = mode === "hero";
+    closePops(); hideCap();
+    const box = toHero ? $("heroBubs") : $("avwrap");
+    ["qMusicWrap", "qVoiceWrap", "bubCap"].forEach(id => box.appendChild($(id)));
+    document.querySelector(".top").classList.toggle("hero-mode", toHero);
+    if (!dockReady || !fromRect || !fromRect.width || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const el = toHero ? $("herowrap") : $("avwrap"), to = (toHero ? $("avHero") : $("avHead")).getBoundingClientRect();
+    if (!to.width) return;
+    const sc = fromRect.width / to.width, dx = fromRect.left - to.left, dy = fromRect.top - to.top;
+    el.animate([{ transform:`translate(${dx}px, ${dy}px) scale(${sc})`, transformOrigin:"0 0", opacity:.9 }, { transform:"none", transformOrigin:"0 0", opacity:1 }],
+      { duration:480, easing:"cubic-bezier(.2,.8,.2,1)" });
+  }
+  function hideHello(){
+    if (hello.hidden) return;
+    const r = $("avHero").getBoundingClientRect(); hello.hidden = true; setDock("head", r);
+  }
+  function showHello(){
+    const r = $("avHead").getBoundingClientRect(); hello.hidden = false; setDock("hero", r);
+  }
+
   function addUser(text){
-    hello.hidden = true;
+    hideHello();
     const el = document.createElement("div");
     el.className = "msg user";
     el.innerHTML = `<div class="bubble">${md(text)}</div>`;
@@ -1293,7 +1338,7 @@ textarea::placeholder{color:var(--muted)}
   }
 
   function addRobo(){
-    hello.hidden = true;
+    hideHello();
     const el = document.createElement("div");
     el.className = "msg robo";
     el.innerHTML = `<svg class="bot bot-mini" width="34" height="34" aria-hidden="true"><use href="#robodad"/></svg>
@@ -1506,7 +1551,7 @@ textarea::placeholder{color:var(--muted)}
     history = []; save();
     if (canSpeak) stopSpeaking();
     log.querySelectorAll(".msg").forEach(n => n.remove());
-    hello.hidden = false; input.focus();
+    showHello(); input.focus();
   });
 
   // ---------- install as an app ----------
@@ -2143,6 +2188,7 @@ const PLAYERS = {
     showCap("", "Tap the bubbles: ♪ for music, 💬 for my voice");
   }
   setTimeout(bubbleHint, 2000);
+  setDock(hello.hidden ? "head" : "hero"); setTimeout(() => { dockReady = true; }, 0);
 
   // RoboDad Radio
   const RADIO_KEY = "robodad.radio";
