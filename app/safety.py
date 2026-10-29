@@ -152,6 +152,13 @@ _MULTILINGUAL: dict[str, list[str]] = {
         r"(खुद|अपने\s*आप)\s*को\s*(मार|नुकसान|चोट|काट|खत्म)",
         r"जीना\s*नहीं\s*(चाहता|चाहती|है)|जीने\s*का\s*मन\s*नहीं",
         r"(जिंदगी|जिन्दगी)\s*(खत्म|से\s*तंग)",
+        # Spanish (accents are stripped before matching)
+        r"\b(matarme|suicidarme|quitarme\s+la\s+vida|hacerme\s+dano|lastimarme|autolesion\w*)\b",
+        r"\b(quiero|quisiera|voy\s+a|ganas\s+de)\s+(morir(me)?|desaparecer|matarme|suicidarme)\b",
+        r"\bme\s+quiero\s+(morir|matar|suicidar)\b",
+        r"\bno\s+quiero\s+(vivir|seguir\s+viviendo|existir|estar\s+aqui)\b",
+        r"\bcortarme\s+(las\s+venas|los\s+brazos|las\s+munecas|la\s+piel)\b",
+        r"\bmejor\s+sin\s+mi\b",
     ],
     "sextortion": [
         r"\bsextor",
@@ -160,6 +167,9 @@ _MULTILINGUAL: dict[str, list[str]] = {
         r"\b(payer|argent|sinon)\b.*\b(nudes?|photos?\s+(de\s+moi\s+)?nue?s?|photos?\s+intimes?)",
         r"\b(nudes?|nangi|nange|private\s+(pics?|photos?|video))\b.*\b(viral|leak|paise|paisa|dhamki|bhej\s+dunga|daal\s+dunga)",
         r"(न्यूड|नंगी|नंगे|अश्लील|प्राइवेट)\s*(फोटो|तस्वीर|वीडियो)?.*(वायरल|पैसे|धमकी|लीक)",
+        r"\bamenaz\w*\s+(con\s+)?(publicar|subir|compartir|mandar|ensenar|difundir)",
+        r"\b(nudes?|packs?|fotos?\s+(intimas?|desnud[oa]s?)|videos?\s+(intimos?|desnud[oa]s?))\b.*\b(pagar|dinero|si\s+no|amenaz|publicar|subir|difundir)",
+        r"\b(pagar|dinero)\b.*\b(nudes?|fotos?\s+(intimas?|desnud[oa]s?))",
     ],
     "eating": [
         r"\banorexi|\bboulimi|\btroubles?\s+(du\s+comportement\s+)?alimentaires?",
@@ -171,12 +181,17 @@ _MULTILINGUAL: dict[str, list[str]] = {
         r"खाना\s*(छोड|बंद).*(मोटा|मोटी|वजन|पतला|पतली)|(मोटा|मोटी|वजन|पतला|पतली).*खाना\s*(छोड|बंद)",
         r"\b(mota|moti|weight|vajan|wajan)\b.*\b(khana|khaana)\s+(chhod|chod|band)",
         r"उल्टी.*(खाने|खाना|वजन|मोटा|मोटी)|एनोरेक्सिया|बुलिमिया",
+        r"\bbulimi",
+        r"\b(me\s+hago|hacerme|me\s+provoco)\s+vomitar\b",
+        r"\b(deje|dejo|dejar|dejare)\s+de\s+comer\b.*\b(gord[oa]|peso|adelgazar|flac[oa]|delgad[oa])",
+        r"\btrastornos?\s+(de\s+la\s+)?(conducta\s+)?alimentari",
     ],
     "dating_violence": [
         r"\b(mon|ma)\s+(copain|copine|petit\s+ami|petite\s+amie|chum|blonde|ex)\s+(me\s+)?(frappe|bat|pousse|menace|force|etrangle|gifle)",
         r"\bm'a\s+forcee?\s+a\b",
         r"\b(boyfriend|girlfriend|bf|gf)\s+(mujhe\s+)?(maarta|marta|maarti|marti|peet|dhamki|force)",
         r"(बॉयफ्रेंड|गर्लफ्रेंड|प्रेमी|प्रेमिका)\s*(मुझे)?\s*(मारता|मारती|पीटता|पीटती|धमकी|जबरदस्ती)",
+        r"\bmi\s+(novio|novia|ex|pareja|chico|chica)\s+(me\s+)?(pega|golpea|amenaza|obliga|empuja|ahorca|cachetea)",
     ],
     "abuse": [
         r"\b(je\s+suis\s+|on\s+me\s+)maltraite|\bmaltraitance",
@@ -188,6 +203,11 @@ _MULTILINGUAL: dict[str, list[str]] = {
         r"\b(papa|mummy|mumma|mom|dad|chacha|mama|uncle|bhaiya)\s+(mujhe\s+)?(maarte|marte|maarti|peet)",
         r"घर\s*(पर|पे|में).*(मारते|पीटते|सुरक्षित\s*नहीं|डर\s*लगता)",
         r"मुझे\s*(मारते|पीटते|मारती|पीटती)\s*(हैं|है)",
+        r"\bme\s+(pegan|golpean|maltratan)\b",
+        r"\bmi\s+(papa|mama|padre|madre|padrastro|madrastra|tio|tia|hermano|abuelo)\s+me\s+(pega|golpea|maltrata)",
+        r"\bmiedo\s+de\s+(volver|regresar|ir)\s+a\s+(casa|mi\s+casa)",
+        r"\bno\s+estoy\s+(a\s+salvo|segur[oa])\s+en\s+(casa|mi\s+casa)",
+        r"\babuso\s+sexual|\bmaltrato\s+(en\s+casa|infantil)",
     ],
 }
 for _name, _pats, _msg in _CATEGORIES:

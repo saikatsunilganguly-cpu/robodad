@@ -856,7 +856,7 @@ details.why[open] summary::before{content:"–"}
 .ex q{font-style:italic}
 
 
-/* ---------- Practice with Dad (French, Hindi) ---------- */
+/* ---------- Practice with Dad (French, Spanish, Hindi) ---------- */
 .chip.lang-chip{border-style:dashed}
 .lang-card{width:min(560px, 100%)}
 .lang-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
@@ -1126,7 +1126,7 @@ textarea::placeholder{color:var(--muted)}
         <button class="chip" type="button">I'm stressed about exams</button>
         <button class="chip" type="button">Help me prep for a job interview</button>
         <button class="chip" type="button">Tell me a dad joke</button>
-        <button class="chip lang-chip" type="button" data-open-lang="">Practice French or Hindi</button>
+        <button class="chip lang-chip" type="button" data-open-lang="">Practice French, Spanish or Hindi</button>
       </div>
       <section class="challenge" aria-label="Daily Dad Challenge">
         <span class="ch-tag">Daily Dad Challenge</span>
@@ -1255,10 +1255,11 @@ textarea::placeholder{color:var(--muted)}
         <div class="ch-row"><button class="primary ch-done" type="button">Done it!</button><small class="ch-count"></small></div>
       </section>
 
-  <section class="widget" aria-label="Practice French and Hindi">
+  <section class="widget" aria-label="Practice French, Spanish and Hindi">
     <b>Practice with Dad</b>
-    <p id="langMini">Beginner French and Hindi: 5 phrases a lesson, a quick quiz, then try them in a role-play.</p>
-    <div class="row"><button class="chipbtn" type="button" data-open-lang="fr">Français</button><button class="chipbtn" type="button" data-open-lang="hi" lang="hi">हिन्दी Hindi</button></div>
+    <p id="langMini">Beginner French, Spanish and Hindi: 5 phrases a lesson, a quick quiz, then try them in a role-play.</p>
+    <div class="row"><button class="chipbtn" type="button" data-open-lang="fr">Français</button><button class="chipbtn" type="button" data-open-lang="es">Español</button><button class="chipbtn" type="button" data-open-lang="hi" lang="hi">हिन्दी Hindi</button></div>
+    <a href="/learn" style="font-weight:800">All subjects in Learn with Dad →</a>
   </section>
 
   <section class="widget" aria-label="Dad joke of the day">
@@ -1392,6 +1393,7 @@ textarea::placeholder{color:var(--muted)}
     <div class="lang-top"><h2 id="langTitle">Practice with Dad</h2><button class="ghost" id="langClose" type="button">Close</button></div>
     <div class="lang-tabs" role="tablist" aria-label="Language">
       <button type="button" role="tab" data-lang="fr" aria-selected="true">Français · French</button>
+      <button type="button" role="tab" data-lang="es" aria-selected="false">Español · Spanish</button>
       <button type="button" role="tab" data-lang="hi" aria-selected="false"><span lang="hi">हिन्दी</span> · Hindi</button>
     </div>
     <div id="langBody" style="display:flex; flex-direction:column; gap:12px"></div>
@@ -1442,9 +1444,9 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/lessons.js?v=36"></script>
-<script src="/static/radio.js?v=36"></script>
-<script src="/static/avatars.js?v=36"></script>
+<script src="/static/lessons.js?v=37"></script>
+<script src="/static/radio.js?v=37"></script>
+<script src="/static/avatars.js?v=37"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -2275,7 +2277,11 @@ const PLAYERS = {
     ["hi4", "Shabaash!", "hi", "Finish 4 Hindi lessons", "Four Hindi lessons done. Shabaash!", "rare", "हि", (p) => p.done.length >= 4],
     ["hirp", "Chai Ready", "hi", "Keep a Hindi role-play going for 4 messages", "Kept a whole Hindi role-play going.", "rare", "हि", (p) => p.rp >= 4],
     ["hi8", "Poora Course", "hi", "Finish all 8 Hindi lessons", "Every Hindi lesson finished. Bahut badhiya!", "epic", "हि", (p) => p.done.length >= 8],
-    ["globe", "Globe Trotter", "", "Finish every French and Hindi lesson", "Both courses finished. Très bien and bahut badhiya!", "legendary", "", () => prog("fr").done.length >= 8 && prog("hi").done.length >= 8],
+    ["es1", "¡Hola, Rookie!", "es", "Finish your first Spanish lesson", "Finished a first Spanish lesson.", "common", "Es", (p) => p.done.length >= 1],
+    ["es4", "¡Muy Bien!", "es", "Finish 4 Spanish lessons", "Four Spanish lessons done. ¡Muy bien!", "rare", "Es", (p) => p.done.length >= 4],
+    ["esrp", "Taco Talker", "es", "Keep a Spanish role-play going for 4 messages", "Kept a whole Spanish role-play going.", "rare", "Es", (p) => p.rp >= 4],
+    ["es8", "Todo el Curso", "es", "Finish all 8 Spanish lessons", "Every Spanish lesson finished. ¡Qué padre!", "epic", "Es", (p) => p.done.length >= 8],
+    ["globe", "Globe Trotter", "", "Finish every lesson in two languages", "Two whole courses finished. Très bien, ¡muy bien! and bahut badhiya!", "legendary", "", () => ["fr", "es", "hi"].filter(l => prog(l).done.length >= 8).length >= 2],
   ];
   LANG_BADGES.forEach(([id, name, lang, todo, did, rar, glyph, test]) =>
     BADGES[id] = { id, name, lang, todo, did, rar, glyph, check: () => test(prog(lang || "fr")) });
@@ -2391,7 +2397,7 @@ const PLAYERS = {
       if (on) h += `<p>${esc(b.did)}</p><p>Unlocked ${dates[id] ? esc(fmtDate(dates[id])) : "earlier"}</p>`;
       else h += `<p><strong style="color:var(--ink)">Mission:</strong> ${esc(b.todo)}.</p><p>${b.lang
         ? `So far: ${p.done.length} of 8 ${name} lessons, and your longest ${name} role-play was ${p.rp} message${p.rp === 1 ? "" : "s"}.`
-        : `So far: ${prog("fr").done.length} of 8 French and ${prog("hi").done.length} of 8 Hindi lessons.`} It unlocks by itself as you practise.</p>`;
+        : `So far: ${prog("fr").done.length} of 8 French, ${prog("es").done.length} of 8 Spanish and ${prog("hi").done.length} of 8 Hindi lessons.`} It unlocks by itself as you practise.</p>`;
       h += `<p style="font-size:.85rem">Practice badges show you've been practising. They aren't a fluency certificate.</p>`;
       btns = on ? `<button class="primary" data-act="share">Share</button><button class="ghost" data-act="close">Close</button>`
                 : `<button class="primary" data-act="practice">Practise now</button><button class="ghost" data-act="close">Not yet</button>`;
@@ -2691,6 +2697,17 @@ const PLAYERS = {
   $("langClose").addEventListener("click", closeLang);
   langDlg.addEventListener("click", (e) => { if (e.target === langDlg) closeLang(); });
   langDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLang(); });
+  { const want = new URLSearchParams(location.search).get("learn");
+    if (want && (L[want] || want === "all")) {
+      window.history.replaceState?.(null, "", location.pathname);
+      // wait until the age check (and anything else on screen) is out of the way
+      let tries = 0;
+      const go = () => {
+        if (document.querySelector(".overlay:not([hidden])") || document.querySelector(".side.open")) { if (++tries < 300) setTimeout(go, 400); return; }
+        openLang(L[want] ? want : "");
+      };
+      setTimeout(go, 300);
+    } }
   document.querySelectorAll("[data-open-lang]").forEach(b => b.addEventListener("click", () => {
     const fromSide = b.closest(".side"); if (fromSide) fromSide.classList.remove("open");
     openLang(b.dataset.openLang); if (fromSide) langReturn = $("sideBtn");

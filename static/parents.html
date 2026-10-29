@@ -34,13 +34,20 @@ ul{margin:0; padding-left:1.2em} li{margin-bottom:6px; max-width:64ch}
 .yes{color:var(--ok); font-weight:900} .no{color:var(--alert); font-weight:900}
 a{color:var(--denim); font-weight:800}
 .fine{font-size:.85rem; color:var(--muted)}
+.cta{display:flex; flex-wrap:wrap; gap:10px}
+.btn{display:inline-flex; align-items:center; min-height:46px; padding:0 20px; border-radius:999px; background:var(--denim); color:#fff; text-decoration:none; font-weight:900}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .btn{color:#101821} }
+:root[data-theme="dark"] .btn{color:#101821}
+.btn.ghost{background:transparent; color:var(--denim); border:2px solid var(--denim)}
+.socials{display:flex; flex-wrap:wrap; gap:6px 16px}
 </style>
 </head>
 <body>
 <main>
   <a class="back" href="/">← Back to RoboDad</a>
   <h1>RoboDad for parents</h1>
-  <p class="lede">A two-minute read on what RoboDad is, how it keeps teens safe, and what happens to their information.</p>
+  <p class="lede">A free AI "dad" for teens 13+, built by a Toronto dad. Here's a two-minute read on what it is, how it keeps teens safe, and what happens to their information.</p>
+  <div class="cta"><a class="btn" href="/">Try RoboDad free</a><a class="btn ghost" href="/learn">Learn with Dad</a></div>
 
   <div class="grid" aria-label="Quick facts">
     <div class="fact"><b>Ages 13+</b><span>A birth-year check on first visit. Under-13s are turned away.</span></div>
@@ -58,7 +65,7 @@ a{color:var(--denim); font-weight:800}
   <section class="card">
     <h2>How it keeps teens safe</h2>
     <ul>
-      <li><strong>Crisis messages skip the AI entirely.</strong> If a teen mentions self-harm, being threatened with intimate photos, an eating disorder, dating violence or abuse at home, RoboDad shows a fixed help message straight away, with tap-to-call numbers for Kids Help Phone (1-800-668-6868, or text CONNECT to 686868) and 911. This works in English, French and Hindi, and the AI is told to flag these situations in any other language so the same help message appears.</li>
+      <li><strong>Crisis messages skip the AI entirely.</strong> If a teen mentions self-harm, being threatened with intimate photos, an eating disorder, dating violence or abuse at home, RoboDad shows a fixed help message straight away, with tap-to-call numbers for Kids Help Phone (1-800-668-6868, or text CONNECT to 686868) and 911. This works in English, French, Spanish and Hindi, and the AI is told to flag these situations in any other language so the same help message appears.</li>
       <li><strong>Firm boundaries.</strong> Nothing sexual. No help getting or hiding vapes, alcohol or drugs. No diet plans or weight-loss tips. No weapons, violence or cheating. RoboDad explains why in a sentence and points to something helpful instead of a cold refusal.</li>
       <li><strong>Privacy reminders.</strong> RoboDad never asks for personal details, and if a teen shares their address, school or passwords, it reminds them to keep those private.</li>
       <li><strong>Honest about being an AI.</strong> It says plainly that it isn't a real parent, and it can get things wrong.</li>
@@ -82,7 +89,7 @@ a{color:var(--denim); font-weight:800}
     <ul>
       <li>RoboDad gives general life advice. It isn't a doctor, lawyer, counsellor or a replacement for you.</li>
       <li>It can read replies aloud and play relaxing background music made right on the device. Both are off until your teen turns them on.</li>
-      <li><strong>Language practice:</strong> teens can practise beginner French and Hindi with short hand-written lessons, quizzes and role-plays (ordering at a café, chatting with an uncle). It's for practice and confidence, not a course or a fluency certificate, and the same safety rules apply in every language.</li>
+      <li><strong>Learn with Dad:</strong> teens can practise beginner French, Spanish and Hindi with short hand-written lessons, quizzes and role-plays (ordering at a café, chatting with an uncle). Maths for Grades 7–10 is coming next, and Dad coaches with hints rather than doing the homework. It's for practice and confidence, not a course or a fluency certificate, and the same safety rules apply in every language. Native speakers who spot a mistake: please tell us.</li>
       <li>Badges are on the honour system and have no streaks, so there's nothing to feel guilty about missing.</li>
     </ul>
   </section>
@@ -90,6 +97,12 @@ a{color:var(--denim); font-weight:800}
   <section class="card">
     <h2>A conversation starter</h2>
     <p>Ask your teen what RoboDad told them this week, or which badge they're going for. Then tell them about your first job, your worst laundry disaster or the first thing you saved up for. That's the conversation RoboDad is trying to start.</p>
+  </section>
+
+  <section class="card">
+    <h2>Follow along</h2>
+    <p>Behind-the-scenes clips and dad jokes, no faces, no ads:</p>
+    <p class="socials"><a href="https://www.instagram.com/robodadapp/" rel="noopener">Instagram</a><a href="https://www.tiktok.com/@robodadapp" rel="noopener">TikTok</a><a href="https://www.youtube.com/@robodadapp" rel="noopener">YouTube</a><a href="https://www.threads.com/@robodadapp" rel="noopener">Threads</a><a href="https://x.com/robodadapp" rel="noopener">X</a></p>
   </section>
 
   <p class="fine">Questions or concerns? Email <a href="mailto:robodadapp@gmail.com">robodadapp@gmail.com</a>. If you think a child under 13 has used RoboDad, let us know and we'll help.</p>

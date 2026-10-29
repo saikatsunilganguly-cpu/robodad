@@ -174,6 +174,17 @@ PRACTICE_LANGS = {
             "free": "A relaxed chat about the teen's day, hobbies, food and school.",
         },
     },
+    "es": {
+        "name": "Spanish",
+        "format": "Write each Spanish line, then the English in brackets, e.g. ¡Hola! ¿Qué tal? (Hi! How's it going?)",
+        "scenarios": {
+            "tacos": "Ordering at a taco stand in Mexico City. You are the friendly taquero.",
+            "intro": "Meeting a new classmate on the first day of school. You are the classmate.",
+            "directions": "Asking for directions in Madrid. You are a helpful local.",
+            "shop": "Buying sneakers at a shop. You are the shop assistant.",
+            "free": "A relaxed chat about the teen's day, hobbies, food and school.",
+        },
+    },
 }
 
 

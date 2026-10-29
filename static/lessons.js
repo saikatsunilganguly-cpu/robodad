@@ -125,5 +125,67 @@
     ],
   };
 
-  window.LESSONS = { fr, hi };
+
+  const es = {
+    name: "Spanish", native: "Español", voice: "es-MX", hello: "Hola",
+    lessons: [
+      { id:"greet", title:"Hellos and goodbyes", tip:"Spanish questions start with an upside-down ¿ so you know a question is coming. Very considerate.", p:[
+        { t:"¡Hola!", e:"Hi!" },
+        { t:"Buenos días.", e:"Good morning." },
+        { t:"¿Qué tal?", e:"How's it going?" },
+        { t:"Muy bien, gracias.", e:"Very well, thanks." },
+        { t:"¡Hasta luego!", e:"See you later!" } ] },
+      { id:"me", title:"All about you", tip:"In Spanish you \"have\" your age: tengo quince años, literally \"I have fifteen years\".", p:[
+        { t:"Me llamo Sam.", e:"My name is Sam." },
+        { t:"¿Cómo te llamas?", e:"What's your name?" },
+        { t:"Tengo quince años.", e:"I'm fifteen." },
+        { t:"Vivo en Toronto.", e:"I live in Toronto." },
+        { t:"¡Mucho gusto!", e:"Nice to meet you!" } ] },
+      { id:"polite", title:"Magic words", tip:"Use usted with adults you don't know and tú with friends. Dad rule: when in doubt, usted.", p:[
+        { t:"Por favor.", e:"Please." },
+        { t:"¡Muchas gracias!", e:"Thank you very much!" },
+        { t:"De nada.", e:"You're welcome." },
+        { t:"Perdón.", e:"Sorry. / Excuse me." },
+        { t:"¿Cómo?", e:"Sorry? (I didn't catch that)" } ] },
+      { id:"food", title:"At the taco stand", tip:"\"Quisiera\" (I'd like) is politer than \"Quiero\" (I want). Abuelas notice.", p:[
+        { t:"Quisiera tres tacos, por favor.", e:"I'd like three tacos, please." },
+        { t:"Un agua de horchata, por favor.", e:"A horchata, please." },
+        { t:"¿Cuánto cuesta?", e:"How much is it?" },
+        { t:"La cuenta, por favor.", e:"The bill, please." },
+        { t:"¡Está delicioso!", e:"It's delicious!" } ] },
+      { id:"school", title:"School survival", tip:"\"¿Puedes repetir?\" will save you in every Spanish class. Use it without shame.", p:[
+        { t:"Tengo un examen mañana.", e:"I have a test tomorrow." },
+        { t:"Mi clase favorita es matemáticas.", e:"My favourite class is math." },
+        { t:"No entiendo.", e:"I don't understand." },
+        { t:"¿Puedes repetir?", e:"Can you say that again?" },
+        { t:"¿Cómo se dice «pencil» en español?", e:"How do you say \"pencil\" in Spanish?" } ] },
+      { id:"around", title:"Getting around", tip:"The ñ in baño sounds like the ny in canyon. Which is also a great place to need one.", p:[
+        { t:"¿Dónde está el baño?", e:"Where is the bathroom?" },
+        { t:"A la izquierda.", e:"To the left." },
+        { t:"A la derecha.", e:"To the right." },
+        { t:"Todo recto.", e:"Straight ahead." },
+        { t:"¿Está lejos?", e:"Is it far?" } ] },
+      { id:"feel", title:"How you feel", tip:"Change the o to an a when a girl is speaking: contenta, cansada, estresada.", p:[
+        { t:"Estoy contento.", e:"I'm happy." },
+        { t:"Estoy cansado.", e:"I'm tired." },
+        { t:"Tengo hambre.", e:"I'm hungry. (literally: I have hunger)" },
+        { t:"Estoy estresado.", e:"I'm stressed." },
+        { t:"¡No pasa nada!", e:"No worries!" } ] },
+      { id:"fun", title:"Weekend plans", tip:"Fútbol means soccer. Ask for American football and you'll get a puzzled look.", p:[
+        { t:"Me gusta jugar al fútbol.", e:"I like playing soccer." },
+        { t:"Escucho música.", e:"I'm listening to music." },
+        { t:"¿Qué haces este fin de semana?", e:"What are you doing this weekend?" },
+        { t:"¿Jugamos videojuegos?", e:"Want to play video games?" },
+        { t:"¡Qué padre!", e:"That's awesome! (Mexico)" } ] },
+    ],
+    scenes: [
+      { id:"tacos", title:"Taco stand in Mexico City", who:"Dad's the taquero", open:"¡Buenas! ¿Qué le sirvo, joven? (Hi there! What can I get you, young one?)", hints:["Quisiera tres tacos, por favor.", "¿Cuánto cuesta?", "¡Está delicioso!"] },
+      { id:"intro", title:"New classmate", who:"Dad's the new kid", open:"¡Hola! Soy nuevo aquí. ¿Cómo te llamas? (Hi! I'm new here. What's your name?)", hints:["Me llamo…", "Tengo quince años.", "¡Mucho gusto!"] },
+      { id:"directions", title:"Lost in Madrid", who:"Dad's a friendly local", open:"¡Hola! Pareces perdido. ¿Te ayudo? (Hi! You look lost. Can I help you?)", hints:["¿Dónde está el metro?", "¿Está lejos?", "¡Muchas gracias!"] },
+      { id:"shop", title:"Sneaker shopping", who:"Dad's the shop assistant", open:"¡Hola! ¿Buscas algo? (Hi! Looking for something?)", hints:["Quisiera unos tenis.", "¿Cuánto cuestan?", "Gracias, ¡adiós!"] },
+      { id:"free", title:"Just chat", who:"Dad asks about your day", open:"¡Hola! ¿Qué tal? ¿Qué hiciste hoy? (Hi! How's it going? What did you do today?)", hints:["Muy bien, gracias.", "Tengo un examen mañana.", "Estoy cansado."] },
+    ],
+  };
+
+  window.LESSONS = { fr, es, hi };
 })();

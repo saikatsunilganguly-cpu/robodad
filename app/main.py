@@ -40,7 +40,7 @@ _load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 import httpx  # noqa: E402
 from fastapi import FastAPI, HTTPException, Request  # noqa: E402
-from fastapi.responses import FileResponse, JSONResponse, Response, StreamingResponse  # noqa: E402
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, Response, StreamingResponse  # noqa: E402
 from fastapi.staticfiles import StaticFiles  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
@@ -153,6 +153,49 @@ SECURITY_HEADERS = {
     "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
     "Cross-Origin-Opener-Policy": "same-origin",
 }
+
+
+# ---------------------------------------------------------------- domains
+# One service, three addresses:
+#   robodad.app    the app for teens (the main address)
+#   robodad.ca     the page for parents; anything else there goes to robodad.app
+#   robodad.online the learning hub (Porkbun forwards it to robodad.app/learn)
+APP_ORIGIN = os.getenv("APP_ORIGIN", "https://robodad.app").rstrip("/")
+PARENT_HOSTS = {"robodad.ca", "www.robodad.ca"}
+LEARN_HOSTS = {"robodad.online", "www.robodad.online"}
+# Set CANONICAL_HOST=robodad.app once that domain is live to send onrender.com visitors there.
+CANONICAL_HOST = os.getenv("CANONICAL_HOST", "").strip().lower()
+_KEEP_ON_ANY_HOST = ("/static/", "/health", "/api/", "/sw.js", "/manifest.webmanifest", "/.well-known/")
+
+
+def _host(request: Request) -> str:
+    return (request.headers.get("host") or "").split(":")[0].strip().lower()
+
+
+def _parents_page() -> HTMLResponse:
+    with open(os.path.join(STATIC_DIR, "parents.html"), encoding="utf-8") as f:
+        html = f.read()
+    # on robodad.ca the site root is this page, so app links point at robodad.app
+    html = html.replace('href="/"', f'href="{APP_ORIGIN}/"').replace('href="/learn"', f'href="{APP_ORIGIN}/learn"')
+    html = html.replace('href="/privacy"', f'href="{APP_ORIGIN}/privacy"')
+    return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
+
+
+@app.middleware("http")
+async def route_domains(request: Request, call_next):
+    host, path = _host(request), request.url.path
+    if request.method in ("GET", "HEAD"):
+        query = f"?{request.url.query}" if request.url.query else ""
+        if host in PARENT_HOSTS and not path.startswith("/static/"):
+            if path in ("/", "/parents"):
+                return _parents_page()
+            return RedirectResponse(f"{APP_ORIGIN}{path}{query}", status_code=301)
+        if host in LEARN_HOSTS and not path.startswith("/static/"):
+            dest = "/learn" if path in ("/", "") else "/learn" + path
+            return RedirectResponse(f"{APP_ORIGIN}{dest}{query}", status_code=302)
+        if CANONICAL_HOST and host.endswith(".onrender.com") and not path.startswith(_KEEP_ON_ANY_HOST):
+            return RedirectResponse(f"https://{CANONICAL_HOST}{path}{query}", status_code=301)
+    return await call_next(request)
 
 
 @app.middleware("http")
@@ -383,6 +426,82 @@ async def tester_signup(t: TesterSignup, request: Request):
         log.warning("Supabase unreachable for tester sign-up: %s", exc)
         return JSONResponse({"error": "Something went wrong saving your sign-up. Please try again."}, status_code=502)
     return {"ok": True, "count": await _tester_count(fresh=True), "goal": TESTER_GOAL}
+
+
+# ---------------------------------------------------------------- learning hub + link tracking
+@app.get("/learn")
+async def learn_page():
+    return FileResponse(os.path.join(STATIC_DIR, "learn.html"), headers={"Cache-Control": "no-cache"})
+
+
+# Short links for bios and posts, e.g. robodad.app/go/tiktok or robodad.online/ig.
+# Each visit adds one anonymous row (just the source name) so we can see which
+# platform brings people in. No cookies, no IP addresses, nothing about the visitor.
+TRACK_SOURCES = {
+    "ig": "instagram", "instagram": "instagram", "tiktok": "tiktok", "tt": "tiktok", "yt": "youtube",
+    "youtube": "youtube", "threads": "threads", "x": "x", "twitter": "x", "reddit": "reddit",
+    "fb": "facebook", "facebook": "facebook", "linkedin": "linkedin", "li": "linkedin", "qr": "qr", "email": "email",
+}
+INTEREST_TOPICS = {
+    "math", "science", "coding", "lang:pa", "lang:tl", "lang:zh", "lang:ta", "lang:ur", "lang:ar", "lang:mr",
+    "lang:gu", "lang:bn", "lang:te", "lang:ko", "lang:ja", "lang:pt", "lang:it", "lang:de", "lang:other",
+}
+_counted: dict[str, deque] = defaultdict(deque)
+
+
+async def _count(kind: str, name: str, request: Request) -> None:
+    """Add one anonymous count. Each visitor counts once per name per 10 minutes."""
+    now = time.monotonic()
+    _prune(_counted, 600, now)
+    key = f"{_client_ip(request)}|{kind}|{name}"
+    q = _counted[key]
+    if q and now - q[-1] < 600:
+        return
+    q.append(now)
+    log.info("COUNT %s %s", kind, name)
+    if not (SUPABASE_URL and SUPABASE_KEY):
+        return
+    try:
+        r = await state["client"].post(
+            f"{SUPABASE_URL}/rest/v1/clicks",
+            headers=_supabase_headers({"Prefer": "return=minimal"}),
+            json={"kind": kind, "name": name},
+        )
+        if r.status_code >= 300:
+            log.warning("Count not stored %s: %s", r.status_code, r.text[:200])
+    except httpx.HTTPError as exc:
+        log.warning("Count not stored: %s", exc)
+
+
+@app.get("/go/{src}")
+async def go(src: str, request: Request):
+    name = TRACK_SOURCES.get(src.lower())
+    if name:
+        await _count("visit", name, request)
+    return RedirectResponse("/", status_code=302)
+
+
+@app.get("/learn/{src}")
+async def learn_go(src: str, request: Request):
+    name = TRACK_SOURCES.get(src.lower())
+    if name:
+        await _count("learn", name, request)
+    return RedirectResponse("/learn", status_code=302)
+
+
+class Interest(BaseModel):
+    topic: str = Field(max_length=24)
+
+
+@app.post("/api/interest")
+async def interest(i: Interest, request: Request):
+    """'I want this' votes on the learning hub (a subject or a family language). Anonymous."""
+    if i.topic not in INTEREST_TOPICS:
+        raise HTTPException(400, "Unknown topic.")
+    if _rate_limited(_client_ip(request)):
+        return JSONResponse({"error": "Too many tries. Wait a minute."}, status_code=429)
+    await _count("interest", i.topic, request)
+    return {"ok": True}
 
 
 @app.get("/parents")
