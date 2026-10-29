@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Creepster&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Creepster&family=Rozha+One&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -90,6 +90,18 @@
   --metal:#8F8AAE; --alert:#FF5E7E; --ok:#8BE04E; --jacket:#16121F; --jacket2:#2A2238; --hair:#15121C; --lens:#05030A;
   --glow:color-mix(in srgb, #FF7A1A 45%, transparent);
   --display:"Creepster", "Nunito", cursive; color-scheme:dark;
+}
+:root[data-look="bolly"]{
+  --sky:#FFF1D9; --surface:#FFFAF0; --ink:#2B1410; --muted:#7A4E3C; --line:#F0C9A0;
+  --denim:#C2185B; --denim-ink:#FFFFFF; --mustard:#FF9A1F; --mustard-ink:#2B1410;
+  --metal:#D3DCE3; --alert:#B3412E; --ok:#0F8B8D; --glow:color-mix(in srgb, #FF9A1F 40%, transparent);
+  --display:"Rozha One", "Nunito", serif; color-scheme:light;
+}
+:root[data-look="diwali"]{
+  --sky:#120B2E; --surface:#1E1446; --ink:#FFF4DE; --muted:#D9C3A0; --line:#3A2A6A;
+  --denim:#FFB000; --denim-ink:#2A1600; --mustard:#C2185B; --mustard-ink:#FFFFFF;
+  --metal:#7D79A8; --alert:#FF6B6B; --ok:#8BE04E; --glow:color-mix(in srgb, #FFB000 50%, transparent);
+  --display:"Rozha One", "Nunito", serif; color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -182,6 +194,60 @@ button,textarea{font:inherit;color:inherit}
 :root[data-look="y2k"] .cassette .buffer{display:block; width:24px; height:24px; animation:spin45 .9s linear infinite}
 :root[data-look="y2k"] .cassette .t-y2k{display:inline}
 
+/* ---------- Bollywood '75 ---------- */
+:root[data-look="bolly"] body{background:#FFF1D9 radial-gradient(rgba(194,24,91,.05) 1px, transparent 1.5px) 0 0 / 9px 9px fixed}
+:root[data-look="bolly"] .top{position:relative; z-index:6; border-bottom:0; background:#FFFAF0}
+:root[data-look="bolly"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-8px; height:8px; background:#C2185B radial-gradient(circle, #FFE9A8 0 2px, transparent 2.6px) 0 0 / 12px 8px repeat-x;
+  animation:marquee 1.4s steps(2) infinite}
+@keyframes marquee{50%{background-position:6px 0}}
+:root[data-look="bolly"] .hello h2{color:#C2185B; text-shadow:3px 3px 0 #FF9A1F, 5px 5px 0 rgba(43,20,16,.15); letter-spacing:.01em; line-height:1.12}
+:root[data-look="bolly"] .hello::before{content:""; position:absolute; z-index:-1; top:-10px; left:-40px; width:200px; height:200px; border-radius:50%;
+  background:repeating-conic-gradient(#FF9A1F 0 10deg, #FFD27A 10deg 20deg); -webkit-mask-image:radial-gradient(circle, #000 35%, transparent 70%); mask-image:radial-gradient(circle, #000 35%, transparent 70%); opacity:.55}
+:root[data-look="bolly"] .hello::after{content:""; position:absolute; z-index:-1; left:-24px; right:-24px; bottom:-28px; height:14px;
+  background:repeating-linear-gradient(-45deg, #C2185B 0 10px, #FF9A1F 10px 20px, #0F8B8D 20px 30px); opacity:.85}
+:root[data-look="bolly"] :is(.chip,.send,.primary){border:2px solid #2B1410; box-shadow:2px 2px 0 #2B1410}
+:root[data-look="bolly"] .user .bubble{background:#C2185B}
+.pv.bolly{background:radial-gradient(circle at 50% 60%, #FFD27A, #FF9A1F 70%)}
+.pv.bolly::after{content:""; position:absolute; left:0; right:0; bottom:0; height:8px; background:repeating-linear-gradient(-45deg, #C2185B 0 6px, #FFF1D9 6px 12px)}
+/* Filmi Hero Dad's moves */
+.do-windflip .hair-f{animation:av-wind 2.8s ease-in-out}
+@keyframes av-wind{0%,100%{transform:none} 20%,80%{transform:translateX(3px) skewX(-12deg) rotate(4deg)} 50%{transform:translateX(4px) skewX(-16deg) rotate(6deg)}}
+.do-windflip .mv-wind{animation:av-gust 2.8s linear}
+@keyframes av-gust{0%{opacity:0; transform:translateX(-6px)} 15%,85%{opacity:1} 50%{transform:translateX(6px)} 100%{opacity:0; transform:translateX(14px)}}
+.do-windflip .hd{animation:av-slowmo 2.8s ease-in-out}
+@keyframes av-slowmo{0%,100%{transform:none} 40%,70%{transform:rotate(-6deg) translateY(-1px)}}
+.do-shimmy .body,.do-shimmy .hd{animation:av-shimmy 2.2s ease-in-out}
+@keyframes av-shimmy{0%,100%{transform:none} 10%,30%,50%,70%{transform:translateX(-1.6px) rotate(-2deg)} 20%,40%,60%,80%{transform:translateX(1.6px) rotate(2deg)}}
+.bot .body{transform-box:view-box; transform-origin:32px 64px}
+.do-dhishoom .mv-punch{animation:av-punch 2s ease-out}
+@keyframes av-punch{0%{opacity:0; transform:translateX(-10px)} 20%{opacity:1; transform:translateX(-8px)} 32%{transform:translateX(4px) scale(1.15)} 70%{opacity:1; transform:translateX(3px)} 100%{opacity:0; transform:translateX(-6px)}}
+.do-dhishoom .mv-boom{animation:av-1up 2s ease-out .3s}
+/* ---------- Diwali Lights (seasonal) ---------- */
+:root[data-look="diwali"] body{background:radial-gradient(ellipse at 50% -10%, #3A1F6A 0, transparent 60%), radial-gradient(circle, rgba(255,201,60,.08) 1px, transparent 1.5px) 0 0 / 22px 22px, #120B2E fixed}
+:root[data-look="diwali"] .top{background:rgba(18,11,46,.92); border-bottom:1px solid #3A2A6A; position:relative; z-index:6}
+:root[data-look="diwali"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-14px; height:16px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 30'%3E%3Cpath d='M0 10 Q85 34 170 10' fill='none' stroke='%236B5A3A' stroke-width='1.5'/%3E%3Ccircle cx='8' cy='14.0' r='5' fill='%23FFC93C'/%3E%3Ccircle cx='30' cy='20.3' r='5' fill='%23FF7A1A'/%3E%3Ccircle cx='52' cy='21.8' r='5' fill='%23C2185B'/%3E%3Ccircle cx='74' cy='17.4' r='5' fill='%238BE04E'/%3E%3Ccircle cx='96' cy='10.5' r='5' fill='%2338B6FF'/%3E%3Ccircle cx='118' cy='6.2' r='5' fill='%23FFC93C'/%3E%3Ccircle cx='140' cy='7.8' r='5' fill='%23FF7A1A'/%3E%3Ccircle cx='162' cy='14.1' r='5' fill='%23C2185B'/%3E%3C/svg%3E") 0 0 / 170px 16px repeat-x; animation:twinkle 1.8s ease-in-out infinite alternate}
+@keyframes twinkle{from{filter:brightness(.8)} to{filter:brightness(1.35) drop-shadow(0 0 3px #FFC93C)}}
+:root[data-look="diwali"] .hello h2{color:#FFB000; text-shadow:0 0 18px var(--glow); letter-spacing:.01em; line-height:1.12}
+:root[data-look="diwali"] .hello::before{content:""; position:absolute; z-index:-1; top:4px; right:-10px; width:150px; height:150px; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 140 140'%3E%3Ccircle cx='70' cy='70' r='18' fill='%230F8B8D'/%3E%3Ccircle cx='70' cy='70' r='9' fill='%23FFF3D6'/%3E%3Cellipse cx='100.0' cy='70.0' rx='6.0' ry='3.0' transform='rotate%280 100.0 70.0%29' fill='%23FF7A1A'/%3E%3Cellipse cx='91.2' cy='91.2' rx='6.0' ry='3.0' transform='rotate%2845 91.2 91.2%29' fill='%23FF7A1A'/%3E%3Cellipse cx='70.0' cy='100.0' rx='6.0' ry='3.0' transform='rotate%2890 70.0 100.0%29' fill='%23FF7A1A'/%3E%3Cellipse cx='48.8' cy='91.2' rx='6.0' ry='3.0' transform='rotate%28135 48.8 91.2%29' fill='%23FF7A1A'/%3E%3Cellipse cx='40.0' cy='70.0' rx='6.0' ry='3.0' transform='rotate%28180 40.0 70.0%29' fill='%23FF7A1A'/%3E%3Cellipse cx='48.8' cy='48.8' rx='6.0' ry='3.0' transform='rotate%28225 48.8 48.8%29' fill='%23FF7A1A'/%3E%3Cellipse cx='70.0' cy='40.0' rx='6.0' ry='3.0' transform='rotate%28270 70.0 40.0%29' fill='%23FF7A1A'/%3E%3Cellipse cx='91.2' cy='48.8' rx='6.0' ry='3.0' transform='rotate%28315 91.2 48.8%29' fill='%23FF7A1A'/%3E%3Cellipse cx='116.0' cy='70.0' rx='7.5' ry='4.0' transform='rotate%280 116.0 70.0%29' fill='%23C2185B'/%3E%3Cellipse cx='109.8' cy='93.0' rx='7.5' ry='4.0' transform='rotate%2830 109.8 93.0%29' fill='%23C2185B'/%3E%3Cellipse cx='93.0' cy='109.8' rx='7.5' ry='4.0' transform='rotate%2860 93.0 109.8%29' fill='%23C2185B'/%3E%3Cellipse cx='70.0' cy='116.0' rx='7.5' ry='4.0' transform='rotate%2890 70.0 116.0%29' fill='%23C2185B'/%3E%3Cellipse cx='47.0' cy='109.8' rx='7.5' ry='4.0' transform='rotate%28120 47.0 109.8%29' fill='%23C2185B'/%3E%3Cellipse cx='30.2' cy='93.0' rx='7.5' ry='4.0' transform='rotate%28150 30.2 93.0%29' fill='%23C2185B'/%3E%3Cellipse cx='24.0' cy='70.0' rx='7.5' ry='4.0' transform='rotate%28180 24.0 70.0%29' fill='%23C2185B'/%3E%3Cellipse cx='30.2' cy='47.0' rx='7.5' ry='4.0' transform='rotate%28210 30.2 47.0%29' fill='%23C2185B'/%3E%3Cellipse cx='47.0' cy='30.2' rx='7.5' ry='4.0' transform='rotate%28240 47.0 30.2%29' fill='%23C2185B'/%3E%3Cellipse cx='70.0' cy='24.0' rx='7.5' ry='4.0' transform='rotate%28270 70.0 24.0%29' fill='%23C2185B'/%3E%3Cellipse cx='93.0' cy='30.2' rx='7.5' ry='4.0' transform='rotate%28300 93.0 30.2%29' fill='%23C2185B'/%3E%3Cellipse cx='109.8' cy='47.0' rx='7.5' ry='4.0' transform='rotate%28330 109.8 47.0%29' fill='%23C2185B'/%3E%3Cellipse cx='130.0' cy='70.0' rx='9.0' ry='5.0' transform='rotate%280 130.0 70.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='125.4' cy='93.0' rx='9.0' ry='5.0' transform='rotate%2822 125.4 93.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='112.4' cy='112.4' rx='9.0' ry='5.0' transform='rotate%2845 112.4 112.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='93.0' cy='125.4' rx='9.0' ry='5.0' transform='rotate%2868 93.0 125.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='70.0' cy='130.0' rx='9.0' ry='5.0' transform='rotate%2890 70.0 130.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='47.0' cy='125.4' rx='9.0' ry='5.0' transform='rotate%28112 47.0 125.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='27.6' cy='112.4' rx='9.0' ry='5.0' transform='rotate%28135 27.6 112.4%29' fill='%23FFC93C'/%3E%3Cellipse cx='14.6' cy='93.0' rx='9.0' ry='5.0' transform='rotate%28158 14.6 93.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='10.0' cy='70.0' rx='9.0' ry='5.0' transform='rotate%28180 10.0 70.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='14.6' cy='47.0' rx='9.0' ry='5.0' transform='rotate%28202 14.6 47.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='27.6' cy='27.6' rx='9.0' ry='5.0' transform='rotate%28225 27.6 27.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='47.0' cy='14.6' rx='9.0' ry='5.0' transform='rotate%28247 47.0 14.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='70.0' cy='10.0' rx='9.0' ry='5.0' transform='rotate%28270 70.0 10.0%29' fill='%23FFC93C'/%3E%3Cellipse cx='93.0' cy='14.6' rx='9.0' ry='5.0' transform='rotate%28292 93.0 14.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='112.4' cy='27.6' rx='9.0' ry='5.0' transform='rotate%28315 112.4 27.6%29' fill='%23FFC93C'/%3E%3Cellipse cx='125.4' cy='47.0' rx='9.0' ry='5.0' transform='rotate%28338 125.4 47.0%29' fill='%23FFC93C'/%3E%3C/svg%3E") no-repeat; background-size:contain; opacity:.85; animation:radar 60s linear infinite}
+:root[data-look="diwali"] .hello::after{content:""; position:absolute; z-index:-1; left:-20px; right:-20px; bottom:-26px; height:26px;
+  background:radial-gradient(ellipse 9px 5px at 50% 72%, #C2410C 96%, transparent) 0 0 / 46px 26px repeat-x, radial-gradient(ellipse 3px 6px at 50% 34%, #FFC93C 90%, transparent) 0 0 / 46px 26px repeat-x;
+  filter:drop-shadow(0 0 6px rgba(255,176,0,.6))}
+:root[data-look="diwali"] :is(.robo .bubble,.widget,.extra,.card){box-shadow:0 0 0 1px #3A2A6A, 0 0 22px rgba(255,176,0,.08)}
+:root[data-look="diwali"] :is(.send,.primary){box-shadow:0 0 14px rgba(255,176,0,.45)}
+.pv.diwali{background:radial-gradient(circle at 50% 120%, #5A2E8A, #120B2E 70%)}
+.pv.diwali::after{content:""; position:absolute; left:0; right:0; top:2px; height:10px; background:radial-gradient(circle, #FFC93C 0 2.5px, transparent 3px) 0 0 / 12px 10px repeat-x}
+/* Festive Dad's moves */
+.bot .flame{transform-box:fill-box; transform-origin:50% 100%}
+.do-diya .mv-diya{animation:av-rise 3s ease-in-out}
+.do-diya .flame{animation:flicker .3s ease-in-out 10 alternate}
+@keyframes flicker{to{transform:scale(.85, 1.15) rotate(3deg)}}
+.do-sparkler .mv-spark{animation:av-pop 2.6s ease-in-out}
+.do-sparkler .mv-spark g{animation:spin .4s linear 6; transform-box:fill-box; transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.do-namaste .mv-namaste{animation:av-rise 2.8s ease-in-out}
+.do-namaste .hd{animation:av-bow 2.8s ease-in-out}
+@keyframes av-bow{0%,100%{transform:none} 30%,70%{transform:translateY(2px) rotate(0deg) scale(.98)}}
+
 /* ---------- Haunted House (Halloween, seasonal) ---------- */
 :root[data-look="halloween"] body{background:radial-gradient(ellipse at 85% -10%, #3A1F5C 0, transparent 55%), linear-gradient(#160D26, #0F0919) fixed}
 :root[data-look="halloween"] .top{background:rgba(22,13,38,.92); border-bottom:1px solid #3B2758; box-shadow:0 1px 0 rgba(255,122,26,.25)}
@@ -214,7 +280,7 @@ button,textarea{font:inherit;color:inherit}
 .do-bleh .hd{animation:av-hop 2.2s ease-out}
 
 /* ---------- Skate Park '99 ---------- */
-:root:is([data-look="skate"],[data-look="summer"],[data-look="halloween"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
+:root:is([data-look="skate"],[data-look="summer"],[data-look="halloween"],[data-look="bolly"],[data-look="diwali"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
 :root[data-look="skate"] body{background:#E7E3DA radial-gradient(rgba(0,0,0,.06) 1px, transparent 1.4px) 0 0 / 7px 7px fixed}
 :root[data-look="skate"] .top{position:relative; z-index:6; border-bottom:0}
 :root[data-look="skate"] .top::after{content:""; position:absolute; left:0; right:0; bottom:-7px; height:7px;
@@ -997,6 +1063,8 @@ textarea::placeholder{color:var(--muted)}
       <button class="chipbtn" type="button" role="radio" data-st="block" aria-checked="false">Block Party '03</button>
       <button class="chipbtn" type="button" role="radio" data-st="lobby" aria-checked="false">Respawn Lounge</button>
       <button class="chipbtn" type="button" role="radio" data-st="haunt" aria-checked="false">Haunted Hayride</button>
+      <button class="chipbtn" type="button" role="radio" data-st="filmi" aria-checked="false">Filmi Nights '75</button>
+      <button class="chipbtn" type="button" role="radio" data-st="diya" aria-checked="false">Diya Glow</button>
     </div>
     <label class="sr" for="radioVol">Volume</label>
     <input type="range" id="radioVol" min="0" max="100" value="35">
@@ -1096,7 +1164,15 @@ textarea::placeholder{color:var(--muted)}
         <span class="pv gamer"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-gamer"/></svg></span>
         <strong>Game Night '05</strong><small>Headset on, lobby loading</small>
       </button>
-      <button class="look" type="button" role="radio" data-look="halloween" aria-checked="false" hidden>
+      <button class="look" type="button" role="radio" data-look="bolly" aria-checked="false">
+        <span class="pv bolly"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-filmi"/></svg></span>
+        <strong>Bollywood '75</strong><small>Painted posters and filmi beats</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="diwali" data-season="diwali" aria-checked="false" hidden>
+        <span class="pv diwali"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-festive"/></svg></span>
+        <strong>Diwali Lights<span class="seasonal-tag">Diwali</span></strong><small>Lights, rangoli and diyas</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="halloween" data-season="halloween" aria-checked="false" hidden>
         <span class="pv halloween"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-dracula"/></svg></span>
         <strong>Haunted House<span class="seasonal-tag">Halloween</span></strong><small>Bats, moonlight and Count Dadcula</small>
       </button>
@@ -1180,8 +1256,8 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/radio.js?v=31"></script>
-<script src="/static/avatars.js?v=31"></script>
+<script src="/static/radio.js?v=33"></script>
+<script src="/static/avatars.js?v=33"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -1693,6 +1769,19 @@ const PLAYERS = {
     <rect x="17.5" y="20.5" width="13" height="13" rx="4.5" fill="#F2F7FB" stroke="#4D7699" stroke-width="1.2"/>
     <rect x="21.3" y="24.3" width="5.4" height="5.4" rx="1.8" fill="none" stroke="#9DB7CC" stroke-width="1"/>
     <path d="M15 4.5 Q24 3 33 4.5" stroke="#fff" stroke-width="1.2" opacity=".8" fill="none"/></svg>`,
+  bolly: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <path d="M30 34 C36 34 44 33 47 30" stroke="#2B1410" stroke-width="3" fill="none"/>
+    <path d="M30 34 C36 34 44 33 47 30" stroke="#C2185B" stroke-width="1.6" stroke-dasharray="2 2" fill="none"/>
+    <g class="spin"><circle cx="20" cy="20" r="16" fill="#3A3F4A" stroke="#2B1410" stroke-width="1.4"/>
+      <g fill="#FFF1D9"><circle cx="20" cy="10.5" r="3.6"/><circle cx="29" cy="17" r="3.6"/><circle cx="25.6" cy="27.8" r="3.6"/><circle cx="14.4" cy="27.8" r="3.6"/><circle cx="11" cy="17" r="3.6"/></g>
+      <circle cx="20" cy="20" r="2.4" fill="#FF9A1F" stroke="#2B1410" stroke-width=".8"/></g></svg>`,
+  diwali: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
+    <g class="waves" fill="none" stroke="#FFC93C" stroke-width="1.6" stroke-linecap="round"><path d="M8 12 L5 9"/><path d="M40 12 L43 9"/><path d="M24 4 V1"/></g>
+    <path d="M8 26 Q24 38 40 26 Q32 23 24 23 Q16 23 8 26Z" fill="#C2410C" stroke="#2A1600" stroke-width="1.4" stroke-linejoin="round"/>
+    <path d="M11.5 26.4 Q24 23.4 36.5 26.4" stroke="#FFD27A" stroke-width="1.2" fill="none"/>
+    <g fill="#FFD27A"><circle cx="16" cy="30" r="1"/><circle cx="24" cy="32" r="1"/><circle cx="32" cy="30" r="1"/></g>
+    <g class="glowface"><path d="M24 22 C20 17 22 11 24 7 C26 11 28 17 24 22Z" fill="#FFC93C" stroke="#FF7A1A" stroke-width="1"/><path d="M24 20 C22.5 17 23.2 14 24 12 C24.8 14 25.5 17 24 20Z" fill="#FFF4CF"/></g>
+    <path d="M24 22 C20 17 22 11 24 7 C26 11 28 17 24 22Z" fill="#FFC93C" stroke="#FF7A1A" stroke-width="1" opacity=".55"/></svg>`,
   halloween: (u) => `<svg viewBox="0 0 48 40" width="48" height="40">
     <path d="M24 10 C24 6.5 25.5 4.2 28.5 3" stroke="#3E7A2C" stroke-width="2.4" fill="none" stroke-linecap="round"/>
     <ellipse cx="24" cy="23.5" rx="19" ry="14.5" fill="#FF7A1A" stroke="#1A0B00" stroke-width="1.4"/>
@@ -1732,7 +1821,8 @@ const PLAYERS = {
   // ---------- looks ----------
   // ---------- avatars: a robot dad for each decade, with idle moves ----------
   // ---------- seasons: looks that switch on by themselves for a holiday ----------
-  const SEASONS = { halloween: { from:[10, 15], to:[11, 2] } };
+  const SEASONS = { halloween: { from:[10, 15], to:[11, 2], hello:"🎃 Happy Halloween! I dressed up. Change the look any time in ☰" },
+                    diwali: { from:[11, 5], to:[11, 12], hello:"🪔 Happy Diwali! I lit the diyas. Change the look any time in ☰" } };   // Diwali 2026 is Nov 8: update yearly
   const seasonForce = new URLSearchParams(location.search).get("season");   // ?season=halloween to preview, ?season=off to hide
   function seasonActive(name){
     if (seasonForce) return seasonForce === name;
@@ -1745,7 +1835,7 @@ const PLAYERS = {
   if (AV) AV.installSymbols(document.querySelector('svg[width="0"]'));
   const avKindFor = (look) => {
     const a = avPref !== "auto" && AV?.AVATARS[avPref];
-    if (a && !(a.seasonal && !seasonActive("halloween"))) return avPref;   // seasonal avatars go home after the holiday
+    if (a && !(a.season && !seasonActive(a.season))) return avPref;   // seasonal avatars go home after the holiday
     return AV?.LOOK_AVATAR[look] || "fifties";
   };
   function mountAvatar(look){
@@ -1770,7 +1860,7 @@ const PLAYERS = {
   }
   function renderAvPick(){
     $("avPick").innerHTML = `<button class="avb" type="button" role="radio" data-av="auto"><span class="auto">Auto</span><b>Match my look</b><small>Changes with it</small></button>` +
-      Object.entries(AV.AVATARS).filter(([k, a]) => (!a.secret || getPref("robodad.grandpa")) && (!a.seasonal || seasonActive("halloween"))).map(([k, a]) => `<button class="avb" type="button" role="radio" data-av="${k}"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-${k}"/></svg><b>${esc(a.name)}</b><small>${esc(a.era)}</small></button>`).join("");
+      Object.entries(AV.AVATARS).filter(([k, a]) => (!a.secret || getPref("robodad.grandpa")) && (!a.season || seasonActive(a.season))).map(([k, a]) => `<button class="avb" type="button" role="radio" data-av="${k}"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-${k}"/></svg><b>${esc(a.name)}</b><small>${esc(a.era)}</small></button>`).join("");
     $("avPick").querySelectorAll(".avb").forEach(b => b.setAttribute("aria-checked", String(b.dataset.av === avPref)));
   }
   // Easter egg: tap RoboDad 5 times quickly (or say "back in my day") to meet Robo-Grandpa
@@ -1808,8 +1898,8 @@ const PLAYERS = {
   }
 
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26" };
-  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block", halloween:"haunt" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26", bolly:"#C2185B", diwali:"#120B2E" };
+  const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block", halloween:"haunt", bolly:"filmi", diwali:"diya" };
   const WAKE_COPY = {
     diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
     y2k: "Dialing up at 56k… RoboDad will be ready in about 30 seconds.",
@@ -1817,6 +1907,8 @@ const PLAYERS = {
     gamer: "Finding a match… RoboDad will be ready in about 30 seconds.",
     summer: "Firing up the grill… RoboDad will be ready in about 30 seconds.",
     halloween: "Waking the dead… RoboDad will be ready in about 30 seconds.",
+    bolly: "Rolling the film reel… RoboDad will be ready in about 30 seconds.",
+    diwali: "Lighting the diyas… RoboDad will be ready in about 30 seconds.",
     other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
   };
   const menuDlg = $("menuDlg");
@@ -1851,15 +1943,19 @@ const PLAYERS = {
   $("menuDone").addEventListener("click", () => { closeMenu(); input.focus(); });
   menuDlg.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
   applyLook(getPref(LOOK_KEY) || "classic");
-  (function seasonal(){                        // Halloween look turns itself on once a season, and off after
-    const on = seasonActive("halloween"), look = getPref(LOOK_KEY) || "classic", flag = "robodad.season.halloween." + new Date().getFullYear();
-    menuDlg.querySelector('.look[data-look="halloween"]').hidden = !on;
-    if (on && !getPref(flag) && look !== "halloween") {
-      setPref(flag, look); applyLook("halloween");
-      setTimeout(() => { lookStation("halloween"); showCap("", "🎃 Happy Halloween! I dressed up. Change the look any time in ☰"); }, 2600);
-    } else if (!on && look === "halloween") {
-      const prev = getPref(flag) || getPref("robodad.season.halloween." + (new Date().getFullYear() - 1));
-      applyLook(prev && prev !== "halloween" ? prev : "classic");
+  (function seasonal(){                        // holiday looks turn themselves on once a season, and off after
+    const look = getPref(LOOK_KEY) || "classic", yr = new Date().getFullYear(); let switched = false;
+    for (const [name, se] of Object.entries(SEASONS)) {
+      const on = seasonActive(name), flag = `robodad.season.${name}.${yr}`;
+      const tile = menuDlg.querySelector(`.look[data-look="${name}"]`); if (tile) tile.hidden = !on;
+      if (on && !switched && !getPref(flag) && look !== name) {
+        switched = true; setPref(flag, look); applyLook(name);
+        setTimeout(() => lookStation(name), 0);                      // right after start-up finishes
+        setTimeout(() => showCap("", se.hello), 2600);
+      } else if (!on && look === name) {
+        const prev = getPref(flag) || getPref(`robodad.season.${name}.${yr - 1}`);
+        applyLook(prev && !SEASONS[prev] ? prev : "classic");
+      }
     }
   })();
   if (canSpeak) { $("readRow").hidden = false; $("voiceRow").hidden = false; fillVoices();
@@ -2370,7 +2466,8 @@ const PLAYERS = {
   if (!canSpeak) $("qVoiceWrap").hidden = true;
   // RoboDad "says" a word in his speech bubble during some idle moves
   const SAY = { gg:"GG!", oneup:"1UP!", wave:"Hey!", peace:"Peace!", fistbump:"Bump!", victory:"Yes!", dad:"#1!", tipcap:"Howdy!",
-    hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it.", glasses:"Hmm?", nap:"Zzz…", kids:"Kids these days!", bleh:"Bleh!", cape:"Good evening.", bat:"Eek!" };
+    hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it.", glasses:"Hmm?", nap:"Zzz…", kids:"Kids these days!", bleh:"Bleh!", cape:"Good evening.", bat:"Eek!",
+    windflip:"Wind on!", shimmy:"Let's dance!", dhishoom:"Dhishoom!", diya:"Let there be light.", sparkler:"Phataka!", namaste:"Happy Diwali!" };
   let sayTimer = null;
   function bubbleSay(move){
     const word = SAY[move]; if (!word || !$("bubCap").hidden || !$("qVoicePop").hidden) return;

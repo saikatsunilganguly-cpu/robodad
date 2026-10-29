@@ -9,7 +9,9 @@
  * "Half-Pipe '99", "Respawn Lounge" and "Block Party '03" are original loops in
  * the style of late-90s pop-punk, mid-2000s game-lobby electronica and
  * early-2000s boom-bap; "Haunted Hayride" is an original spooky tune for
- * Halloween. None of them borrow melodies from real songs.
+ * Halloween; "Filmi Nights '75" is an original 1970s Bollywood-style groove and
+ * "Diya Glow" a gentle festive tune for Diwali. None of them borrow melodies
+ * from real songs or films.
  *
  *   RoboRadio.play("lounge" | "canon" | "drive")
  *   RoboRadio.stop()
@@ -218,6 +220,39 @@
     o.connect(g); out(g, true); o.start(t); lfo.start(t); o.stop(end + 0.5); lfo.stop(end + 0.5);
   }
 
+  // Indian-style instruments, approximated with simple synthesis
+  function drum(t, freq, level, decay, bend = 0.6) {          // dholak/tabla-style tuned hit
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(freq, t); o.frequency.exponentialRampToValueAtTime(freq * bend, t + decay);
+    g.gain.setValueAtTime(level, t); g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+    o.connect(g); out(g); o.start(t); o.stop(t + decay + 0.02);
+  }
+  const dha = (t, l = 0.16) => { drum(t, 110, l, 0.32, 0.55); hit(t, { type: "bandpass", freq: 900, level: l * 0.18, decay: 0.05 }); };
+  const na = (t, l = 0.07) => { drum(t, 420, l, 0.12, 0.9); hit(t, { type: "highpass", freq: 3000, level: l * 0.25, decay: 0.03 }); };
+  function harmonium(notes, t, dur, level = 0.022) {             // reedy, slightly wavering drone
+    notes.forEach((n) => {
+      const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain(), l = ctx.createOscillator(), lg = ctx.createGain();
+      o.type = "square"; o.frequency.value = mtof(n); l.frequency.value = 4.5; lg.gain.value = 4; l.connect(lg).connect(o.detune);
+      f.type = "lowpass"; f.frequency.value = 1500; env(g, t, 0.15, level, 0.3, level * 0.85, 0.4, t + dur);
+      o.connect(f).connect(g); out(g); o.start(t); l.start(t); o.stop(t + dur + 0.5); l.stop(t + dur + 0.5);
+    });
+  }
+  function sitar(n, t, level = 0.05, slide = 0) {                // bright pluck with a little slide into the note
+    const o = ctx.createOscillator(), o2 = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = "sawtooth"; o2.type = "sawtooth"; o2.detune.value = 9;
+    [o, o2].forEach((x) => { x.frequency.setValueAtTime(mtof(n - slide), t); x.frequency.exponentialRampToValueAtTime(mtof(n), t + (slide ? 0.12 : 0.001)); });
+    f.type = "bandpass"; f.frequency.value = 1800; f.Q.value = 1.4;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.4);
+    o.connect(f); o2.connect(f); f.connect(g); out(g, true); o.start(t); o2.start(t); o.stop(t + 1.5); o2.stop(t + 1.5);
+  }
+  function bell(n, t, level = 0.04) {
+    [1, 2.76, 5.4].forEach((r, k) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = mtof(n) * r;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(level / (k + 1), t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 2.2 / (k + 1));
+      o.connect(g); out(g, true); o.start(t); o.stop(t + 2.3);
+    });
+  }
+
   // ---------- stations ----------
   const STATIONS = {
     // Lobby Lounge: smooth "elevator" jazz in F
@@ -392,6 +427,44 @@
       for (let k = 0; k < 8; k++) pluck(box[k % 4] + 12, t + k * b / 2, { type: "triangle", level: 0.035, decay: 0.9, cutoff: 4000, echo: k % 4 === 3 });
       if (i % 8 >= 4) theremin(this.tunes[i % 4], t, b, 0.05);
       softKick(t, 0.12); brush(t + 2 * b, 0.04);
+    },
+  };
+
+  // Filmi Nights '75: original 1970s Bollywood-style groove in D minor, dholak, harmonium, sitar and strings
+  STATIONS.filmi = {
+    name: "Filmi Nights '75", bpm: 104,
+    bars: [
+      { root: 38, chord: [62, 65, 69] }, // Dm
+      { root: 36, chord: [60, 64, 67] }, // C
+      { root: 34, chord: [58, 62, 65] }, // Bb
+      { root: 33, chord: [57, 61, 64] }, // A
+    ],
+    riffs: [[74, 75, 77, 74, 72, 74], [72, 74, 76, 72, 70, 72], [70, 72, 74, 70, 69, 70], [69, 70, 73, 76, 75, 73]],
+    play(i, t, b) {
+      const { root, chord } = this.bars[i % 4];
+      harmonium(chord.map((n) => n - 12), t, 4 * b, 0.03);
+      bass(root, t, b * 0.9, { level: 0.15, cutoff: 280 }); bass(root + 7, t + 2 * b, b * 0.9, { level: 0.12, cutoff: 280 });
+      [0, 1.5, 2, 3.5].forEach((p) => dha(t + p * b, p ? 0.2 : 0.26));       // keherwa-style feel
+      [0.5, 1, 2.5, 3, 3.75].forEach((p) => na(t + p * b, 0.1));
+      const r = this.riffs[i % 4];
+      if (i % 8 >= 2) r.forEach((n, k) => sitar(n, t + k * b * 0.66, 0.085, k === 0 ? 2 : 0));
+      if (i % 8 >= 4) pad(chord.map((n) => n + 12), t, 4 * b, { type: "sawtooth", cutoff: 2200, level: 0.026 });   // string swell
+    },
+  };
+  // Diya Glow: original gentle festive tune for Diwali, drone, santoor-like shimmer, bells and soft hand drum
+  STATIONS.diya = {
+    name: "Diya Glow", bpm: 80,
+    scale: [62, 64, 66, 69, 71, 74, 76, 78],   // D major pentatonic-ish, warm and bright
+    play(i, t, b) {
+      harmonium([50, 57], t, 4 * b, 0.03);                                     // Sa-Pa drone
+      bass(38, t, b * 3, { level: 0.13, cutoff: 220 });
+      for (let k = 0; k < 8; k++) {                                              // santoor shimmer: quick repeated plucks
+        const n = this.scale[(i * 3 + k * 2) % this.scale.length];
+        pluck(n, t + k * b / 2, { type: "triangle", level: 0.085, decay: 0.9, cutoff: 5000 });
+        if (k % 2) pluck(n, t + k * b / 2 + b / 8, { type: "triangle", level: 0.045, decay: 0.6, cutoff: 5000 });
+      }
+      if (i % 2 === 0) bell(86, t, 0.06); else bell(81, t + 2 * b, 0.05);
+      drum(t, 120, 0.16, 0.35, 0.6); drum(t + 2.5 * b, 120, 0.11, 0.3, 0.6); na(t + 1.5 * b, 0.06); na(t + 3 * b, 0.06);
     },
   };
 

@@ -176,7 +176,7 @@
       </g>`,
     },
     dracula: {
-      name: "Count Dadcula", era: "Halloween", seasonal: true, moves: ["cape", "bat", "bleh"],
+      name: "Count Dadcula", era: "Halloween", season: "halloween", moves: ["cape", "bat", "bleh"],
       svg: `<g class="collar2"><path d="M11 50 L3.5 28 L18.5 40 Z M53 50 L60.5 28 L45.5 40 Z" fill="#B3122E" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>
         <path d="M9 44 L5.5 32 M55 44 L58.5 32" stroke="#E04A64" stroke-width="1.2" opacity=".8"/></g>
       <g class="body">${torso("#16121F")}
@@ -192,6 +192,48 @@
         <path class="fangs" d="M28.3 40.5 L29.4 43.6 L30.5 40.9 Z M33.5 40.9 L34.6 43.6 L35.7 40.5 Z" fill="#fff" stroke="${INK}" stroke-width=".8" stroke-linejoin="round"/>
       </g>
       <path class="mv mv-bat" opacity="0" d="M0 0 C2 -3.5 4.5 -3.5 5.5 -1 C6.3 -3 7.7 -3 8.5 -1 C9.5 -3.5 12 -3.5 14 0 C12 -.6 10.5 1 9.3 2.2 C8.4 1.2 7.5 1.4 7 2.4 C6.5 1.4 5.6 1.2 4.7 2.2 C3.5 1 2 -.6 0 0Z" fill="#2A1F3D" stroke="#B3122E" stroke-width=".5"/>`,
+    },
+    filmi: {
+      name: "Filmi Hero Dad", era: "1970s", moves: ["windflip", "shimmy", "dhishoom"],
+      svg: `<g class="body">${torso("#C2185B")}
+        <g fill="#FFD27A"><circle cx="10" cy="59" r=".9"/><circle cx="14" cy="55" r=".9"/><circle cx="18" cy="61" r=".9"/><circle cx="50" cy="56" r=".9"/><circle cx="54" cy="60" r=".9"/><circle cx="46" cy="61" r=".9"/></g>
+        <path d="M23 49.5 L41 49.5 L35 64 L29 64Z" fill="#FFF3D6" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M23.5 49 L31 53 L23 61 L18.5 52Z M40.5 49 L33 53 L41 61 L45.5 52Z" fill="#FFF3D6" stroke="${INK}" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M32 54 V64" stroke="#E7C98E" stroke-width="1"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M13.5 25 L13.5 34 L16.5 34 L16.5 24Z M50.5 25 L50.5 34 L47.5 34 L47.5 24Z" fill="#2A1A12"/>
+        <g class="hair-f"><path d="M12.5 26 C9 17 14 6 25 5 C29 2.5 37 2.5 41 5 C52 6 56 16 51.5 26 C50 21 46 18.6 41 19 C38 15.5 34 15 31 17.5 C27.5 15 22 15.5 20 19.5 C16.5 20 14 22.5 12.5 26Z" fill="#2A1A12" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M19 11 C23 8 28 7.5 32 9 M35 9.5 C39 8 44 9.5 47 13" fill="none" stroke="#fff" stroke-width="1.3" opacity=".3" stroke-linecap="round"/></g>
+        ${eyes}${smile}
+      </g>
+      <g class="mv mv-wind" opacity="0" stroke="#F2B533" stroke-width="1.4" stroke-linecap="round" fill="none"><path d="M1 12 h9 M0 18 h12 M2 24 h8"/></g>
+      <g class="mv mv-punch" opacity="0"><rect x="49" y="40" width="12" height="10" rx="3.5" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
+        <path d="M52 40.5 v3.5 M55 40.5 v3.5 M58 40.5 v3.5" stroke="${INK}" stroke-width="1.2"/>
+        <path d="M44 45 h5" stroke="#C2185B" stroke-width="6" stroke-linecap="round"/></g>
+      <g class="mv mv-boom" opacity="0"><path d="M52 18 l3 5 5 -3 -1 6 6 1 -5 4 4 4 -6 0 1 6 -5 -4 -3 5 -2 -6 -6 2 3 -5 -5 -3 6 -1 -2 -6 5 3z" fill="#FFD23F" stroke="#C2185B" stroke-width="1.2" stroke-linejoin="round"/>
+        <text x="56" y="32" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="900" font-size="4.2" fill="#C2185B">DHISH!</text></g>`,
+    },
+    festive: {
+      name: "Festive Dad", era: "Diwali", season: "diwali", moves: ["diya", "sparkler", "namaste"],
+      svg: `<g class="body">${torso("#F2A01E")}
+        <path d="M27 49.5 h10 v3 h-10z" fill="#C2185B" stroke="${INK}" stroke-width="1.2"/>
+        <path d="M32 52.5 V64" stroke="#C2185B" stroke-width="2.4"/>
+        <g fill="#FFF3D6"><circle cx="32" cy="55.5" r=".8"/><circle cx="32" cy="58.5" r=".8"/><circle cx="32" cy="61.5" r=".8"/></g>
+        <path d="M8 60 q4 -3 8 0 M48 60 q4 -3 8 0" stroke="#C2185B" stroke-width="1.2" fill="none"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M14 26 C12.5 17 18 10.5 26 10 C31 7.5 40 8 45 11 C49.5 13.8 51.3 19.3 50 26 C48.5 21.5 45.5 19.6 40.5 19.6 L26 19.6 C20 19.6 15.5 21.8 14 26Z" fill="#2A1A12" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+        ${eyes}${smile}
+      </g>
+      <g class="mv mv-diya" opacity="0"><path d="M22 54 Q32 62 42 54 Q37 52 32 52 Q27 52 22 54Z" fill="#C2410C" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M24.5 54.3 Q32 52.6 39.5 54.3" stroke="#FFD27A" stroke-width="1" fill="none"/>
+        <path class="flame" d="M32 51.5 C30 49 31 46.5 32 44.5 C33 46.5 34 49 32 51.5Z" fill="#FFC93C" stroke="#FF7A1A" stroke-width=".8"/></g>
+      <g class="mv mv-spark" opacity="0"><path d="M55 48 L49 30" stroke="#8A8F98" stroke-width="1.4" stroke-linecap="round"/>
+        <g stroke="#FFD27A" stroke-width="1.1" stroke-linecap="round"><path d="M49 30 l-4 -3 M49 30 l1 -5 M49 30 l5 -2 M49 30 l-5 2 M49 30 l4 4 M49 30 l-3 4"/></g>
+        <circle cx="49" cy="30" r="1.6" fill="#fff"/></g>
+      <g class="mv mv-namaste" opacity="0"><path d="M27 64 L30.5 47 Q32 44.5 33.5 47 L37 64Z" fill="var(--metal)" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M32 46.5 V60" stroke="${INK}" stroke-width="1"/></g>`,
     },
     grandpa: {
       name: "Robo-Grandpa", era: "Secret", secret: true, moves: ["glasses", "nap", "kids"],
@@ -217,7 +259,7 @@
         <path d="M52.5 38.5 v3.5 M55 38.5 v3.5 M57.5 38.5 v3.5" stroke="${INK}" stroke-width="1.2"/></g>`,
     },
   };
-  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula" };
+  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula", bolly: "filmi", diwali: "festive" };
 
   function installSymbols(sprite){
     for (const [k, a] of Object.entries(AVATARS)) {
