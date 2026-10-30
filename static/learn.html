@@ -15,11 +15,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--sky:#E8EFF5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5A6B7E; --line:#D3DEE8; --denim:#2E5C8A; --mustard:#F2B533; --ok:#2F7D5B; --chip:#F4F7FA; color-scheme:light}
+:root{--sky:#E8EFF5; --surface:#FFFFFF; --ink:#1B2A3A; --muted:#5A6B7E; --line:#D3DEE8; --denim:#2E5C8A; --mustard:#F2B533; --ok:#2F7D5B; --chip:#F4F7FA; --metal:#C9D3DC; color-scheme:light}
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --chip:#22303E; color-scheme:dark}
+  :root:not([data-theme="light"]){--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --chip:#22303E; --metal:#7D8EA1; color-scheme:dark}
 }
-:root[data-theme="dark"]{--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --chip:#22303E; color-scheme:dark}
+:root[data-theme="dark"]{--sky:#101821; --surface:#1A2632; --ink:#E5EDF5; --muted:#9AAABB; --line:#2B3A49; --denim:#7FA9D6; --ok:#5FBF93; --chip:#22303E; --metal:#7D8EA1; color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0; background:var(--sky); color:var(--ink); font:17px/1.55 "Nunito", ui-rounded, system-ui, sans-serif}
 main{max-width:760px; margin:0 auto; padding:24px 16px 64px; display:flex; flex-direction:column; gap:18px}
@@ -52,6 +52,14 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
 .card{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:16px 18px}
 .card ul{margin:6px 0 0; padding-left:1.2em} .card li{margin-bottom:4px}
 .fine{font-size:.85rem; color:var(--muted); margin:0}
+.teachers{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px}
+@media (max-width:420px){ .teachers{grid-template-columns:repeat(2, 1fr)} }
+.teacher{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:10px 6px 10px; text-align:center}
+.teacher svg{width:64px; height:64px; overflow:visible; display:block; margin:0 auto 4px}
+.teacher b{display:block; font-size:.92rem; font-weight:900; line-height:1.2}
+.teacher small{display:block; color:var(--muted); font-size:.8rem; font-weight:700}
+.course .hd svg{width:40px; height:40px; flex:none; overflow:visible; margin:-4px 0 -6px}
+.course .hd .nm{display:flex; align-items:center; gap:8px}
 .thanks{font-size:.9rem; color:var(--ok); font-weight:800; min-height:1.4em; margin:0}
 </style>
 </head>
@@ -67,6 +75,15 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
     <h1>Learn with Dad</h1>
   </div>
   <p class="lede">Bite-size practice the way a good dad helps at the kitchen table: five phrases or one idea at a time, a quick quiz, then try it out. Every lesson earns badges in RoboDad.</p>
+
+  <h2>Meet your teachers</h2>
+  <div class="teachers" aria-label="RoboDad's teachers">
+    <div class="teacher"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-professor"/></svg><b>Professor Dad</b><small>Maths</small></div>
+    <div class="teacher"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-bookworm"/></svg><b>Bookworm Dad</b><small>Languages</small></div>
+    <div class="teacher"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-labdad"/></svg><b>Lab Dad</b><small>Science, soon</small></div>
+    <div class="teacher"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-coach"/></svg><b>Coach Dad</b><small>Badges and challenges</small></div>
+  </div>
+  <p class="why">Want the whole classroom? In the app, open the ☰ menu and pick a Teacher Dad look: Chalkboard, Science Lab, Library or Gym Class.</p>
 
   <h2>Languages for school</h2>
   <p class="why">French is part of school in Ontario, and Spanish is one of the most popular language options. A head start helps.</p>
@@ -99,14 +116,14 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
   <p class="why">Dad coaches, he doesn't do your homework. Hints first, then the steps, then you try the next one.</p>
   <div class="grid">
     <div class="course" id="mathCard">
-      <div class="hd"><b>Maths</b><span class="tag">New</span></div>
+      <div class="hd"><span class="nm"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-professor"/></svg><b>Maths</b></span><span class="tag">New</span></div>
       <p>Grades 7–10: integers, fractions, percent, equations, Pythagoras, slope, factoring, trig. Quiz answers are checked by hand.</p>
       <div class="bar" aria-hidden="true"><i id="mathBar"></i></div>
       <span class="meta" id="mathMeta">0 of 12 topics</span>
       <a class="btn" id="mathGo" href="/?learn=math">Start</a>
     </div>
     <div class="course soon">
-      <div class="hd"><b>Science</b><span class="tag">Coming soon</span></div>
+      <div class="hd"><span class="nm"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-labdad"/></svg><b>Science</b></span><span class="tag">Coming soon</span></div>
       <p>Physics, chemistry and biology basics, explained with everyday dad examples.</p>
       <button class="btn ghost" type="button" data-topic="science">I want this</button>
     </div>
@@ -131,8 +148,11 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
   <p class="fine">Badges show you've been practising. They aren't a fluency certificate. Dad's an AI and can slip up, so check anything important with a teacher. Parents: <a href="https://robodad.ca">here's how RoboDad keeps teens safe</a>. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
   <p class="fine">RoboDad™ and the RoboDad logo and characters are trademarks of Saikat Sunil Ganguly. © 2026 Saikat Sunil Ganguly. All rights reserved.</p>
 </main>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"></svg>
+<script src="/static/avatars.js?v=39"></script>
 <script>
 (function(){
+  try { window.RoboAvatars.installSymbols(document.querySelector('svg[width="0"]')); } catch (e) {}
   var COURSES = {
     school: [
       { id:"fr", name:"French", native:"Français", blurb:"Greetings, the café, school survival, getting around. Québec tips included." },
@@ -148,7 +168,7 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
   function card(c){
     var p = lp[c.id] || { done:[], rp:0 }, n = (p.done || []).length, pct = Math.round(n / 8 * 100);
     var label = n === 0 ? "Start" : n >= 8 ? "Practise again" : "Keep going";
-    return '<div class="course"><div class="hd"><b>' + esc(c.name) + '</b><span class="native"' + (c.id === "hi" ? ' lang="hi"' : ' lang="' + c.id + '"') + '>' + esc(c.native) + '</span></div>'
+    return '<div class="course"><div class="hd"><span class="nm"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#av-bookworm"/></svg><b>' + esc(c.name) + '</b></span><span class="native"' + (c.id === "hi" ? ' lang="hi"' : ' lang="' + c.id + '"') + '>' + esc(c.native) + '</span></div>'
       + '<p>' + esc(c.blurb) + '</p>'
       + '<div class="bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>'
       + '<span class="meta">' + n + ' of 8 lessons' + (p.rp ? ' · best role-play ' + (Number(p.rp) || 0) + ' messages' : '') + '</span>'

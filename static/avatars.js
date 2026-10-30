@@ -322,8 +322,112 @@
         <rect x="49.5" y="38" width="11" height="10" rx="3.5" fill="var(--metal)" stroke="${INK}" stroke-width="1.8"/>
         <path d="M52.5 38.5 v3.5 M55 38.5 v3.5 M57.5 38.5 v3.5" stroke="${INK}" stroke-width="1.2"/></g>`,
     },
+
+    // ---------- Teacher Dads (the learning looks) ----------
+    professor: {
+      name: "Professor Dad", era: "Maths", moves: ["specs", "chalk", "idea"],
+      svg: `<g class="body">${torso("#7A5A3C")}
+        <path d="M6 60 L12 56 M9 63 L15 59 M50 56 L56 60 M49 59 L55 63" stroke="#5E4329" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="M24.5 49.6 L32 58 L39.5 49.6Z" fill="#fff" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M21 49.5 L27.5 60 L24 64 M43 49.5 L36.5 60 L40 64" fill="none" stroke="#4A3422" stroke-width="1.6" stroke-linejoin="round"/>
+      </g>${neck}
+      <path d="M32 53.8 L25.8 50.4 L25.8 57.2Z M32 53.8 L38.2 50.4 L38.2 57.2Z" fill="#C8102E" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>
+      <circle cx="32" cy="53.8" r="2" fill="#9E0C24" stroke="${INK}" stroke-width="1.1"/>
+      <g class="hd">${head}
+        <path d="M20 19.5 Q26 17 31.5 18" stroke="#fff" stroke-width="1.7" opacity=".6" fill="none" stroke-linecap="round"/>
+        <path d="M13 20.5 C8.5 19.5 6.8 24 9.3 26.5 C6.8 28.4 8.5 33 13 31.6Z M51 20.5 C55.5 19.5 57.2 24 54.7 26.5 C57.2 28.4 55.5 33 51 31.6Z" fill="#D9DCE0" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M17.5 24 C20 21.8 25 21.8 27.8 23.8 M36.2 23.8 C39 21.8 44 21.8 46.5 24" stroke="${INK}" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <path d="M17.5 24 C20 21.8 25 21.8 27.8 23.8 M36.2 23.8 C39 21.8 44 21.8 46.5 24" stroke="#D9DCE0" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+        ${eyes}
+        <g class="pspecs"><circle cx="23" cy="30.5" r="5.4" fill="#fff" fill-opacity=".15" stroke="#C99A2E" stroke-width="1.7"/><circle cx="41" cy="30.5" r="5.4" fill="#fff" fill-opacity=".15" stroke="#C99A2E" stroke-width="1.7"/>
+          <path d="M28.4 30 Q32 28.2 35.6 30" fill="none" stroke="#C99A2E" stroke-width="1.6"/>
+          <path class="glint" d="M19.8 28.5 L21.6 27 M37.8 28.5 L39.6 27" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".8"/></g>
+        ${smile}
+      </g>
+      <g class="mv mv-chalk" opacity="0"><text x="3" y="15" font-family="'Gochi Hand', cursive" font-size="15" fill="#F7D54A" stroke="${INK}" stroke-width=".5">π</text>
+        <rect x="52" y="36" width="9" height="3.2" rx="1" fill="#fff" stroke="${INK}" stroke-width="1" transform="rotate(-35 56.5 37.6)"/></g>
+      <g class="mv mv-bulb" opacity="0"><circle cx="53" cy="9" r="5.4" fill="#FFE066" stroke="${INK}" stroke-width="1.5"/>
+        <rect x="50.6" y="13.6" width="4.8" height="3.4" rx="1" fill="#B8C1CA" stroke="${INK}" stroke-width="1.2"/>
+        <path d="M53 1 V-1.5 M45.5 4 L43.8 2.2 M60.5 4 L62.2 2.2" stroke="#F2B533" stroke-width="1.4" stroke-linecap="round"/></g>`,
+    },
+    labdad: {
+      name: "Lab Dad", era: "Science", moves: ["goggles", "beaker", "poof"],
+      svg: `<g class="body">${torso("#F4F7F8")}
+        <path d="M24 49.6 L32 57.5 L40 49.6Z" fill="#7B3FE4" stroke="${INK}" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M23 49.5 L28.5 64 M41 49.5 L35.5 64" stroke="${INK}" stroke-width="1.5" fill="none"/>
+        <rect x="12" y="55" width="8" height="6.5" rx="1" fill="#E6ECEF" stroke="${INK}" stroke-width="1.2"/>
+        <path d="M14 55 V51.5 M16.5 55 V52.3 M18.5 55 V51.2" stroke-width="1.6" stroke-linecap="round" stroke="#12B5A0"/><path d="M16.5 55 V52.3" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round"/>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M13 25 L8.5 18.5 L14.5 19 L12 11 L19.5 14 L20 5.5 L26.5 11 L32 2.5 L37.5 11 L44 5.5 L44.5 14 L52 11 L49.5 19 L55.5 18.5 L51 25 C48 21.2 44.5 19.6 40.5 19.6 L23.5 19.6 C19.5 19.6 16 21.2 13 25Z" fill="#F2F2F2" stroke="${INK}" stroke-width="1.8" stroke-linejoin="round"/>
+        ${eyes}${smile}
+        <g class="goggles"><path d="M11.5 21 H52.5" stroke="#12B5A0" stroke-width="3"/>
+          <rect x="16.5" y="15.5" width="13" height="10" rx="4.5" fill="#BDF3EC" fill-opacity=".8" stroke="${INK}" stroke-width="1.6"/>
+          <rect x="34.5" y="15.5" width="13" height="10" rx="4.5" fill="#BDF3EC" fill-opacity=".8" stroke="${INK}" stroke-width="1.6"/>
+          <path d="M19 18.5 L22 17.5 M37 18.5 L40 17.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></g>
+      </g>
+      <g class="mv mv-beaker" opacity="0"><path d="M50 38 H58 M51.5 38 V44 L46.5 56 Q46 58.5 48.5 58.5 H59.5 Q62 58.5 61.5 56 L56.5 44 V38" fill="#fff" fill-opacity=".9" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M48.6 51 H59.4 L61.4 56 Q61.8 58.5 59.5 58.5 H48.5 Q46.2 58.5 46.6 56Z" fill="#7B3FE4"/>
+        <g class="bubs"><circle cx="52" cy="47" r="1.4" fill="#7B3FE4"/><circle cx="55.5" cy="43" r="1.1" fill="#7B3FE4"/><circle cx="53.5" cy="34" r="1.6" fill="#B79BFF"/></g></g>
+      <g class="mv mv-poof" opacity="0"><g fill="#C9CED6" stroke="${INK}" stroke-width="1.2"><circle cx="24" cy="9" r="5"/><circle cx="32" cy="6" r="6.5"/><circle cx="40" cy="9" r="5"/></g>
+        <path d="M27 13 Q32 15 37 13" fill="#C9CED6"/><g fill="#5B6470"><circle cx="20" cy="27" r="1"/><circle cx="44" cy="25" r="1"/><circle cx="31" cy="21.5" r=".9"/></g></g>`,
+    },
+    bookworm: {
+      name: "Bookworm Dad", era: "Languages", moves: ["book", "tea", "shh"],
+      svg: `<g class="body">${torso("#4E7A5F")}
+        <path d="M24.5 49.6 L32 64 L39.5 49.6Z" fill="#DCE8F2" stroke="${INK}" stroke-width="1.3" stroke-linejoin="round"/>
+        <path d="M24.5 49.6 L32 53 L28.5 56 Z M39.5 49.6 L32 53 L35.5 56Z" fill="#fff" stroke="${INK}" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M32 53 L30 55.5 L31.4 64 H32.6 L34 55.5Z" fill="#8C2F39" stroke="${INK}" stroke-width="1.1" stroke-linejoin="round"/>
+        <g fill="#C9B07A" stroke="${INK}" stroke-width=".6"><circle cx="22.6" cy="57" r="1.1"/><circle cx="23.6" cy="61.5" r="1.1"/><circle cx="41.4" cy="57" r="1.1"/><circle cx="40.4" cy="61.5" r="1.1"/></g>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M14 26.5 C12.5 18 17.5 11 26 10 C31 7.8 40 8.2 45 11.2 C49.5 14 51.2 19.5 50 26.5 C48.5 22 45.5 19.6 40.5 19.6 L30 19.6 C27 17 22 17 19 19.6 C16.5 21 15 23.5 14 26.5Z" fill="#6B4A32" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M29.5 10.2 C35 11 40.5 14 43 19.4" stroke="#C9CDD2" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        ${eyes}
+        <path d="M17.5 32 H28.5 Q28.5 36.5 23 36.5 Q17.5 36.5 17.5 32Z M35.5 32 H46.5 Q46.5 36.5 41 36.5 Q35.5 36.5 35.5 32Z" fill="#fff" fill-opacity=".25" stroke="#8C2F39" stroke-width="1.5"/>
+        <path d="M28.5 32.5 Q32 31 35.5 32.5" stroke="#8C2F39" stroke-width="1.4" fill="none"/>
+        <path d="M17.5 33 Q11 41 19 49 M46.5 33 Q53 41 45 49" stroke="#C99A2E" stroke-width="1.1" stroke-dasharray="1.6 1.4" fill="none"/>
+        <path class="mouth" d="M26 41 Q32 44 38 41" fill="none" stroke="${INK}" stroke-width="2.4" stroke-linecap="round"/>
+      </g>
+      <g class="mv mv-book" opacity="0"><path d="M32 47 C27 44.5 21.5 44.5 17 46.5 V58 C21.5 56 27 56 32 58.5 C37 56 42.5 56 47 58 V46.5 C42.5 44.5 37 44.5 32 47Z" fill="#FFFBF2" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M32 47 V58.5" stroke="${INK}" stroke-width="1.2"/><path d="M20 49.5 H29 M20 52.5 H29 M35 49.5 H44 M35 52.5 H44" stroke="#8C7A66" stroke-width="1"/>
+        <path d="M17 58 C21.5 56 27 56 32 58.5 C37 56 42.5 56 47 58 V60 H17Z" fill="#8C2F39" stroke="${INK}" stroke-width="1.2"/></g>
+      <g class="mv mv-tea" opacity="0"><path d="M36 37 h10 v8 a3 3 0 0 1 -3 3 h-4 a3 3 0 0 1 -3 -3z" fill="#fff" stroke="${INK}" stroke-width="1.6"/>
+        <path d="M46 39 h1.5 a2.2 2.2 0 0 1 0 4.4 H46" fill="none" stroke="${INK}" stroke-width="1.6"/>
+        <path d="M41 37 V43" stroke="#C9B07A" stroke-width=".9"/><rect x="39.6" y="43" width="2.8" height="3" fill="#8C2F39"/>
+        <path d="M39 34.5 c-1 -1.2 1 -2 0 -3.4 M42.5 34.5 c-1 -1.2 1 -2 0 -3.4" stroke="#8796A5" stroke-width="1.1" fill="none" stroke-linecap="round"/></g>
+      <g class="mv mv-shh" opacity="0"><rect x="29.6" y="33" width="4.8" height="15" rx="2.4" fill="var(--metal)" stroke="${INK}" stroke-width="1.5"/>
+        <rect x="26" y="45" width="12" height="9" rx="3.5" fill="var(--metal)" stroke="${INK}" stroke-width="1.6"/></g>`,
+    },
+    coach: {
+      name: "Coach Dad", era: "Gym", moves: ["whistle", "clipboard", "stopwatch"],
+      svg: `<g class="body">${torso("#1F2F5C")}
+        <path d="M5.5 60 L14 51.8 M58.5 60 L50 51.8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M27 49.6 L32 52.5 L37 49.6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M32 52.5 V64" stroke="#C9D3DC" stroke-width="1.3"/>
+        <path d="M22.5 49.6 Q32 61 41.5 49.6" fill="none" stroke="#C8102E" stroke-width="1.6"/>
+        <g class="lwhistle"><rect x="29.5" y="54.5" width="6" height="3.6" rx="1.6" fill="#C9D3DC" stroke="${INK}" stroke-width="1.1"/><circle cx="30.6" cy="56.3" r="1" fill="${INK}"/></g>
+      </g>${neck}
+      <g class="hd">${head}
+        <path d="M15 24 C14 28 14.5 30.5 16 32 L18 24Z M49 24 C50 28 49.5 30.5 48 32 L46 24Z" fill="#5A3A22" stroke="${INK}" stroke-width="1.1"/>
+        ${eyes}
+        <path d="M24.5 37.5 Q28.5 34.6 32 36.6 Q35.5 34.6 39.5 37.5 Q35.5 39.6 32 38.4 Q28.5 39.6 24.5 37.5Z" fill="#5A3A22" stroke="${INK}" stroke-width="1" stroke-linejoin="round"/>
+        <path class="mouth" d="M27 41 Q32 44 37 41" fill="none" stroke="${INK}" stroke-width="2.2" stroke-linecap="round"/>
+        <g class="ccap"><path d="M12.5 23 C11.5 10.5 20 4.5 32 4.5 C44 4.5 52.5 10.5 51.5 23Z" fill="#C8102E" stroke="${INK}" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M32 4.5 C30 10 29.5 16 30 23 M32 4.5 C34 10 34.5 16 34 23" stroke="#9E0C24" stroke-width="1.1" fill="none"/>
+          <path d="M11.5 22.5 Q32 26.5 52.5 22.5 L52 25.5 Q32 29.5 12 25.5Z" fill="#9E0C24" stroke="${INK}" stroke-width="1.6" stroke-linejoin="round"/>
+          <text x="32" y="17.5" text-anchor="middle" font-family="Graduate, 'Nunito', sans-serif" font-size="9" fill="#fff">D</text></g>
+      </g>
+      <g class="mv mv-whistle" opacity="0"><rect x="28" y="37.5" width="9" height="5" rx="2.2" fill="#C9D3DC" stroke="${INK}" stroke-width="1.3"/>
+        <path d="M39.5 36 L44 33.5 M40 40 H45.5 M39.5 44 L44 46.5" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round"/></g>
+      <g class="mv mv-clip" opacity="0"><rect x="46" y="36" width="15" height="21" rx="2" fill="#B07A44" stroke="${INK}" stroke-width="1.6"/>
+        <rect x="48" y="40" width="11" height="15" fill="#fff" stroke="${INK}" stroke-width=".8"/><rect x="50.5" y="34.5" width="6" height="3.6" rx="1" fill="#C9D3DC" stroke="${INK}" stroke-width="1"/>
+        <path d="M49.5 44 l1.5 1.5 l3 -3 M49.5 49.5 l1.5 1.5 l3 -3" stroke="#2E8B57" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M55.5 44.5 H58 M55.5 50 H58" stroke="#8796A5" stroke-width="1"/></g>
+      <g class="mv mv-watch" opacity="0"><circle cx="53" cy="11" r="7" fill="#fff" stroke="${INK}" stroke-width="1.6"/><rect x="51.5" y="1.5" width="3" height="2.6" fill="#C9D3DC" stroke="${INK}" stroke-width="1"/>
+        <path class="hand" d="M53 11 V6.2" stroke="#C8102E" stroke-width="1.6" stroke-linecap="round"/><circle cx="53" cy="11" r="1" fill="${INK}"/></g>`,
+    },
   };
-  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula", bolly: "filmi", diwali: "festive", winter: "cozy", lunar: "lucky", eid: "eiddad" };
+  const LOOK_AVATAR = { classic: "modern", arcade: "eighties", vhs: "nineties", y2k: "y2k", diner: "fifties", skate: "skater", gamer: "gamer", summer: "bucket", halloween: "dracula", bolly: "filmi", diwali: "festive", winter: "cozy", lunar: "lucky", eid: "eiddad", chalk: "professor", lab: "labdad", library: "bookworm", gym: "coach" };
 
   function installSymbols(sprite){
     for (const [k, a] of Object.entries(AVATARS)) {

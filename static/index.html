@@ -14,7 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="RoboDad">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Bungee&family=Creepster&family=Rozha+One&family=Sniglet:wght@800&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Bungee&family=Creepster&family=Rozha+One&family=Sniglet:wght@800&family=Comfortaa:wght@500;700&family=Graduate&family=Lobster&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@600;800&family=Permanent+Marker&family=Righteous&family=Gochi+Hand&family=Fredoka:wght@500;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
 <script>try{var l=localStorage.getItem("robodad.look");if(l)document.documentElement.dataset.look=l;}catch(e){}</script>
 <style>
 :root{
@@ -114,6 +114,31 @@
   --denim:#F5C04A; --denim-ink:#3A0A06; --mustard:#F5C04A; --mustard-ink:#3A0A06;
   --metal:#7E6670; --alert:#FFD27A; --ok:#F5C04A; --glow:color-mix(in srgb, #F5C04A 45%, transparent);
   --display:"Rozha One", "Nunito", serif; color-scheme:dark;
+}
+:root[data-look="chalk"]{
+  --sky:#22382E; --surface:#2B4638; --ink:#F3F1E7; --muted:#B9C7B8; --line:#41604F;
+  --denim:#F7D54A; --denim-ink:#1F2A20; --mustard:#F28CB1; --mustard-ink:#2A0E18;
+  --metal:#9FB2A6; --alert:#FF8A7A; --ok:#A5E07A; --jacket:#1A2B22; --jacket2:#24382D; --hair:#1A2B22; --lens:#0E1913;
+  --glow:color-mix(in srgb, #F7D54A 30%, transparent);
+  --display:"Gochi Hand", "Nunito", cursive; color-scheme:dark;
+}
+:root[data-look="lab"]{
+  --sky:#E8F6F3; --surface:#FFFFFF; --ink:#10343A; --muted:#4B6B70; --line:#B7E1DA;
+  --denim:#7B3FE4; --denim-ink:#FFFFFF; --mustard:#12B5A0; --mustard-ink:#FFFFFF;
+  --metal:#CBD8DD; --alert:#C2413A; --ok:#0E8F7E; --glow:color-mix(in srgb, #12B5A0 35%, transparent);
+  --display:"Fredoka", "Nunito", sans-serif; color-scheme:light;
+}
+:root[data-look="library"]{
+  --sky:#F4ECDD; --surface:#FFFBF2; --ink:#2A1B14; --muted:#6E5646; --line:#E2D2B8;
+  --denim:#8C2F39; --denim-ink:#FFFFFF; --mustard:#2F6E5B; --mustard-ink:#FFFFFF;
+  --metal:#D6D9DC; --alert:#B3412E; --ok:#2F6E5B; --glow:color-mix(in srgb, #C99A2E 30%, transparent);
+  --display:"Playfair Display", Georgia, serif; color-scheme:light;
+}
+:root[data-look="gym"]{
+  --sky:#F1DDB5; --surface:#FFFFFF; --ink:#14213D; --muted:#4A5568; --line:#E0C391;
+  --denim:#C8102E; --denim-ink:#FFFFFF; --mustard:#14213D; --mustard-ink:#FFFFFF;
+  --metal:#CDD5DD; --alert:#B3412E; --ok:#2E8B57; --glow:color-mix(in srgb, #C8102E 25%, transparent);
+  --display:"Graduate", "Nunito", serif; color-scheme:light;
 }
 :root[data-look="eid"]{
   --sky:#0B2A33; --surface:#11404C; --ink:#F4FBF8; --muted:#A8CFC6; --line:#1E5B68;
@@ -387,6 +412,69 @@ button,textarea{font:inherit;color:inherit}
 :root[data-look="skate"] :is(.send,.primary):active{transform:translate(2px,2px); box-shadow:1px 1px 0 #1C1C1C}
 .pv.skate{background:#E7E3DA radial-gradient(rgba(0,0,0,.08) 1px, transparent 1.4px) 0 0 / 6px 6px}
 .pv.skate::after{content:""; position:absolute; right:-6px; bottom:-4px; width:64px; height:36px; background:radial-gradient(130% 150% at 0 0, transparent 61%, #1C1C1C 61.5%, #1C1C1C 65%, #BDB6A8 65.5%)}
+/* ---------- Teacher Dads: Chalkboard, Science Lab, Library, Gym Class ---------- */
+:root:is([data-look="chalk"],[data-look="gym"]) :is(.top h1,.hello h2,.card h2,.side-head h2,.widget > b,.widget .w-title,.extra b,.belt-rank,.timer,.reveal h2,.big-num){font-weight:400}
+:root[data-look="chalk"] body{background:radial-gradient(ellipse at 18% 28%, rgba(255,255,255,.06), transparent 42%), radial-gradient(ellipse at 82% 72%, rgba(255,255,255,.045), transparent 46%), #22382E fixed}
+:root[data-look="chalk"] .top{border-bottom:7px solid #8B5A2B; box-shadow:0 2px 0 #5E3C1C}
+:root[data-look="chalk"] .hello h2{letter-spacing:.01em; line-height:1.12; font-size:clamp(2rem, 6.4vw, 2.9rem)}
+:root[data-look="chalk"] .hello::before{content:"a² + b² = c²"; position:absolute; z-index:-1; top:6px; right:2px; transform:rotate(-7deg);
+  font:400 1.45rem/1 "Gochi Hand", cursive; color:rgba(243,241,231,.32)}
+:root[data-look="chalk"] .hello::after{content:"π ≈ 3.14   ✓ A+"; position:absolute; z-index:-1; right:8px; bottom:-26px; transform:rotate(4deg);
+  font:400 1.2rem/1 "Gochi Hand", cursive; color:rgba(247,213,74,.4)}
+:root[data-look="chalk"] .robo .bubble{border:1.5px dashed rgba(243,241,231,.35)}
+:root[data-look="lab"] body{background:linear-gradient(rgba(18,181,160,.08) 1px, transparent 1px) 0 0 / 34px 34px, linear-gradient(90deg, rgba(18,181,160,.08) 1px, transparent 1px) 0 0 / 34px 34px, #E8F6F3 fixed}
+:root[data-look="lab"] .top{border-bottom:2px solid #B7E1DA}
+:root[data-look="lab"] .hello h2{font-weight:700; letter-spacing:-.01em}
+:root[data-look="lab"] .hello::before{content:"86\A Da\A Dadium"; white-space:pre; position:absolute; z-index:-1; top:4px; right:6px; transform:rotate(6deg);
+  font:700 .85rem/1.2 "Fredoka", sans-serif; color:#7B3FE4; text-align:center; background:#fff; border:2.5px solid #7B3FE4; border-radius:10px; padding:7px 12px; box-shadow:4px 4px 0 #12B5A0}
+:root[data-look="lab"] .hello::after{content:""; position:absolute; z-index:-1; right:-10px; bottom:-30px; width:150px; height:90px;
+  background:radial-gradient(circle at 20% 70%, rgba(123,63,228,.18) 0 9px, transparent 10px), radial-gradient(circle at 45% 35%, rgba(18,181,160,.2) 0 13px, transparent 14px), radial-gradient(circle at 75% 60%, rgba(123,63,228,.14) 0 7px, transparent 8px), radial-gradient(circle at 88% 20%, rgba(18,181,160,.16) 0 5px, transparent 6px)}
+:root[data-look="library"] body{background:repeating-linear-gradient(transparent 0 31px, rgba(140,47,57,.06) 31px 32px), #F4ECDD fixed}
+:root[data-look="library"] .top{border-bottom:4px double #8C2F39}
+:root[data-look="library"] .hello h2{font-weight:800; letter-spacing:-.01em}
+:root[data-look="library"] .hello::before{content:"Bonjour · Hola · Namaste"; position:absolute; z-index:-1; top:8px; right:0; transform:rotate(-4deg);
+  font:italic 700 1.05rem/1 "Playfair Display", Georgia, serif; color:rgba(140,47,57,.38)}
+:root[data-look="library"] .hello::after{content:""; position:absolute; z-index:-1; right:-12px; bottom:-34px; width:min(260px, 60%); height:36px; opacity:.6;
+  background:repeating-linear-gradient(90deg, #8C2F39 0 9px, #2F6E5B 9px 17px, #C99A2E 17px 23px, #4E3B2E 23px 31px, transparent 31px 34px); border-bottom:5px solid #6E5646;
+  -webkit-mask-image:linear-gradient(to left, #000 55%, transparent); mask-image:linear-gradient(to left, #000 55%, transparent)}
+:root[data-look="library"] .robo .bubble{border-left:4px solid #8C2F39}
+:root[data-look="gym"] body{background:repeating-linear-gradient(90deg, rgba(150,100,40,.11) 0 2px, transparent 2px 46px), linear-gradient(#F1DDB5, #EACB94) fixed}
+:root[data-look="gym"] .top{border-bottom:5px solid #C8102E; box-shadow:0 5px 0 #14213D}
+:root[data-look="gym"] .hello h2{letter-spacing:.02em; line-height:1.15}
+:root[data-look="gym"] .hello::before{content:"GO TEAM DAD"; position:absolute; z-index:-1; top:14px; right:0; transform:rotate(-5deg);
+  font:400 .85rem/1 "Graduate", serif; color:#fff; background:#C8102E; padding:8px 26px 8px 12px; clip-path:polygon(0 0, 100% 0, 88% 50%, 100% 100%, 0 100%)}
+:root[data-look="gym"] .hello::after{content:""; position:absolute; z-index:-1; right:-16px; bottom:-34px; width:min(240px, 58%); height:120px;
+  background:radial-gradient(circle at 100% 100%, transparent 58%, rgba(255,255,255,.95) 58.6% 61.4%, transparent 62%)}
+:root[data-look="gym"] :is(.send,.primary){text-transform:uppercase; letter-spacing:.04em}
+.pv.chalk{background:#22382E}
+.pv.chalk::before{content:"1+1=2"; position:absolute; left:8px; top:4px; font:400 15px/1 "Gochi Hand", cursive; color:rgba(243,241,231,.55)}
+.pv.chalk::after{content:""; position:absolute; left:0; right:0; bottom:0; height:7px; background:#8B5A2B}
+.pv.lab{background:linear-gradient(rgba(18,181,160,.14) 1px, transparent 1px) 0 0 / 14px 14px, linear-gradient(90deg, rgba(18,181,160,.14) 1px, transparent 1px) 0 0 / 14px 14px, #E8F6F3}
+.pv.lab::after{content:"Da"; position:absolute; right:7px; top:5px; font:700 12px/1 "Fredoka", sans-serif; color:#7B3FE4; border:2px solid #7B3FE4; border-radius:5px; padding:3px 4px; background:#fff}
+.pv.library{background:#F4ECDD}
+.pv.library::after{content:""; position:absolute; left:0; right:0; bottom:0; height:16px; background:repeating-linear-gradient(90deg, #8C2F39 0 6px, #2F6E5B 6px 11px, #C99A2E 11px 15px, #4E3B2E 15px 20px, transparent 20px 22px); border-bottom:3px solid #6E5646}
+.pv.gym{background:repeating-linear-gradient(90deg, rgba(150,100,40,.16) 0 2px, transparent 2px 18px), #F1DDB5}
+.pv.gym::after{content:""; position:absolute; left:0; right:0; top:0; height:7px; background:#C8102E; box-shadow:0 3px 0 #14213D}
+.looks-head{grid-column:1 / -1; margin:6px 0 -2px; font-weight:900; font-size:.9rem; color:var(--muted); letter-spacing:.04em; text-transform:uppercase}
+/* teacher moves */
+.bot .pspecs,.bot .goggles,.bot .ccap,.bot .bubs,.bot .hand{transform-box:fill-box}
+.bot .hand{transform-origin:50% 100%}
+@keyframes av-tpop{0%{opacity:0; transform:scale(.4)} 18%{opacity:1; transform:scale(1.12)} 28%,82%{opacity:1; transform:scale(1)} 100%{opacity:0; transform:scale(.6)}}
+@keyframes av-specs{0%,100%{transform:none} 20%,38%{transform:translateY(3px)} 52%,85%{transform:translateY(-1px)}}
+@keyframes av-goggles{0%,100%{transform:none} 25%,75%{transform:translateY(10px)}}
+@keyframes av-bubs{0%{transform:none; opacity:1} 100%{transform:translateY(-8px); opacity:0}}
+.do-specs .pspecs{animation:av-specs 2.2s ease-in-out} .do-specs .hd{animation:av-look 2.2s ease-in-out}
+.do-chalk .mv-chalk{animation:av-tpop 2.6s ease-in-out}
+.do-idea .mv-bulb{animation:av-tpop 2.4s ease-in-out} .do-idea .hd{animation:av-hop 2.4s ease-out}
+.do-goggles .goggles{animation:av-goggles 2.6s ease-in-out}
+.do-beaker .mv-beaker{animation:av-tpop 2.8s ease-in-out} .do-beaker .bubs{animation:av-bubs .9s ease-in 3}
+.do-poof .mv-poof{animation:av-tpop 2.4s ease-out} .do-poof .hd{animation:av-hop 2.4s ease-out}
+.do-book .mv-book{animation:av-tpop 2.8s ease-in-out}
+.do-tea .mv-tea{animation:av-tpop 2.6s ease-in-out}
+.do-shh .mv-shh{animation:av-tpop 2.2s ease-in-out}
+.do-whistle .mv-whistle{animation:av-tpop 2s ease-in-out} .do-whistle .hd{animation:av-hop 2s ease-out}
+.do-clipboard .mv-clip{animation:av-tpop 2.6s ease-in-out}
+.do-stopwatch .mv-watch{animation:av-tpop 2.8s ease-in-out} .do-stopwatch .hand{animation:spin .7s linear 4}
 /* ---------- Game Night '05 ---------- */
 :root[data-look="gamer"] body{background:radial-gradient(ellipse at 50% -10%, #133048 0, transparent 60%),
   repeating-linear-gradient(0deg, rgba(57,255,136,.035) 0 1px, transparent 1px 28px), repeating-linear-gradient(90deg, rgba(57,255,136,.035) 0 1px, transparent 1px 28px), #0A0E14 fixed}
@@ -863,6 +951,7 @@ details.why[open] summary::before{content:"–"}
 .chip.lang-chip{border-style:dashed}
 .lang-card{width:min(560px, 100%)}
 .lang-top{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.teach-h{display:flex; align-items:center; gap:10px} .teach-h svg{width:46px; height:46px; flex:none; overflow:visible} .teach-h small{display:block; font-size:.8rem; font-weight:700; color:var(--muted); font-family:"Nunito", sans-serif}
 .lang-tabs{display:flex; gap:6px}
 .lang-tabs button{flex:1; border:1.5px solid var(--line); background:transparent; color:var(--ink); border-radius:12px; padding:9px; font:inherit; font-weight:900; cursor:pointer}
 .lang-tabs button[aria-selected="true"]{background:var(--denim); border-color:var(--denim); color:var(--denim-ink)}
@@ -1360,6 +1449,23 @@ textarea::placeholder{color:var(--muted)}
         <span class="pv halloween"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-dracula"/></svg></span>
         <strong>Haunted House<span class="seasonal-tag">Halloween</span></strong><small>Bats, moonlight and Count Dadcula</small>
       </button>
+      <p class="looks-head">Teacher Dads</p>
+      <button class="look" type="button" role="radio" data-look="chalk" aria-checked="false">
+        <span class="pv chalk"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-professor"/></svg></span>
+        <strong>Chalkboard</strong><small>Professor Dad's maths class</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="lab" aria-checked="false">
+        <span class="pv lab"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-labdad"/></svg></span>
+        <strong>Science Lab</strong><small>Lab Dad, goggles on</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="library" aria-checked="false">
+        <span class="pv library"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-bookworm"/></svg></span>
+        <strong>Library</strong><small>Bookworm Dad, inside voice</small>
+      </button>
+      <button class="look" type="button" role="radio" data-look="gym" aria-checked="false">
+        <span class="pv gym"><svg aria-hidden="true" viewBox="0 0 64 64"><use href="#av-coach"/></svg></span>
+        <strong>Gym Class</strong><small>Coach Dad, whistle ready</small>
+      </button>
     </div>
     <div class="avpick">
       <p class="coll-head" style="margin:0!important"><span>Avatar</span><small>Tap RoboDad any time to see a move</small></p>
@@ -1400,7 +1506,7 @@ textarea::placeholder{color:var(--muted)}
 
 <div class="overlay" id="langDlg" role="dialog" aria-modal="true" aria-labelledby="langTitle" hidden>
   <div class="card lang-card">
-    <div class="lang-top"><h2 id="langTitle">Practice with Dad</h2><button class="ghost" id="langClose" type="button">Close</button></div>
+    <div class="lang-top"><div class="teach-h"><svg class="bot" viewBox="0 0 64 64" aria-hidden="true"><use href="#av-bookworm"/></svg><h2 id="langTitle">Practice with Dad<small>Your teacher: Bookworm Dad</small></h2></div><button class="ghost" id="langClose" type="button">Close</button></div>
     <div class="lang-tabs" role="tablist" aria-label="Language">
       <button type="button" role="tab" data-lang="fr" aria-selected="true">Français · French</button>
       <button type="button" role="tab" data-lang="es" aria-selected="false">Español · Spanish</button>
@@ -1412,7 +1518,7 @@ textarea::placeholder{color:var(--muted)}
 
 <div class="overlay" id="mathDlg" role="dialog" aria-modal="true" aria-labelledby="mathTitle" hidden>
   <div class="card lang-card">
-    <div class="lang-top"><h2 id="mathTitle">Maths with Dad</h2><button class="ghost" id="mathClose" type="button">Close</button></div>
+    <div class="lang-top"><div class="teach-h"><svg class="bot" viewBox="0 0 64 64" aria-hidden="true"><use href="#av-professor"/></svg><h2 id="mathTitle">Maths with Dad<small>Your teacher: Professor Dad</small></h2></div><button class="ghost" id="mathClose" type="button">Close</button></div>
     <div id="mathBody" style="display:flex; flex-direction:column; gap:12px"></div>
   </div>
 </div>
@@ -1461,10 +1567,10 @@ textarea::placeholder{color:var(--muted)}
   </form>
 </div>
 
-<script src="/static/lessons.js?v=38"></script>
-<script src="/static/maths.js?v=38"></script>
-<script src="/static/radio.js?v=38"></script>
-<script src="/static/avatars.js?v=38"></script>
+<script src="/static/lessons.js?v=39"></script>
+<script src="/static/maths.js?v=39"></script>
+<script src="/static/radio.js?v=39"></script>
+<script src="/static/avatars.js?v=39"></script>
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
@@ -2148,7 +2254,7 @@ const PLAYERS = {
   }
 
   const LOOK_KEY = "robodad.look";
-  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26", bolly:"#C2185B", diwali:"#120B2E", winter:"#0E1F3A", lunar:"#7A0E14", eid:"#0B2A33" };
+  const THEME_COLORS = { classic:"#2E5C8A", arcade:"#0D0A26", vhs:"#1C0E22", diner:"#D7263D", y2k:"#1A7FD6", skate:"#1C1C1C", gamer:"#0A0E14", summer:"#E2541F", halloween:"#160D26", bolly:"#C2185B", diwali:"#120B2E", winter:"#0E1F3A", lunar:"#7A0E14", chalk:"#22382E", lab:"#12B5A0", library:"#8C2F39", gym:"#C8102E", eid:"#0B2A33" };
   const LOOK_STATION = { diner:"jukebox", arcade:"drive", skate:"skate", gamer:"lobby", summer:"block", halloween:"haunt", bolly:"filmi", diwali:"diya", winter:"snow", lunar:"lantern", eid:"crescent" };
   const WAKE_COPY = {
     diner: "Firing up the jukebox… RoboDad will be ready in about 30 seconds.",
@@ -2162,6 +2268,10 @@ const PLAYERS = {
     winter: "Shovelling the driveway… RoboDad will be ready in about 30 seconds.",
     lunar: "Hanging the lanterns… RoboDad will be ready in about 30 seconds.",
     eid: "Setting out the sweets… RoboDad will be ready in about 30 seconds.",
+    chalk: "Cleaning the chalkboard… RoboDad will be ready in about 30 seconds.",
+    lab: "Warming up the Bunsen burner… RoboDad will be ready in about 30 seconds.",
+    library: "Shelving the returns… RoboDad will be ready in about 30 seconds.",
+    gym: "Pumping up the dodgeballs… RoboDad will be ready in about 30 seconds.",
     other: "Blowing on the cartridge… RoboDad will be ready in about 30 seconds.",
   };
   const menuDlg = $("menuDlg");
@@ -3054,7 +3164,7 @@ const PLAYERS = {
   });
   if (!canSpeak) $("qVoiceWrap").hidden = true;
   // RoboDad "says" a word in his speech bubble during some idle moves
-  const SAY = { gg:"GG!", oneup:"1UP!", wave:"Hey!", peace:"Peace!", fistbump:"Bump!", victory:"Yes!", dad:"#1!", tipcap:"Howdy!",
+  const SAY = { specs:"Hmm, interesting.", chalk:"Pop quiz!", idea:"Eureka!", goggles:"Safety first!", beaker:"Science!", poof:"Totally planned.", book:"Chapter one…", tea:"Ahh, Earl Grey.", shh:"Shh!", whistle:"Hustle!", clipboard:"Good form!", stopwatch:"New PB!", gg:"GG!", oneup:"1UP!", wave:"Hey!", peace:"Peace!", fistbump:"Bump!", victory:"Yes!", dad:"#1!", tipcap:"Howdy!",
     hattip:"Yo!", collar:"Cool.", comb:"Lookin' good", ollie:"Rad!", pager:"Beep!", capflip:"Ta-da!", sip:"Ahh.", mash:"Go go!", nod:"Sup?", shades:"Deal with it.", glasses:"Hmm?", nap:"Zzz…", kids:"Kids these days!", bleh:"Bleh!", cape:"Good evening.", bat:"Eek!",
     windflip:"Wind on!", shimmy:"Let's dance!", dhishoom:"Dhishoom!", diya:"Let there be light.", sparkler:"Phataka!", namaste:"Happy Diwali!",
     cocoa:"Ahh, cocoa.", snowball:"Snowball!", pompom:"Brr!", lantern:"Happy New Year!", envelope:"Lucky money!", firecracker:"Pop pop!",
