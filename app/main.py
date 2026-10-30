@@ -16,6 +16,7 @@ import logging
 import os
 import re
 import time
+from urllib.parse import quote
 from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from datetime import date
@@ -177,7 +178,7 @@ def _parents_page() -> HTMLResponse:
         html = f.read()
     # on robodad.ca the site root is this page, so app links point at robodad.app
     html = html.replace('href="/"', f'href="{APP_ORIGIN}/"').replace('href="/learn"', f'href="{APP_ORIGIN}/learn"')
-    html = html.replace('href="/privacy"', f'href="{APP_ORIGIN}/privacy"')
+    html = html.replace('href="/privacy"', f'href="{APP_ORIGIN}/privacy"').replace('href="/terms"', f'href="{APP_ORIGIN}/terms"')
     html = html.replace("← Back to RoboDad", "Open the RoboDad app →")
     return HTMLResponse(html, headers={"Cache-Control": "no-cache"})
 
@@ -185,7 +186,10 @@ def _parents_page() -> HTMLResponse:
 @app.middleware("http")
 async def route_domains(request: Request, call_next):
     host, path = _host(request), request.url.path
-    if request.method in ("GET", "HEAD"):
+    redirecting_host = host in PARENT_HOSTS or host in LEARN_HOSTS or bool(CANONICAL_HOST and host.endswith(".onrender.com"))
+    if request.method in ("GET", "HEAD") and redirecting_host:
+        # redirects only ever point at our own site: collapse "//" and re-encode the path
+        path = "/" + quote(path.lstrip("/"), safe="/-_.~@:")
         query = f"?{request.url.query}" if request.url.query else ""
         if host in PARENT_HOSTS and not path.startswith("/static/"):
             if path in ("/", "/parents"):
@@ -508,6 +512,11 @@ async def interest(i: Interest, request: Request):
 @app.get("/parents")
 async def parents():
     return FileResponse(os.path.join(STATIC_DIR, "parents.html"), headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/terms")
+async def terms():
+    return FileResponse(os.path.join(STATIC_DIR, "terms.html"), headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/changelog")

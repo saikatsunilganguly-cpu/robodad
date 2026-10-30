@@ -69,7 +69,7 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
   <p class="lede">Bite-size practice the way a good dad helps at the kitchen table: five phrases or one idea at a time, a quick quiz, then try it out. Every lesson earns badges in RoboDad.</p>
 
   <h2>Languages for school</h2>
-  <p class="why">French is required in Ontario schools, and Spanish is the most popular language elective. A head start helps.</p>
+  <p class="why">French is part of school in Ontario, and Spanish is one of the most popular language options. A head start helps.</p>
   <div class="grid" id="school"></div>
 
   <h2>Family languages</h2>
@@ -128,7 +128,7 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
     </ul>
   </div>
 
-  <p class="fine">Badges show you've been practising. They aren't a fluency certificate. Dad's an AI and can slip up, so check anything important with a teacher. Parents: <a href="https://robodad.ca">here's how RoboDad keeps teens safe</a>. <a href="/privacy">Privacy</a>.</p>
+  <p class="fine">Badges show you've been practising. They aren't a fluency certificate. Dad's an AI and can slip up, so check anything important with a teacher. Parents: <a href="https://robodad.ca">here's how RoboDad keeps teens safe</a>. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a>.</p>
   <p class="fine">RoboDad™ and the RoboDad logo and characters are trademarks of Saikat Sunil Ganguly. © 2026 Saikat Sunil Ganguly. All rights reserved.</p>
 </main>
 <script>
@@ -151,14 +151,14 @@ h2{margin:10px 0 0; font-size:1.25rem; font-weight:900}
     return '<div class="course"><div class="hd"><b>' + esc(c.name) + '</b><span class="native"' + (c.id === "hi" ? ' lang="hi"' : ' lang="' + c.id + '"') + '>' + esc(c.native) + '</span></div>'
       + '<p>' + esc(c.blurb) + '</p>'
       + '<div class="bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>'
-      + '<span class="meta">' + n + ' of 8 lessons' + (p.rp ? ' · best role-play ' + p.rp + ' messages' : '') + '</span>'
+      + '<span class="meta">' + n + ' of 8 lessons' + (p.rp ? ' · best role-play ' + (Number(p.rp) || 0) + ' messages' : '') + '</span>'
       + '<a class="btn" href="/?learn=' + c.id + '">' + label + '</a></div>';
   }
   document.getElementById("school").innerHTML = COURSES.school.map(card).join("");
   document.getElementById("family").innerHTML = COURSES.family.map(card).join("");
   var mp = lp.math || { done:[] }, mn = (mp.done || []).length;
   document.getElementById("mathBar").style.width = Math.round(mn / 12 * 100) + "%";
-  document.getElementById("mathMeta").textContent = mn + " of 12 topics" + (mp.rp ? " · best coach chat " + mp.rp + " messages" : "");
+  document.getElementById("mathMeta").textContent = mn + " of 12 topics" + (mp.rp ? " · best coach chat " + (Number(mp.rp) || 0) + " messages" : "");
   document.getElementById("mathGo").textContent = mn === 0 ? "Start" : mn >= 12 ? "Practise again" : "Keep going";
 
   var voted = {};

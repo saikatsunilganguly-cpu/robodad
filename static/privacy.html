@@ -35,11 +35,12 @@ th{font-weight:800}
   <a class="back" href="/">← Back to RoboDad</a>
   <div class="card">
     <h1>RoboDad Privacy Policy</h1>
-    <p class="muted">Last updated: October 28, 2026 (tester sign-ups added)</p>
+    <p class="muted">Last updated: October 29, 2026 (new web addresses, maths, anonymous link counts and votes)</p>
 
     <p>RoboDad is an AI chatbot that gives teenagers practical advice about everyday life. It is a passion
     project made by Saikat Sunil Ganguly in Toronto, Canada. This page explains, in plain language, what
-    happens to your information when you use it.</p>
+    happens to your information when you use it. It covers robodad.app (the app), robodad.ca (the page for parents)
+    and robodad.online (which forwards to the Learn with Dad page on robodad.app).</p>
 
     <h2>The short version</h2>
     <ul>
@@ -64,9 +65,9 @@ th{font-weight:800}
           <td>Sent through our server to our AI provider (Groq) to write a reply</td>
           <td>Not saved by RoboDad. Groq handles it under its own privacy policy.</td></tr>
       <tr><td>Messages that suggest you might be in danger</td>
-          <td>Answered with a fixed help message on our server. They are not sent to the AI.</td>
+          <td>Answered with a fixed help message. Messages caught by our safety checks are not sent to the AI. Anything the checks miss goes to the AI like a normal message, and the AI is told to flag it so the same help message is shown.</td>
           <td>Not saved. Our server log notes only that a help message was shown and which kind.</td></tr>
-      <tr><td>Language practice progress (lessons done, practice badges)</td>
+      <tr><td>Learning progress (language lessons and maths topics done, learning badges)</td>
           <td>Stored only in your browser on your device</td>
           <td>Until you clear your browser data</td></tr>
       <tr><td>Your chat history on screen, nickname and settings</td>
@@ -81,6 +82,9 @@ th{font-weight:800}
       <tr><td>Tester sign-ups (on the <a href="/testers">Help test RoboDad</a> page, adults only)</td>
           <td>Our database (Supabase): the Gmail address and optional first name, used only to invite you to the Google Play test</td>
           <td>Deleted once Play Store testing is finished</td></tr>
+      <tr><td>Short-link visits (for example robodad.app/go/tiktok) and "I want this" votes on the Learn with Dad page</td>
+          <td>Our database (Supabase): only the name of the platform or topic and the time. No IP address, no cookie and nothing that identifies you. Your browser remembers which topics you voted for so you don't vote twice.</td>
+          <td>Kept as simple totals to see which platforms people come from and what to build next</td></tr>
       <tr><td>Technical data such as IP address and the time of a request</td>
           <td>Our hosting provider's server logs (Render). Your IP address is also used briefly in memory to limit how fast messages can be sent.</td>
           <td>Short-term, for security and fixing problems</td></tr>
@@ -93,9 +97,10 @@ th{font-weight:800}
 
     <h2>Services RoboDad uses</h2>
     <ul>
-      <li><strong>Render</strong> hosts the website (United States).</li>
+      <li><strong>Render</strong> hosts the website (United States). Render uses <strong>Cloudflare</strong> to protect and deliver it.</li>
       <li><strong>Groq</strong> runs the AI model that writes replies (United States).</li>
-      <li><strong>Supabase</strong> stores ratings, reports and tester sign-ups (United States).</li>
+      <li><strong>Supabase</strong> stores ratings, reports, tester sign-ups, link counts and votes (United States).</li>
+      <li><strong>Porkbun</strong> is where the web addresses are registered, and it forwards robodad.online to robodad.app.</li>
       <li><strong>Google Fonts</strong> provides the typeface, so your browser contacts Google to load it.</li>
     </ul>
     <p>Because these services are in the United States, information may be processed there.</p>
@@ -118,7 +123,7 @@ th{font-weight:800}
     <p>If this policy changes, we'll update this page and the date at the top.</p>
 
     <h2>Contact</h2>
-    <p>Questions or concerns? Email <a href="mailto:robodadapp@gmail.com">robodadapp@gmail.com</a>.</p>
+    <p>Questions or concerns? Email <a href="mailto:robodadapp@gmail.com">robodadapp@gmail.com</a>. See also our <a href="/terms">terms of use</a>.</p>
   </div>
   <p class="fine" style="font-size:.85rem; opacity:.8">RoboDad™ and the RoboDad logo and characters are trademarks of Saikat Sunil Ganguly. © 2026 Saikat Sunil Ganguly. All rights reserved.</p>
 </main>
