@@ -11,7 +11,8 @@
  * early-2000s boom-bap; "Haunted Hayride" is an original spooky tune for
  * Halloween; "Filmi Nights '75" is an original 1970s Bollywood-style groove and
  * "Diya Glow" a gentle festive tune for Diwali; "Snow Day", "Lantern Festival"
- * and "Crescent Night" are original holiday tunes. None of them borrow melodies
+ * and "Crescent Night" are original holiday tunes, and "Study Hall" is an
+ * original lo-fi loop for focus sessions. None of them borrow melodies
  * from real songs or films.
  *
  *   RoboRadio.play("lounge" | "canon" | "drive")
@@ -528,6 +529,29 @@
       this.lines[i % 4].forEach((n, k) => zither(n - 12, t + k * b * 0.66, 0.13, k === 2 ? -1 : 0));
       if (i % 4 >= 2) this.lines[(i + 1) % 4].slice(0, 3).forEach((n, k) => pluck(n + 12, t + (k + 4) * b * 0.5, { type: "sine", level: 0.04, decay: 1.2, cutoff: 5000, echo: true }));
       drum(t, 85, 0.2, 0.45, 0.6); na(t + 1.5 * b, 0.06); drum(t + 2 * b, 85, 0.13, 0.4, 0.6); na(t + 3 * b, 0.06); na(t + 3.5 * b, 0.05);
+    },
+  };
+  // Study Hall: original lo-fi loop for focus sessions. Jazzy ii-V-I-vi with rootless 9th voicings on
+  // electric piano, a lazy swung boom-bap beat kept very quiet, and a little vinyl crackle.
+  STATIONS.study = {
+    name: "Study Hall", bpm: 74,
+    bars: [
+      { root: 38, chord: [65, 69, 72, 76] },   // Dm9
+      { root: 43, chord: [65, 69, 71, 76] },   // G13
+      { root: 36, chord: [64, 67, 71, 74] },   // Cmaj9
+      { root: 45, chord: [60, 64, 67, 71] },   // Am9
+    ],
+    lines: [[76, 74, 72], [79, 76], [74, 76, 79, 81], [72, 69]],
+    play(i, t, b) {
+      const { root, chord } = this.bars[i % 4];
+      chord.forEach((n, k) => epiano(n, t + k * 0.025, 2.2 * b, 0.68));
+      chord.slice(1).forEach((n, k) => epiano(n, t + 2.5 * b + k * 0.02, 1.2 * b, 0.35));
+      bass(root, t, b * 2.2, { level: 0.11, cutoff: 300 }); bass(root + 7, t + 2.5 * b, b * 1.2, { level: 0.08, cutoff: 300 });
+      if (i % 2 === 1) this.lines[i % 4].forEach((n, k) => pluck(n, t + (1 + k * 0.75) * b, { type: "sine", level: 0.035, decay: 1.6, cutoff: 3500, echo: k === this.lines[i % 4].length - 1 }));
+      softKick(t, 0.12); softKick(t + 1.75 * b, 0.08); softKick(t + 2.5 * b, 0.1);
+      brush(t + b, 0.05); brush(t + 3 * b, 0.05);
+      for (let k = 0; k < 8; k++) hit(t + (Math.floor(k / 2) + (k % 2 ? 0.58 : 0)) * b, { type: "highpass", freq: 7500, level: k % 2 ? 0.006 : 0.011, decay: 0.05 });
+      for (let k = 0; k < 6; k++) hit(t + rand() * 4 * b, { type: "highpass", freq: 3000, level: 0.004, decay: 0.012 });   // vinyl crackle
     },
   };
 
