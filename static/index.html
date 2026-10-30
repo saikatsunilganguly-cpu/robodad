@@ -2944,7 +2944,7 @@ const PLAYERS = {
   function renderExtras(tools, item){
     const meta = item.meta;
     // only nudge when the classifier is fairly sure ("do you save my chats?" once scored 0.4 for money)
-    const skill = (meta.confidence ?? 1) >= 0.55 ? SKILL_BY_INTENT[meta.intent] : null;
+    const skill = (meta.confidence ?? 1) >= 0.5 ? SKILL_BY_INTENT[meta.intent] : null;
     if (skill && !belt.has(skill)) {
       const b = document.createElement("button");
       b.type = "button"; b.className = "plate-nudge";
